@@ -1,0 +1,417 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[bosnian]{babel}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue}
+\usepackage{titlesec}
+
+\geometry{margin=2.5cm}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Reusable command for use case tables
+\newcommand{\usecase}[9]{%
+\begin{longtable}{|L{4cm}|L{11cm}|}
+\hline
+\textbf{\textit{Naziv}} & \textbf{#1} \\
+\hline
+\textbf{\textit{Opis}} & #2 \\
+\hline
+\textbf{\textit{Vezani zahtjevi}} & #3 \\
+\hline
+\textbf{\textit{Preduslovi}} & #4 \\
+\hline
+\textbf{\textit{Posljedice -- Uspješan završetak}} & #5 \\
+\hline
+\textbf{\textit{Posljedice -- Neuspješan završetak}} & #6 \\
+\hline
+\textbf{\textit{Primarni akteri}} & #7 \\
+\hline
+\textbf{\textit{Ostali akteri}} & #8 \\
+\hline
+\textbf{\textit{Glavni tok}} & #9 \\
+\hline
+\end{longtable}%
+}
+
+% Separate command for extensions (can't fit in 9 params)
+\newcommand{\extensions}[1]{%
+\vspace{-1.5em}
+\begin{longtable}{|L{4cm}|L{11cm}|}
+\hline
+\textbf{\textit{Proširenja / Alternative}} & #1 \\
+\hline
+\end{longtable}%
+}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\textbf{Popravka.ba}}
+\fancyhead[L]{Scenariji slučajeva upotrebe}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\textbf{Scenariji slučajeva upotrebe}}
+\author{Aid Mustafić, Tarik Redžić, Rijad Kasapović, Eldar Mandžić}
+\date{Ilidža, 30. mart, 2026.}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+%=============================================================
+\section{Postavljanje oglasa usluga i popravki}
+%=============================================================
+
+\usecase
+{Postavljanje oglasa usluga i popravki}
+{Klijent putem web interfejsa kreira oglas za potrebnu uslugu,
+    na koji se majstori/firme prijavljuju sa ponudama. Klijent pregledava ponude i prihvata jednu, čime se ostale automatski odbijaju.
+    Majstori i firme imaju mogućnost postavljanja \emph{maksimalno tri} vlastita oglasa opće ponude, vidljivih na profilima i u pretragama.
+
+    Administrator ima mogućnost uređivanja i zatvaranja neprimjerenih ili neaktivnih oglasa.
+}
+{ Oglašavanje; Pregled i izbor ponuda;}
+{Klijent, majstor/firma moraju biti prijavljeni i uspješno proći verifikaciju profila}
+{\hyperref[tok:1.1]{[1.1] Tok događaja: Posljedice -- Uspješan završetak}}
+{\hyperref[tok:1.2]{[1.2] Tok događaja: Posljedice -- Neuspješan završetak}}
+{1. Klijent}
+{1. Majstor, 2. Firma, 3. Administrator 4. Sistem (automatsko zatvaranje)}
+{Klijent, nakon prijave i uspješne verifikacije, pristupa interfejsu za kreiranje oglasa. Unosi potrebne informacije. Sistem validira unos i objavljuje oglas. Ciljani izvršioci usluga pregledavaju oglase i šalju ponude. Klijent pregledava ponude i prihvata jednu.
+    Sistem automatski odbija ostale ponude.}
+
+
+\extensions{
+    \begin{enumerate}[nosep, leftmargin=*]
+        \item Klijent uredi ili prijevremeno zatvori oglas.
+        \item Oglas, nakon određenog vremena neaktivnosti se automatski zatvara i klijent prima obavijest.
+        \item Administrator zatvori oglas zbog neprimjerenosti sadržaja ili kršenja drugih pravila upotrebe platforme.
+        \item Firme imaju mogućnost postavljanja oglasa radnih mjesta, na koji se mogu prijavljivati isključivo majstori sa verifikovanim profilom.
+        \item Uz svaku dospjelu ponudu, sistem daje preporuku klijentu na osnovu prosječnih cijena i ocjena izvršioca usluga, ali klijent zadržava potpunu slobodu izbora.
+    \end{enumerate}}
+
+
+\subsection{ Tok događaja: Posljedice -- Uspješan završetak}
+\label{tok:1.1}
+
+\begin{longtable}{|L{5cm}|L{5cm}|L{5cm}|}
+    \hline
+    \textbf{Klijent}                          & \textbf{Sistem}                            & \textbf{Majstor ili Firma} \\
+    \hline
+    1. Prijava klijenta na račun              &                                            &                            \\
+    \hline
+    2. Pristup interfejsu za kreiranje oglasa &                                            &                            \\
+    \hline
+    3. Unos informacija o oglasu              & 4. Validacija i spremanje podataka na bazu &                            \\
+    \hline
+    5. Poruka o uspješnoj akciji              &                                            &                            \\
+    \hline
+    6. Mogućnost izmjene podataka             &                                            & 7. Slanje ponude           \\
+    \hline
+    8. Pregled i izbor ponude                 & 9. Odbijanje preostalih ponuda             &                            \\
+    \hline
+\end{longtable}
+
+
+\subsection{Tok događaja: Posljedice -- Neuspješan završetak}
+\label{tok:1.2}
+
+\begin{longtable}{|L{7.5cm}|L{7.5cm}|}
+    \hline
+    \textbf{Klijent}                                                            & \textbf{Sistem}                                                                                          \\
+    \hline
+    1. Prijava klijenta na račun                                                &                                                                                                          \\
+    \hline
+    2. Pristup interfejsu za kreiranje oglasa                                   &                                                                                                          \\
+    \hline
+    3. Unos informacija o oglasu                                                & 4. Validacija neuspješna: nedostaju obavezna polja, nedozvoljen sadržaj, ili greška pri spremanju u bazu \\
+    \hline
+                                                                                & 5. Prikaz poruke o grešci uz označavanje spornih polja                                                   \\
+    \hline
+    6. Ispravka podataka i ponovni pokušaj, ili odustajanje od kreiranja oglasa &                                                                                                          \\
+    \hline
+\end{longtable}
+
+%=============================================================
+\section{Kategorizacija zanimanja}
+%=============================================================
+
+\usecase
+{Kategorizacija zanimanja}
+{Majstori i firme pri registraciji ili uređivanju profila biraju jednu ili više kategorija zanimanja. Administrator može dodavati i uređivati dostupne kategorije. Klijenti koriste kategorije za filtriranje pretrage.}
+{Kategorizacija zanimanja; Upravljanje i uređivanje profila; Filtriranje pretrage}
+{Korisnik prijavljen u sistem; Kategorija postoji u sistemu}
+{Kategorija uspješno dodijeljena i vidljiva na profilu ili nova kategorija kreirana}
+{Greška prilikom dodjeljivanja kategorije ili kreiranja nove kategorije, sa porukom o grešci}
+{1. Majstor/Firma}
+{1. Klijent; 2. Administrator}
+{Izvršilac usluge pristupa interfejsu za uređivanju profila, bira kategorije iz ponuđene liste, sistem sprema izbor.}
+
+\extensions{Administrator kreira novu kategoriju ako postojeće ne pokrivaju potrebe.}
+
+%=============================================================
+\section{Sistem recenzija i ocjenjivanja usluga}
+%=============================================================
+
+\usecase
+{Sistem recenzija i ocjenjivanja usluga}
+{Nakon izvršene usluge, klijent ostavlja ocjenu i tekstualnu recenziju usluge koju je izvršio određeni majstor/firma. Recenzija, kao i usluga su javno vidljive na profilu izvršioca.
+    Prosječna ocjena se automatski preračunava. }
+{Pregled i izbor ponuda; Pregled statistike o izvršiocima usluga}
+{Oglas je označen kao izvršen; Klijent je prijavljen u sistem.}
+{Recenzija je spremljena , javno vidljiva na profilu izvršioca i prosječna ocjena izvršioca usluge je ažurirana.}
+{Greška prilikom spremanja recenzije, sa porukom o grešci}
+{1. Klijent 2. Majstor/Firma}
+{1. Administrator}
+{1. Klijent pristupa završenoj usluzi. 2. Unosi ocjenu i/ili recenziju 3. Sistem validira i sprema unos. 4. Sistem ažurira prosječnu ocjenu izvršioca usluge. 5. Recenzija i ocjena postaju javno vidljive na profilu izvršioca.}
+
+\extensions{Administrator ima mogućnost brisanja neprimjerenih recenzija. Podaci iz usluga i recenzija se koriste za generisanje statistike o izvršiocima usluga.}
+
+
+%=============================================================
+\section{Generisanje statistike i rangiranja izvršioca usluga na platformi}
+%=============================================================
+
+\usecase
+{Rangiranje i statistika o majstorima na platformi}
+{Sistem asinhrono obrađuje podatke o recenzijama, odazivu i završenim poslovima te ažurira rang listu majstora. Korisnici mogu pregledati rang prema različitim filterima (lokacija, kategorija, ocjena).}
+{Sistem recenzija i ocjenjivanja usluga; Kategorizacija zanimanja; Pregled statistike o izvršiocima usluga}
+{Postoje majstori sa završenim poslovima i recenzijama u bazi}
+{\hyperref[tok:4.1] {Tok događaja: Posljedice -- Uspješan završetak}}
+{\hyperref[tok:4.2] {Tok događaja: Posljedice -- Neuspješan završetak}}
+{1. Sistem (asinhroni proces)}
+{Klijent, Majstor, Firma (pregled); Administrator (mogućnosti upravljanja)}
+{Nastavnik se prijavljuje u sistem. Otvara interfejs za unos aktivnosti. Unosi podatke (naziv, datum, opis). Sistem validira unos i podaci se spremaju u bazu.}
+
+\extensions{Ako su podaci nepotpuni, sistem prikazuje grešku i traži ispravke.}
+
+\subsection{[4.1] Tok događaja: Posljedice -- Uspješan završetak}
+\label{tok:4.1}
+
+\begin{longtable}{|L{7.5cm}|L{7.5cm}|}
+    \hline
+    \textbf{Sistem}                                      & \textbf{Korisnik}                          \\
+    \hline
+    1. Periodično pokretanje asinhronog zadatka          &                                            \\
+    \hline
+    2. Dohvatanje novih recenzija i podataka o odazivu   &                                            \\
+    \hline
+    3. Izračun ažuriranog ranga za svakog majstora/firmu &                                            \\
+    \hline
+    4. Logiranje i izvršavanje ažuriranja na platformi   &                                            \\
+    \hline
+                                                         & 5. Pristup stranici statistike             \\
+    \hline
+                                                         & 6. Pregled ažuriranih rangova i statistike \\
+    \hline
+\end{longtable}
+
+\subsection{[4.2] Tok događaja: Posljedice -- Neuspješan završetak}
+\label{tok:4.2}
+
+\begin{longtable}{|L{7.5cm}|L{7.5cm}|}
+    \hline
+    \textbf{Sistem}                                                              & \textbf{Administrator}                                                           \\
+    \hline
+    1. Periodično pokretanje asinhronog zadatka                                  &                                                                                  \\
+    \hline
+    2. Pokušaj dohvatanja podataka iz baze                                       &                                                                                  \\
+    \hline
+    3. Detekcija i logiranje greške                                              &                                                                                  \\
+    \hline
+    4. Slanje obavijesti administratoru o neuspjelom ažuriranju                  &                                                                                  \\
+    \hline
+    5. Izlazak iz asinhronog zadatka, rangiranja ostaju neizmjenuta na platformi &                                                                                  \\
+    \hline
+                                                                                 & 6. Administrator pregledava i ispravlja grešku, po potrebi ručno pozove zadatak. \\
+    \hline
+\end{longtable}
+
+
+
+
+%=============================================================
+\section{Verifikacija profila}
+%=============================================================
+
+\usecase
+{Verifikacija profila pri registraciji putem maila}
+{Pri registraciji, sistem šalje verifikacioni email korisniku. Korisnik potvrđuje email klikom na link. Firme prolaze dodatnu verifikaciju prilaganjem dokumentacije putem submit forme. Administrator pregledava i odobrava ili odbija verifikaciju firme.}
+{Verifikacija profila; Verifikacija firme}
+{1. Postoje evidentirane aktivnosti za slanje obavijesti}
+{\hyperref[tok:5.1] {Tok događaja: Posljedice -- Uspješan završetak}}
+{\hyperref[tok:5.2]{ Tok događaja: Posljedice -- Neuspješan završetak}}
+{1. Korisnik (Klijent/Majstor/Firma)}
+{1. E-mail servis; 2. Administrator}
+{Sistem periodično provjerava bazu aktivnosti. Određuje koje aktivnosti zahtijevaju obavijesti. Kreira sadržaj obavijesti. Šalje email korisnicima. Logira status slanja.}
+
+\extensions{Korisnik može zatražiti ponovni email ako nije primio prvi, i pri svakoj promjeni emaila, mora ponovo izvršiti verifikaciju.
+    Administrator može ručno pokrenuti proces slanja obavijesti u slučaju problema.
+    Verifikacioni link ističe nakon određenog vremena.
+}
+
+\subsection{[5.1] Tok događaja: Posljedice -- Uspješan završetak}
+\label{tok:5.1}
+
+\begin{longtable}{|L{3.5cm}|L{3.5cm}|L{3.5cm}|L{3.5cm}|}
+    \hline
+    \textbf{Korisnik}                          & \textbf{Sistem}                                       & \textbf{E-mail servis}               & \textbf{Administrator}                              \\
+    \hline
+    1. Popunjavanje registracijske forme       &                                                       &                                      &                                                     \\
+    \hline
+    2. Slanje zahtjeva za registraciju         &                                                       &                                      &                                                     \\
+    \hline
+                                               & 3. Validacija podataka                                &                                      &                                                     \\
+    \hline
+                                               & 4. Kreiranje korisničkog računa (neaktivan)           &                                      &                                                     \\
+    \hline
+                                               &                                                       & 5. Slanje verifikacionog emaila      &                                                     \\
+    \hline
+    6. Korisnik pristupi verifikacionom linku  &                                                       &                                      &                                                     \\
+    \hline
+                                               & 7. Aktivacija računa                                  &                                      &                                                     \\
+    \hline
+    8. (Firma) pristupa submit formi           &                                                       &                                      &                                                     \\
+    \hline
+    9. (Firma) priloži dokumentaciju           &                                                       & 9. Proslijedi podatke administratoru & 10. Administrator pregleda i odobrava dokumentaciju \\
+    \hline
+    11. Prikaz potvrde o potpunoj verifikaciji & 12. Verifikacioni link ističe nakon određenog vremena &                                      &                                                     \\
+    \hline
+\end{longtable}
+
+\subsection{[5.2] Tok događaja: Posljedice -- Neuspješan završetak}
+\label{tok:5.2}
+
+\begin{longtable}{|L{7.5cm}|L{7.5cm}|}
+    \hline
+    \textbf{Korisnik}                                                 & \textbf{Sistem}                                                               \\
+    \hline
+    1. Popunjavanje registracijske forme                              &                                                                               \\
+    \hline
+    2. Slanje zahtjeva za registracije                                &                                                                               \\
+    \hline
+                                                                      & 3. Pokušaj slanja verifikacionog emaila                                       \\
+    \hline
+                                                                      & 4. Greška (nevažeća email adresa, problem s email servisom, ili link istekao) \\
+    \hline
+                                                                      & 5. Prikaz poruke o grešci                                                     \\
+    \hline
+    6. Korisnik ispravlja email adresu ili traži ponovno slanje linka &                                                                               \\
+    \hline
+\end{longtable}
+
+
+%=============================================================
+\section{Pretraga usluga}
+%=============================================================
+
+\usecase
+{Pretraga usluga sa mogućnošću filtriranja}
+{Korisnici pretražuju majstore, firme i oglase koristeći kombinaciju filtera (kategorija, lokacija, cijena, ocjena). Rezultati se sortiraju algoritmom prema relevantnosti. }
+{Pretraga usluga; Filtriranje rezultata; Sortiranje rezultata; Kategorizacija zanimanja;}
+{Korisnik prijavljen u sistem; Postoje aktivni profili/oglasi u bazi}
+{Rezultati pretrage prikazani sortirani prema relevantnosti}
+{Nema rezultata za traženu pretragu ili zadate filtere, ili greška pri dohvatu podataka}
+{Klijent}
+{Majstor, Firma}
+{\begin{enumerate}[nosep, leftmargin=*]
+        \item Korisnik pristupa pretrazi putem polja za pretragu.
+        \item Unosi ključnu riječ i/ili bira filtere
+        \item Sistem primjenjuje algoritam sortiranja
+        \item Rezultati su prikazani na novom panelu.
+    \end{enumerate}}
+
+\extensions{Korisnik ima opciju kombiniranja više filtera istovremeno. }
+
+
+
+%=============================================================
+\section{Upravljanje i uređivanje profila}
+%=============================================================
+
+\usecase
+{Upravljanje i uređivanje profila}
+{Korisnici (majstori, firme, klijenti) nakon verifikacije profila imaju dodatne mogućnosti uređivanja prisustva na platformi (Između ostalog uključujući: opis usluga, određeni portfolio, prethodno radno iskustvo, kontakt informacije, i slično.)
+    Administrator ima pristup moderiranju i brisanju profila, kojima je utvrđen prekršaj pravila upotrebe platforme.}
+{Upravljanje i uređivanje profila; Verifikacija profila; Kategorizacija zanimanja}
+{Korisnik prijavljen sa verificiranim računom}
+{Profil uspješno ažuriran u bazi.}
+{Greška prilikom validacije ili zapisa u bazu podataka.}
+{Korisnik (Majstor, Firma, Klijent)}
+{Administrator}
+{1. Korisnik pristupa računu. 2. Korisnik uređuje i unosi željene informacije. 3. Sistem validira zapis u bazu podataka. 4. Sistem vrača povratnu informaciju o uspjehu ažuriranja.}
+
+\extensions{Administrator briše ili moderira izmjene na profilu koji je prekršio pravila upotrebe platforme.}
+
+
+
+%=============================================================
+\section{Automatsko zatvaranje neaktivnih oglasa}
+%=============================================================
+
+\usecase
+{Automatsko zatvaranje neaktivnih oglasa}
+{Planirani asinhroni zadatak periodično provjerava oglase bez ponuda majstora. Oglasi bez odaziva nakon definisanog perioda se automatski zatvaraju. Klijent prima email notifikaciju.}
+{Postavljanje oglasa; Automatsko zatvaranja neaktivnih oglasa}
+{Postoji aktivan oglas.}
+{\hyperref[tok:8.1]{[8.1] Tok događaja: Posljedice -- Uspješan završetak}}
+{\hyperref[tok:8.2]{[8.2] Tok događaja: Posljedice -- Neuspješan završetak}}
+{Sistem (asinhroni proces)}
+{Klijent; Administrator}
+{Sistem periodično provjerava oglase, identifikuje oglase bez ponuda starije od definisanog perioda, zatvara ih, šalje email klijentu.}
+
+\extensions{Klijent može ponovo postaviti zatvoreni oglas.
+    Administrator može ručno pokrenuti zadatak zatvaranja u slučaju problema.}
+
+\subsection{[8.1] Tok događaja: Posljedice -- Uspješan završetak}
+\label{tok:8.1}
+
+\begin{longtable}{|L{7.5cm}|L{7.5cm}|}
+    \hline
+    \textbf{Sistem}                                                            & \textbf{Klijent}                          \\
+    \hline
+    1. Periodična provjera aktivnih oglasa u bazi                              &                                           \\
+    \hline
+    2. Pronalaženje oglasa bez aktivnih ponuda starijih od definisanog perioda &                                           \\
+    \hline
+    3. Zatvaranje neaktivnih oglasa u bazi                                     &                                           \\
+    \hline
+    4. Slanje email obavijesti klijentu                                        &                                           \\
+    \hline
+    5. Bilježenje uspješnog zatvaranja                                         &                                           \\
+    \hline
+                                                                               & 6. Prijem obavijesti putem emaila         \\
+    \hline
+                                                                               & 7. Mogućnost ponovnog postavljanja oglasa \\
+    \hline
+\end{longtable}
+
+\subsection{[8.2] Tok događaja: Posljedice -- Neuspješan završetak}
+\label{tok:8.2}
+
+\begin{longtable}{|L{7.5cm}|L{7.5cm}|}
+    \hline
+    \textbf{Sistem}                                                 & \textbf{Administrator}                                                             \\
+    \hline
+    1. Periodična provjera aktivnih oglasa u bazi                   &                                                                                    \\
+    \hline
+    2. Pokušaj zatvaranja neaktivnih oglasa                         &                                                                                    \\
+    \hline
+    3. Detekcija greške (baza nedostupna, problem s email servisom) &                                                                                    \\
+    \hline
+    4. Bilježenje greške, oglasi ostaju nepromijenjeni na platformi &                                                                                    \\
+    \hline
+
+                                                                    & 5. Administrator pregledava i ispravlja grešku, po potrebi ponovno pokreće zadatak \\
+    \hline
+\end{longtable}
+
+\end{document}
