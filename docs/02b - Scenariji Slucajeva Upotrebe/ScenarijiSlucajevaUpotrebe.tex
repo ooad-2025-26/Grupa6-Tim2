@@ -60,8 +60,8 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 \title{\textbf{Scenariji slučajeva upotrebe}}
-\author{Aid Mustafić, Tarik Redžić, Rijad Kasapović, Eldar Mandžić}
-\date{Ilidža, 30. mart, 2026.}
+\author{\textbf{Popravka.ba}\\Aid Mustafić, Tarik Redžić, Rijad Kasapović, Eldar Mandžić}
+\date{}
 
 \begin{document}
 \maketitle
@@ -189,7 +189,7 @@
 {\hyperref[tok:4.2] {Tok događaja: Posljedice -- Neuspješan završetak}}
 {1. Sistem (asinhroni proces)}
 {Klijent, Majstor, Firma (pregled); Administrator (mogućnosti upravljanja)}
-{Nastavnik se prijavljuje u sistem. Otvara interfejs za unos aktivnosti. Unosi podatke (naziv, datum, opis). Sistem validira unos i podaci se spremaju u bazu.}
+{1. Sistem periodično pokreće asinhroni zadatak. 2. Dohvata i obrađuje podatke iz novih recenzija 3. Ažurira rang listu i podatke na platformi. 4. Korisnici pristupaju stranici statistike i pregledavaju rezultate.}
 
 \extensions{Ako su podaci nepotpuni, sistem prikazuje grešku i traži ispravke.}
 
@@ -308,7 +308,7 @@
     \hline
 \end{longtable}
 
-
+\pagebreak
 %=============================================================
 \section{Pretraga usluga}
 %=============================================================
@@ -327,7 +327,9 @@
         \item Unosi ključnu riječ i/ili bira filtere
         \item Sistem primjenjuje algoritam sortiranja
         \item Rezultati su prikazani na novom panelu.
-    \end{enumerate}}
+    \end{enumerate}
+}
+
 
 \extensions{Korisnik ima opciju kombiniranja više filtera istovremeno. }
 
@@ -347,7 +349,7 @@
 {Greška prilikom validacije ili zapisa u bazu podataka.}
 {Korisnik (Majstor, Firma, Klijent)}
 {Administrator}
-{1. Korisnik pristupa računu. 2. Korisnik uređuje i unosi željene informacije. 3. Sistem validira zapis u bazu podataka. 4. Sistem vrača povratnu informaciju o uspjehu ažuriranja.}
+{1. Korisnik pristupa računu. 2. Korisnik uređuje i unosi željene informacije. 3. Sistem validira zapis u bazu podataka. 4. Sistem vraća povratnu informaciju o uspjehu ažuriranja.}
 
 \extensions{Administrator briše ili moderira izmjene na profilu koji je prekršio pravila upotrebe platforme.}
 
@@ -370,7 +372,7 @@
 
 \extensions{Klijent može ponovo postaviti zatvoreni oglas.
     Administrator može ručno pokrenuti zadatak zatvaranja u slučaju problema.}
-
+\pagebreak
 \subsection{[8.1] Tok događaja: Posljedice -- Uspješan završetak}
 \label{tok:8.1}
 
