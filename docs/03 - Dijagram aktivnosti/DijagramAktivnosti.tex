@@ -1,0 +1,142 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[bosnian]{babel}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{etoolbox}
+
+\geometry{margin=2.5cm}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Reusable command for use case tables
+\newcommand{\usecase}[1]{%
+\begin{longtable}{|L{4cm}|L{11cm}|}
+\hline
+\textbf{\textit{Naziv}} & \textbf{#1} \\
+\hline
+\end{longtable}%
+}
+
+
+
+\newcommand{\dijagram}[2]{%
+  \begin{figure}[H]
+    \centering
+    \ifstrempty{#2}{%
+      \fbox{\parbox[c][0.4\textheight][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
+        \centering Placeholder za dijagram aktivnosti}}%
+    }{%
+      \includegraphics[width=\textwidth]{DijagramiAktivnosti/#2}%
+    }
+    \caption{Dijagram aktivnosti za \textit{use case}: #1}
+  \end{figure}
+}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\textbf{Popravka.ba}}
+\fancyhead[L]{Dijagrami aktivnosti slučajeva upotrebe}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\textbf{Dijagrami aktivnosti slučajeva upotrebe}}
+\author{\textbf{Popravka.ba}\\Aid Mustafić, Tarik Redžić, Rijad Kasapović, Eldar Mandžić}
+\date{}
+
+\begin{document}
+\maketitle
+\newpage
+\listoffigures
+\newpage
+\thispagestyle{fancy}
+
+%=============================================================
+\section{Postavljanje oglasa usluga i popravki}
+
+\usecase
+{Postavljanje oglasa usluga i popravki}
+
+\dijagram
+{Postavljanje oglasa usluga i popravki}{}
+%============================================================
+
+%=============================================================
+\section{Kategorizacija zanimanja}
+%=============================================================
+
+\usecase
+{Kategorizacija zanimanja}
+
+\dijagram
+{Kategorizacija zanimanja}{}
+%=============================================================
+\section{Sistem recenzija i ocjenjivanja usluga}
+%=============================================================
+
+\usecase
+{Sistem recenzija i ocjenjivanja usluga}
+
+\dijagram
+{Sistem recenzija i ocjenjivanja usluga}{}
+%=============================================================
+\section{Generisanje statistike i rangiranja izvršioca usluga na platformi}
+%=============================================================
+
+\usecase
+{Rangiranje i statistika o majstorima na platformi}
+
+\dijagram
+{Rangiranje i statistika o majstorima na platformi}
+{}
+
+
+%=============================================================
+\section{Verifikacija profila}
+%=============================================================
+
+\usecase
+{Verifikacija profila pri registraciji putem maila}
+\dijagram
+{Verifikacija profila pri registraciji putem maila}
+{}
+
+%=============================================================
+\section{Pretraga usluga}
+%=============================================================
+
+\usecase
+{Pretraga usluga sa mogućnošću filtriranja}
+
+\dijagram
+{Pretraga usluga sa mogućnošću filtriranja}
+{}
+
+%=============================================================
+\section{Upravljanje i uređivanje profila}
+%=============================================================
+
+\usecase
+{Upravljanje i uređivanje profila}
+\dijagram{Upravljanje i uređivanje profila}{}
+%=============================================================
+\section{Automatsko zatvaranje neaktivnih oglasa}
+%=============================================================
+
+\usecase
+{Automatsko zatvaranje neaktivnih oglasa}
+
+\dijagram{Automatsko zatvaranje neaktivnih oglasa}{}
+
+\end{document}
