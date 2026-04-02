@@ -139,7 +139,7 @@
     6. Ispravka podataka i ponovni pokušaj, ili odustajanje od kreiranja oglasa &                                                                                                          \\
     \hline
 \end{longtable}
-
+\newpage
 %=============================================================
 \section{Kategorizacija zanimanja}
 %=============================================================
@@ -244,20 +244,20 @@
 
 \usecase
 {Verifikacija profila pri registraciji putem maila}
-{Pri registraciji, sistem šalje verifikacioni email korisniku. Korisnik potvrđuje email klikom na link. Firme prolaze dodatnu verifikaciju prilaganjem dokumentacije putem submit forme. Administrator pregledava i odobrava ili odbija verifikaciju firme.}
+{Pri registraciji, sistem šalje verifikacioni email korisniku. Korisnik potvrđuje email klikom na link. }
 {Verifikacija profila; Verifikacija firme}
-{1. Postoje evidentirane aktivnosti za slanje obavijesti}
+{Korisnik šalje zahtjev za registraciju naloga na validan email.}
 {\hyperref[tok:5.1] {Tok događaja: Posljedice -- Uspješan završetak}}
 {\hyperref[tok:5.2]{ Tok događaja: Posljedice -- Neuspješan završetak}}
 {1. Korisnik (Klijent/Majstor/Firma)}
 {1. E-mail servis; 2. Administrator}
-{Sistem periodično provjerava bazu aktivnosti. Određuje koje aktivnosti zahtijevaju obavijesti. Kreira sadržaj obavijesti. Šalje email korisnicima. Logira status slanja.}
+{Korisnik šalje zahtjev za verifikaciju. Sistem validira podatke i šalje verifikacioni email. Korisnik klikne na link, sistem aktivira račun. }
 
 \extensions{Korisnik može zatražiti ponovni email ako nije primio prvi, i pri svakoj promjeni emaila, mora ponovo izvršiti verifikaciju.
-    Administrator može ručno pokrenuti proces slanja obavijesti u slučaju problema.
+    Firme prolaze dodatnu verifikaciju prilaganjem dokumentacije putem submit forme. Administrator pregledava i odobrava ili odbija verifikaciju firme.
     Verifikacioni link ističe nakon određenog vremena.
 }
-
+\newpage
 \subsection{[5.1] Tok događaja: Posljedice -- Uspješan završetak}
 \label{tok:5.1}
 
