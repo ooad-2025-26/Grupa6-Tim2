@@ -32,13 +32,15 @@
 \newcommand{\dijagram}[2]{%
   \begin{figure}[H]
     \centering
+    \caption{Dijagram aktivnosti za \textit{use case}: #1}  
+    
     \ifstrempty{#2}{%
       \fbox{\parbox[c][0.4\textheight][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
         \centering Placeholder za dijagram aktivnosti}}%
     }{%
-      \includegraphics[width=\textwidth]{DijagramiAktivnosti/#2}%
+      \includegraphics[width=\textwidth]{#2}%
     }
-    \caption{Dijagram aktivnosti za \textit{use case}: #1}
+    
   \end{figure}
 }
 
@@ -110,7 +112,7 @@
 {Verifikacija profila pri registraciji putem maila}
 \dijagram
 {Verifikacija profila pri registraciji putem maila}
-{}
+{dijagram-verifikacijaprofila.pdf}
 
 %=============================================================
 \section{Pretraga usluga}
