@@ -1,4 +1,4 @@
-<center><img src="ui-wip/logo.png" alt="Popravka.ba logotip" width="300" height="200" align="center">
+<center><img src="ui-wip/assets/logo.png" alt="Popravka.ba logotip" width="300" height="200" align="center">
 <br>
 <br>
 
