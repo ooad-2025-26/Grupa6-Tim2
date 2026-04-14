@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F4F3EF;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .section {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #E8E6E0;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .btn-show-all {
+    font-size: 13px;
+    color: #3563E9;
+    border: 1px solid #C5D3FA;
+    background: #F0F4FF;
+    padding: 5px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-show-all:hover { background: #DDE8FF; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead th {
+    text-align: left;
+    color: #888;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0 0 10px;
+    border-bottom: 1px solid #EEECE7;
+  }
+
+  tbody td {
+    padding: 13px 0;
+    border-bottom: 1px solid #F0EEE9;
+    color: #1a1a1a;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  .user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .av-blue  { background: #DDEEFF; color: #1255A0; }
+  .av-green { background: #D6F5E9; color: #0B6E46; }
+  .av-amber { background: #FEF0D0; color: #8C5A00; }
+
+  .user-name  { font-weight: 500; font-size: 13.5px; display: block; }
+  .user-email { color: #999; font-size: 12px; display: block; margin-top: 1px; }
+
+  .date { color: #888; }
+
+  .btn-approve {
+    background: #1DB97A;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 5px 13px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-right: 6px;
+    transition: background 0.15s;
+  }
+  .btn-approve:hover { background: #17A36C; }
+
+  .btn-reject, .btn-remove {
+    background: #E84040;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 5px 13px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-reject:hover, .btn-remove:hover { background: #C93535; }
+
+  .btn-view {
+    background: transparent;
+    border: 1px solid #DDD;
+    color: #333;
+    border-radius: 7px;
+    padding: 5px 13px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-right: 6px;
+    transition: background 0.15s;
+  }
+  .btn-view:hover { background: #F5F5F5; }
+
+  .badge-warn {
+    display: inline-block;
+    background: #FEF0D0;
+    color: #8C5A00;
+    border-radius: 999px;
+    padding: 3px 11px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Verifikacije -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Čekaju na verifikaciju (23)</span>
+      <button class="btn-show-all">Prikaži sve</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Korisnik</th>
+          <th>Kategorija</th>
+          <th>Datum</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar av-blue">E</div>
+              <div>
+                <span class="user-name">ElektroServis d.o.o.</span>
+                <span class="user-email">haris@email.com</span>
+              </div>
+            </div>
+          </td>
+          <td>Električar</td>
+          <td class="date">Prije 2 dana</td>
+          <td>
+            <button class="btn-approve">Odobri</button>
+            <button class="btn-reject">Odbij</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar av-green">S</div>
+              <div>
+                <span class="user-name">Stolarska Radionica Redžić</span>
+                <span class="user-email">tarik@email.com</span>
+              </div>
+            </div>
+          </td>
+          <td>Stolar</td>
+          <td class="date">Prije 1 dan</td>
+          <td>
+            <button class="btn-approve">Odobri</button>
+            <button class="btn-reject">Odbij</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar av-amber">K</div>
+              <div>
+                <span class="user-name">Krovopokrivački Obrt Petrović</span>
+                <span class="user-email">ivan@email.com</span>
+              </div>
+            </div>
+          </td>
+          <td>Krovač</td>
+          <td class="date">Prije 5h</td>
+          <td>
+            <button class="btn-approve">Odobri</button>
+            <button class="btn-reject">Odbij</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recenzije -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Prijavljene recenzije (5)</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Recenzija</th>
+          <th>Majstor</th>
+          <th>Razlog</th>
+          <th>Datum</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Ovaj majstor je potpuno ne..."</td>
+          <td>Ahmed S.</td>
+          <td><span class="badge-warn">Neprimjereno</span></td>
+          <td class="date">Prije 3h</td>
+          <td>
+            <button class="btn-view">Pregledaj</button>
+            <button class="btn-remove">Ukloni</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prijava / Registracija – Popravka.ba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a6fd4;
+    --blue-dark: #1558aa;
+    --blue-light: #e8f0fb;
+    --navy: #1e2d4a;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --red: #ef4444;
+    --red-light: #fee2e2;
+    --green: #27ae60;
+    --green-light: #dcfce7;
+  }
+
+  * { font-family: 'Noto Sans', system-ui, sans-serif; }
+  h1, h2, h3, label, .tab-btn, .btn-submit, .role-btn, .switch-link, .panel-logo-text {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+
+  /* ── SPLIT ── */
+  .split { display: flex; min-height: 100vh; width: 100%; }
+
+  .panel-blue {
+    flex: 1;
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-blue::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .panel-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+    z-index: 1;
+  }
+
+  .panel-logo-icon {
+    width: 38px; height: 38px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .panel-logo-icon svg { width: 22px; height: 22px; color: var(--blue); }
+  .panel-logo-text { font-weight: 800; font-size: 1.4rem; color: white; }
+
+  .panel-photo {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 4/3;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    border: 2px dashed rgba(255,255,255,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    color: rgba(255,255,255,0.5);
+    z-index: 1;
+  }
+
+  .panel-photo svg { width: 40px; height: 40px; }
+  .panel-photo span { font-size: 0.85rem; font-weight: 500; }
+
+  .panel-tagline {
+    margin-top: 2rem;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    max-width: 300px;
+    z-index: 1;
+  }
+  .panel-tagline strong { color: white; }
+
+  /* ── FORM PANEL ── */
+  .panel-form {
+    width: 500px;
+    flex-shrink: 0;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2.5rem 2.5rem;
+    overflow-y: auto;
+    min-height: 100vh;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 1.75rem;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .tab-btn.active { background: var(--white); color: var(--blue); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* ── HEADINGS ── */
+  .form-title { font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; }
+  .form-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  /* ── ROLE SELECTOR ── */
+  .role-label { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.45rem; display: block; }
+
+  .role-row { display: flex; gap: 0.6rem; margin-bottom: 1.4rem; }
+
+  .role-btn {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    border-radius: 8px;
+    padding: 0.65rem 0.4rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all .15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .role-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+  .role-btn.active { border-color: var(--blue); background: var(--blue-light); }
+
+  .role-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
+  }
+  .role-btn.active .role-icon { background: var(--blue); }
+  .role-icon svg { width: 15px; height: 15px; color: #6b7280; }
+  .role-btn.active .role-icon svg { color: white; }
+
+  .role-name { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
+  .role-btn.active .role-name { color: var(--blue); }
+
+  /* ── FORM FIELDS ── */
+  .form-group { display: flex; flex-direction: column; gap: 0.28rem; margin-bottom: 0.9rem; }
+  .form-row-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+  label { font-size: 0.78rem; font-weight: 700; color: var(--text); }
+  .label-hint { font-weight: 400; color: var(--text-muted); font-size: 0.73rem; margin-left: 0.25rem; }
+  .label-req { color: var(--red); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  select {
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.85rem;
+    font-family: 'Noto Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    width: 100%;
+    -webkit-appearance: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,111,212,0.1); }
+  input::placeholder { color: #b0b7c0; }
+  input.valid { border-color: var(--green); }
+  input.invalid { border-color: var(--red); }
+
+  /* password wrapper */
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 2.5rem; }
+  .pw-toggle {
+    position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex;
+  }
+  .pw-toggle svg { width: 16px; height: 16px; }
+
+  /* pw match hint */
+  .pw-hint { font-size: 0.7rem; margin-top: 0.2rem; display: none; }
+  .pw-hint.show { display: block; }
+  .pw-hint.match { color: var(--green); }
+  .pw-hint.no-match { color: var(--red); }
+
+  /* ── MULTI-SELECT DROPDOWN ── */
+  .multi-select-wrap { position: relative; }
+
+  .multi-select-trigger {
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    transition: border-color .15s;
+  }
+  .multi-select-trigger:hover, .multi-select-trigger.open { border-color: var(--blue); }
+  .multi-select-trigger svg { width: 14px; height: 14px; flex-shrink: 0; transition: transform .15s; }
+  .multi-select-trigger.open svg { transform: rotate(180deg); }
+
+  .multi-select-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--white);
+    border: 1.5px solid var(--blue);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    z-index: 50;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .multi-select-dropdown.open { display: block; }
+
+  .multi-select-group-label {
+    padding: 0.4rem 0.75rem 0.2rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f9fafb;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+  }
+
+  .multi-select-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.83rem;
+    cursor: pointer;
+    transition: background .1s;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .multi-select-option:last-child { border-bottom: none; }
+  .multi-select-option:hover { background: var(--blue-light); }
+  .multi-select-option.selected { background: var(--blue-light); color: var(--blue); font-weight: 600; }
+  .multi-select-option.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+  .multi-select-option .opt-check {
+    width: 15px; height: 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .1s;
+  }
+  .multi-select-option.selected .opt-check {
+    background: var(--blue); border-color: var(--blue);
+  }
+  .multi-select-option.selected .opt-check svg { display: block; }
+  .multi-select-option .opt-check svg { display: none; width: 9px; height: 9px; color: white; }
+
+  /* ── CHIPS ── */
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.45rem;
+    min-height: 0;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--blue-light);
+    color: var(--blue);
+    border: 1px solid #bfdbfe;
+    border-radius: 20px;
+    padding: 0.2rem 0.55rem 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .chip-remove {
+    background: none; border: none; cursor: pointer;
+    color: var(--blue); opacity: 0.65;
+    display: flex; align-items: center;
+    padding: 0;
+    transition: opacity .1s;
+  }
+  .chip-remove:hover { opacity: 1; }
+  .chip-remove svg { width: 12px; height: 12px; }
+
+  .select-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+  /* ── PHOTO UPLOAD ── */
+  .photo-upload {
+    width: 100%;
+    height: 110px;
+    border: 2px dashed #c7d6ee;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    background: #f8fafd;
+    color: #9eb3d4;
+    transition: border-color .15s, background .15s;
+  }
+  .photo-upload:hover { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+  .photo-upload svg { width: 26px; height: 26px; }
+  .photo-upload span { font-size: 0.78rem; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .photo-upload small { font-size: 0.68rem; opacity: 0.7; }
+
+  /* ── SUBMIT ── */
+  .btn-submit {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 0.65rem;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.25rem;
+    transition: background .15s;
+  }
+  .btn-submit:hover { background: var(--blue-dark); }
+
+  /* ── FORGOT / SWITCH / TERMS ── */
+  .forgot { text-align: right; font-size: 0.75rem; margin-top: -0.4rem; margin-bottom: 0.9rem; }
+  .forgot a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+  .switch-link { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 1.1rem; }
+  .switch-link a { color: var(--blue); font-weight: 700; text-decoration: none; cursor: pointer; }
+  .switch-link a:hover { text-decoration: underline; }
+
+  .terms { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.65rem; text-align: center; line-height: 1.5; }
+  .terms a { color: var(--blue); text-decoration: none; }
+
+  /* ── VISIBILITY ── */
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+</style>
+</head>
+<body>
+<div class="split">
+
+  <!-- LEFT: BLUE PANEL -->
+  <div class="panel-blue">
+    <div class="panel-logo">
+      <div class="panel-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <span class="panel-logo-text">Popravka.ba</span>
+    </div>
+
+    <div class="panel-photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Fotografija</span>
+    </div>
+
+    <p class="panel-tagline">
+      <strong>Vaš online prostor za provjerene usluge.</strong><br>
+      Povežite se s najboljim majstorima u vašem gradu.
+    </p>
+  </div>
+
+  <!-- RIGHT: FORM PANEL -->
+  <div class="panel-form">
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tabPrijava" onclick="switchTab('prijava')">Prijava</button>
+      <button class="tab-btn" id="tabRegistracija" onclick="switchTab('registracija')">Registracija</button>
+    </div>
+
+    <!-- ── PRIJAVA ── -->
+    <div class="form-section active" id="sectionPrijava">
+      <h1 class="form-title">Dobrodošli nazad</h1>
+      <p class="form-subtitle">Unesite vaše podatke za pristup nalogu.</p>
+
+      <div class="form-group">
+        <label>E-mail adresa</label>
+        <input type="email" placeholder="vas@email.com">
+      </div>
+
+      <div class="form-group">
+        <label>Lozinka</label>
+        <div class="pw-wrap">
+          <input type="password" id="pwLogin" placeholder="••••••••">
+          <button class="pw-toggle" onclick="togglePw('pwLogin',this)" tabindex="-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="forgot"><a href="#">Zaboravili ste lozinku?</a></div>
+
+      <button class="btn-submit">Prijava</button>
+
+      <div class="switch-link">Nemate nalog? <a onclick="switchTab('registracija')">Registrujte se</a></div>
+    </div>
+
+    <!-- ── REGISTRACIJA ── -->
+    <div class="form-section" id="sectionRegistracija">
+      <h1 class="form-title">Kreirajte nalog</h1>
+      <p class="form-subtitle">Popunite podatke i počnite koristiti platformu.</p>
+
+      <span class="role-label">Prijavljujem se kao...</span>
+      <div class="role-row">
+        <button class="role-btn active" data-role="klijent" onclick="selectRole(this)">
+          <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <span class="role-name">Klijent</span>
+        </button>
+        <button class="role-btn" data-role="majstor" onclick="selectRole(this)">
+          <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <span class="role-name">Majstor</span>
+        </button>
+        <button class="role-btn" data-role="firma" onclick="selectRole(this)">
+          <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+          <span class="role-name">Firma</span>
+        </button>
+      </div>
+
+      <!-- ── KLIJENT ── -->
+      <div id="fieldsKlijent">
+        <div class="form-row-two">
+          <div class="form-group"><label>Ime</label><input type="text" placeholder="Tarik"></div>
+          <div class="form-group"><label>Prezime</label><input type="text" placeholder="Redžić"></div>
+        </div>
+        <div class="form-group"><label>E-mail adresa</label><input type="email" placeholder="vas@email.com"></div>
+        <div class="form-group">
+          <label>Lozinka</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwK" placeholder="Minimum 8 znakova" oninput="checkMatch('pwK','pwKC','hintK')">
+            <button class="pw-toggle" onclick="togglePw('pwK',this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Potvrda lozinke</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwKC" placeholder="Ponovite lozinku" oninput="checkMatch('pwK','pwKC','hintK')">
+            <button class="pw-toggle" onclick="togglePw('pwKC',this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="pw-hint" id="hintK"></div>
+        </div>
+        <!-- Lokacija multi-select (max 3) -->
+        <div class="form-group">
+          <label>Lokacija <span class="label-hint">(max 3)</span></label>
+          <div class="multi-select-wrap" id="locKWrap">
+            <div class="multi-select-trigger" onclick="toggleDropdown('locKDrop',this)">
+              <span>Odaberite grad(ove)...</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="multi-select-dropdown" id="locKDrop"></div>
+          </div>
+          <div class="chips-row" id="chipsLocK"></div>
+        </div>
+      </div>
+
+      <!-- ── MAJSTOR ── -->
+      <div id="fieldsMajstor" style="display:none;">
+        <div class="form-row-two">
+          <div class="form-group"><label>Ime</label><input type="text" placeholder="Tarik"></div>
+          <div class="form-group"><label>Prezime</label><input type="text" placeholder="Redžić"></div>
+        </div>
+        <div class="form-group"><label>E-mail adresa</label><input type="email" placeholder="vas@email.com"></div>
+        <div class="form-group">
+          <label>Lozinka</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwM" placeholder="Minimum 8 znakova" oninput="checkMatch('pwM','pwMC','hintM')">
+            <button class="pw-toggle" onclick="togglePw('pwM',this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Potvrda lozinke</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwMC" placeholder="Ponovite lozinku" oninput="checkMatch('pwM','pwMC','hintM')">
+            <button class="pw-toggle" onclick="togglePw('pwMC',this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="pw-hint" id="hintM"></div>
+        </div>
+        <!-- Zanimanje multi-select (max 5) -->
+        <div class="form-group">
+          <label>Zanimanje <span class="label-hint">(max 5)</span></label>
+          <div class="multi-select-wrap">
+            <div class="multi-select-trigger" onclick="toggleDropdown('zanDrop',this)">
+              <span>Odaberite zanimanje(a)...</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="multi-select-dropdown" id="zanDrop"></div>
+          </div>
+          <div class="chips-row" id="chipsZan"></div>
+        </div>
+        <!-- Lokacija multi-select (max 3) -->
+        <div class="form-group">
+          <label>Lokacija <span class="label-hint">(max 3)</span></label>
+          <div class="multi-select-wrap">
+            <div class="multi-select-trigger" onclick="toggleDropdown('locMDrop',this)">
+              <span>Odaberite grad(ove)...</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="multi-select-dropdown" id="locMDrop"></div>
+          </div>
+          <div class="chips-row" id="chipsLocM"></div>
+        </div>
+      </div>
+
+      <!-- ── FIRMA ── -->
+      <div id="fieldsFirma" style="display:none;">
+        <div class="form-group"><label>Naziv firme</label><input type="text" placeholder="npr. SaniChampi d.o.o."></div>
+        <div class="form-group"><label>E-mail adresa</label><input type="email" placeholder="firma@email.com"></div>
+        <div class="form-group">
+          <label>Lozinka</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwF" placeholder="Minimum 8 znakova" oninput="checkMatch('pwF','pwFC','hintF')">
+            <button class="pw-toggle" onclick="togglePw('pwF',this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Potvrda lozinke</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwFC" placeholder="Ponovite lozinku" oninput="checkMatch('pwF','pwFC','hintF')">
+            <button class="pw-toggle" onclick="togglePw('pwFC',this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="pw-hint" id="hintF"></div>
+        </div>
+        <!-- Djelatnost multi-select (max 5) -->
+        <div class="form-group">
+          <label>Djelatnost <span class="label-hint">(max 5)</span></label>
+          <div class="multi-select-wrap">
+            <div class="multi-select-trigger" onclick="toggleDropdown('djeDrop',this)">
+              <span>Odaberite djelatnost(i)...</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="multi-select-dropdown" id="djeDrop"></div>
+          </div>
+          <div class="chips-row" id="chipsDje"></div>
+        </div>
+        <!-- Lokacija multi-select (max 3) -->
+        <div class="form-group">
+          <label>Lokacija <span class="label-hint">(max 3)</span></label>
+          <div class="multi-select-wrap">
+            <div class="multi-select-trigger" onclick="toggleDropdown('locFDrop',this)">
+              <span>Odaberite grad(ove)...</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="multi-select-dropdown" id="locFDrop"></div>
+          </div>
+          <div class="chips-row" id="chipsLocF"></div>
+        </div>
+        <div class="form-group"><label>Kontakt telefon <span class="label-hint">(opcionalno)</span></label><input type="tel" placeholder="+387 61 000 000"></div>
+        <!-- Firma photo (required) -->
+        <div class="form-group">
+          <label>Logo / fotografija firme <span class="label-req">*</span></label>
+          <div class="photo-upload" id="firmaPhotoBox" onclick="document.getElementById('firmaPhotoInput').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Kliknite za upload</span>
+            <small>JPG, PNG – max 5MB</small>
+          </div>
+          <input type="file" id="firmaPhotoInput" accept="image/*" style="display:none;" onchange="previewPhoto(this,'firmaPhotoBox')">
+        </div>
+      </div>
+
+      <button class="btn-submit">Registracija</button>
+
+      <p class="terms">Registracijom prihvatate naše <a href="#">Uvjete korištenja</a> i <a href="#">Politiku privatnosti</a>.</p>
+
+      <div class="switch-link">Već imate nalog? <a onclick="switchTab('prijava')">Prijavite se</a></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── DATA ──────────────────────────────────────────────────────
+  const LOCATIONS = ['Bugojno','Jablanica','Mostar','Pale','Sarajevo','Tuzla','Visoko','Vogošća','Zenica'];
+
+  const ZAN_GROUPS = [
+    { label: 'Instalacije',  opts: ['Vodoinstalater','Električar','Klima tehničar','Plinoinstalater'] },
+    { label: 'Građevina',    opts: ['Krovopokrivač','Armirani beton','Zidar','Keramičar','Fasader','Izolater'] },
+    { label: 'Obrada',       opts: ['Stolar','Bravar','Moler','Farbar','Lakirer'] },
+    { label: 'Prijevoz',     opts: ['Prevoznik','Selidbeni radnik'] },
+    { label: 'Ostalo',       opts: ['Kozmetičar','Grill majstor','Čistač','Vrtlar','Ostalo'] },
+  ];
+
+  const DJE_GROUPS = [
+    { label: 'Instalacije',        opts: ['Vodoinstalacije','Električne instalacije','Klimatizacija','Plinske instalacije'] },
+    { label: 'Građevina',          opts: ['Krovopokrivački poslovi','Armirani beton','Zidarstvo','Keramičarski radovi','Fasaderski radovi','Izolacija'] },
+    { label: 'Obrada i završni',   opts: ['Stolarija','Bravarija','Molerski radovi','Farbanje','Lakirajni radovi'] },
+    { label: 'Prijevoz',           opts: ['Prevoz robe','Selidbe'] },
+    { label: 'Ostalo',             opts: ['Kozmetika','Ugostiteljstvo','Čišćenje','Vrtlarstvo','Ostalo'] },
+  ];
+
+  // ── MULTI-SELECT STATE ─────────────────────────────────────────
+  const state = {
+    locK:  [], locM:  [], locF:  [],
+    zan:   [], dje:   [],
+  };
+
+  const checkSVG = `<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,5 4,7 8,3"/></svg>`;
+  const closeSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const chevSVG  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+  function buildLocDropdown(dropId, stateKey, chipsId, max) {
+    const drop = document.getElementById(dropId);
+    LOCATIONS.forEach(loc => {
+      const div = document.createElement('div');
+      div.className = 'multi-select-option';
+      div.dataset.val = loc;
+      div.innerHTML = `<span class="opt-check">${checkSVG}</span>${loc}`;
+      div.addEventListener('click', () => toggleOption(div, stateKey, chipsId, max, dropId));
+      drop.appendChild(div);
+    });
+  }
+
+  function buildGroupedDropdown(dropId, stateKey, chipsId, max, groups) {
+    const drop = document.getElementById(dropId);
+    groups.forEach(group => {
+      const gl = document.createElement('div');
+      gl.className = 'multi-select-group-label';
+      gl.textContent = group.label;
+      drop.appendChild(gl);
+      group.opts.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'multi-select-option';
+        div.dataset.val = opt;
+        div.innerHTML = `<span class="opt-check">${checkSVG}</span>${opt}`;
+        div.addEventListener('click', () => toggleOption(div, stateKey, chipsId, max, dropId));
+        drop.appendChild(div);
+      });
+    });
+  }
+
+  function toggleOption(div, stateKey, chipsId, max, dropId) {
+    const val = div.dataset.val;
+    const arr = state[stateKey];
+    if (arr.includes(val)) {
+      state[stateKey] = arr.filter(v => v !== val);
+      div.classList.remove('selected');
+    } else {
+      if (arr.length >= max) return;
+      state[stateKey].push(val);
+      div.classList.add('selected');
+    }
+    renderChips(stateKey, chipsId, max, dropId);
+  }
+
+  function renderChips(stateKey, chipsId, max, dropId) {
+    const row = document.getElementById(chipsId);
+    row.innerHTML = '';
+    state[stateKey].forEach(val => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `${val}<button class="chip-remove" onclick="removeChip('${stateKey}','${val}','${chipsId}',${max},'${dropId}')">${closeSVG}</button>`;
+      row.appendChild(chip);
+    });
+    // disable options in dropdown if at max
+    document.querySelectorAll(`#${dropId} .multi-select-option`).forEach(opt => {
+      if (!state[stateKey].includes(opt.dataset.val) && state[stateKey].length >= max) {
+        opt.classList.add('disabled');
+      } else {
+        opt.classList.remove('disabled');
+      }
+    });
+    // update trigger label
+    const trigger = document.querySelector(`#${dropId}`).previousElementSibling;
+    const span = trigger.querySelector('span');
+    span.textContent = state[stateKey].length === 0
+      ? trigger.dataset.placeholder || 'Odaberite...'
+      : `${state[stateKey].length} odabrano`;
+  }
+
+  function removeChip(stateKey, val, chipsId, max, dropId) {
+    state[stateKey] = state[stateKey].filter(v => v !== val);
+    const opt = document.querySelector(`#${dropId} [data-val="${val}"]`);
+    if (opt) opt.classList.remove('selected');
+    renderChips(stateKey, chipsId, max, dropId);
+  }
+
+  function toggleDropdown(dropId, trigger) {
+    const drop = document.getElementById(dropId);
+    const isOpen = drop.classList.contains('open');
+    // close all
+    document.querySelectorAll('.multi-select-dropdown.open').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.multi-select-trigger.open').forEach(t => t.classList.remove('open'));
+    if (!isOpen) {
+      drop.classList.add('open');
+      trigger.classList.add('open');
+    }
+  }
+
+  // close dropdowns on outside click
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.multi-select-wrap')) {
+      document.querySelectorAll('.multi-select-dropdown.open').forEach(d => d.classList.remove('open'));
+      document.querySelectorAll('.multi-select-trigger.open').forEach(t => t.classList.remove('open'));
+    }
+  });
+
+  // ── INIT DROPDOWNS ────────────────────────────────────────────
+  buildLocDropdown('locKDrop', 'locK', 'chipsLocK', 3);
+  buildLocDropdown('locMDrop', 'locM', 'chipsLocM', 3);
+  buildLocDropdown('locFDrop', 'locF', 'chipsLocF', 3);
+  buildGroupedDropdown('zanDrop', 'zan', 'chipsZan', 5, ZAN_GROUPS);
+  buildGroupedDropdown('djeDrop', 'dje', 'chipsDje', 5, DJE_GROUPS);
+
+  // ── TABS ──────────────────────────────────────────────────────
+  function switchTab(tab) {
+    document.getElementById('sectionPrijava').classList.toggle('active', tab === 'prijava');
+    document.getElementById('sectionRegistracija').classList.toggle('active', tab === 'registracija');
+    document.getElementById('tabPrijava').classList.toggle('active', tab === 'prijava');
+    document.getElementById('tabRegistracija').classList.toggle('active', tab === 'registracija');
+  }
+
+  // ── ROLE ─────────────────────────────────────────────────────
+  function selectRole(btn) {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const role = btn.dataset.role;
+    document.getElementById('fieldsKlijent').style.display = role === 'klijent' ? 'block' : 'none';
+    document.getElementById('fieldsMajstor').style.display = role === 'majstor' ? 'block' : 'none';
+    document.getElementById('fieldsFirma').style.display   = role === 'firma'   ? 'block' : 'none';
+  }
+
+  // ── PASSWORD ──────────────────────────────────────────────────
+  function togglePw(id, btn) {
+    const input = document.getElementById(id);
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.innerHTML = show
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  }
+
+  function checkMatch(id1, id2, hintId) {
+    const v1 = document.getElementById(id1).value;
+    const v2 = document.getElementById(id2).value;
+    const hint = document.getElementById(hintId);
+    if (!v2) { hint.className = 'pw-hint'; return; }
+    if (v1 === v2) {
+      hint.textContent = '✓ Lozinke se podudaraju';
+      hint.className = 'pw-hint show match';
+    } else {
+      hint.textContent = '✗ Lozinke se ne podudaraju';
+      hint.className = 'pw-hint show no-match';
+    }
+  }
+
+  // ── PHOTO PREVIEW ────────────────────────────────────────────
+  function previewPhoto(input, boxId) {
+    if (!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const box = document.getElementById(boxId);
+      box.style.backgroundImage = `url(${e.target.result})`;
+      box.style.backgroundSize = 'cover';
+      box.style.backgroundPosition = 'center';
+      box.innerHTML = '';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+</script>
+
+</body>
+</html>

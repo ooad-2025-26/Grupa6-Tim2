@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ševko Rahimić – Popravka.ba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a6fd4;
+    --blue-dark: #1558aa;
+    --blue-light: #e8f0fb;
+    --navy: #1e2d4a;
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --gold: #f59e0b;
+  }
+
+  body {
+    font-family: 'Noto Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, h2, h3, h4, .nav-logo, .section-title, .stat-val, .btn-primary {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--blue);
+  }
+
+  .nav-logo svg {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--blue); }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.3rem 0.75rem 0.3rem 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .nav-user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #c8d3e0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .nav-user-avatar svg { width: 22px; height: 22px; }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 3rem;
+    width: 100%;
+    flex: 1;
+  }
+
+  /* ── HERO BANNER ── */
+  .hero-banner {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 60%, var(--navy) 100%);
+    border-radius: 12px;
+    height: 130px;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  /* ── PROFILE HEADER CARD ── */
+  .profile-header-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 0 0 12px 12px;
+    padding: 0 1.75rem 1.25rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+
+  /* Avatar — sits half over the banner */
+  .profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #c8d3e0;
+    border: 4px solid var(--white);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    top: -40px;
+    margin-bottom: -20px;
+    flex-shrink: 0;
+  }
+  .profile-avatar svg { width: 64px; height: 64px; }
+
+  .profile-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .profile-identity { flex: 1; }
+
+  .profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.2rem;
+  }
+
+  .profile-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 0.18rem 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .verified-badge-icon {
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: #374151;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .verified-badge-icon svg { width: 7px; height: 7px; color: white; }
+
+  .profile-role {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .profile-location {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .profile-location svg { width: 14px; height: 14px; color: var(--text); flex-shrink: 0; }
+
+  .profile-actions {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    padding-top: 0.25rem;
+  }
+
+  .btn-contact {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 7px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .btn-contact:hover { background: var(--blue-dark); }
+
+  .btn-report {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1.5px solid #fca5a5;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 0.28rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn-report:hover { background: #fecaca; border-color: #ef4444; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex;
+    gap: 2.5rem;
+    padding: 1rem 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item { display: flex; flex-direction: column; gap: 0.1rem; }
+
+  .stat-val {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .stat-val svg { width: 18px; height: 18px; color: var(--blue); }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ── LAYOUT GRID ── */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title-icon { font-size: 1rem; }
+
+  .about-text {
+    font-size: 0.88rem;
+    color: #374151;
+    line-height: 1.75;
+  }
+
+  /* ── SKILLS CHIPS ── */
+  .skills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill-chip {
+    background: var(--blue-light);
+    color: var(--blue);
+    border: 1px solid #bfdbfe;
+    border-radius: 20px;
+    padding: 0.28rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* ── SERVICE ADS ── */
+  .service-ads { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .service-ad-card {
+    display: flex;
+    gap: 0.85rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+    cursor: pointer;
+  }
+  .service-ad-card:hover { border-color: #aac4ea; box-shadow: 0 1px 6px rgba(26,111,212,0.08); }
+
+  .service-ad-img {
+    width: 80px;
+    flex-shrink: 0;
+    background: #f0f4fa;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9eb3d4;
+  }
+  .service-ad-img svg { width: 26px; height: 26px; }
+
+  .service-ad-body { padding: 0.7rem 0.85rem 0.7rem 0; flex: 1; min-width: 0; }
+
+  .service-ad-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .service-ad-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+  }
+
+  .service-ad-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .service-ad-price {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--blue);
+  }
+
+  .service-ad-loc {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .service-ad-loc svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* ── REVIEWS ── */
+  .section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .see-all-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: opacity .15s;
+  }
+  .see-all-link:hover { opacity: 0.75; text-decoration: underline; }
+
+  .review-item {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .review-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .review-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .review-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .review-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: #c8d3e0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .review-avatar svg { width: 28px; height: 28px; }
+
+  .review-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .review-date { font-size: 0.73rem; color: var(--text-muted); margin-top: 0.1rem; }
+
+  .review-stars {
+    display: flex;
+    gap: 0.15rem;
+    flex-shrink: 0;
+  }
+  .review-stars svg { width: 18px; height: 18px; color: var(--blue); }
+
+  .review-text { font-size: 0.85rem; color: #374151; line-height: 1.65; }
+
+  /* ── SIDEBAR CARDS ── */
+  .contact-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.9rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .contact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-label { color: var(--text-muted); }
+  .contact-value { font-weight: 600; color: var(--text); text-align: right; }
+
+  /* ── PORTFOLIO ── */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .portfolio-img {
+    aspect-ratio: 1;
+    background: #f0f4fa;
+    border: 1px dashed #c7d6ee;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9eb3d4;
+  }
+  .portfolio-img svg { width: 22px; height: 22px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.75);
+    padding: 1.75rem 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    Popravka.ba
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Početna</a></li>
+    <li><a href="#">Statistika</a></li>
+    <li><a href="#">Pretraga</a></li>
+  </ul>
+  <div class="nav-user">
+    <div class="nav-user-avatar">
+      <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+    </div>
+    Klijent: Eldar M.
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO BANNER -->
+  <div class="hero-banner"></div>
+
+  <!-- PROFILE HEADER CARD -->
+  <div class="profile-header-card">
+    <div class="profile-top">
+      <div style="display:flex;align-items:flex-end;gap:1rem;">
+        <div class="profile-avatar">
+          <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+        </div>
+        <div class="profile-identity">
+          <div class="profile-name-row">
+            <span class="profile-name">Ševko Rahimić</span>
+            <span class="verified-badge">
+              <span class="verified-badge-icon">
+                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,5 4,7 8,3"/></svg>
+              </span>
+            </span>
+          </div>
+          <div class="profile-role">Instalater</div>
+          <div class="profile-location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Sarajevo, Centar
+          </div>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-contact">Kontaktiraj</button>
+      </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-val">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          5.0
+        </div>
+        <div class="stat-label">Ocjena</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">127</div>
+        <div class="stat-label">Recenzija</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">342</div>
+        <div class="stat-label">Poslova</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">15</div>
+        <div class="stat-label">God. iskustva</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="profile-grid">
+
+    <!-- LEFT -->
+    <div>
+      <!-- O MENI -->
+      <div class="card">
+        <div class="section-title">O meni</div>
+        <p class="about-text">
+          Profesionalni vodoinstalater sa preko 15 godina iskustva. Specijalizovan za hitne intervencije, zamjenu cijevi, montažu sanitarnog namještaja i sve vrste vodoinstalaterskih popravki. Dostupan 24/7 za hitne slučajeve.
+        </p>
+      </div>
+
+      <!-- VJEŠTINE I USLUGE -->
+      <div class="card">
+        <div class="section-title">Vještine i usluge</div>
+        <div class="skills-wrap">
+          <span class="skill-chip">Hitne intervencije</span>
+          <span class="skill-chip">Zamjena cijevi</span>
+          <span class="skill-chip">Montaža bojlera</span>
+          <span class="skill-chip">Sanitarni namještaj</span>
+          <span class="skill-chip">Odvodni sistemi</span>
+          <span class="skill-chip">Detekcija curenja</span>
+          <span class="skill-chip">Renoviranje kupatila</span>
+        </div>
+      </div>
+
+      <!-- OPĆI OGLAS USLUGA -->
+      <div class="card">
+        <div class="section-title">Opći oglas usluga</div>
+        <div class="service-ads">
+
+          <div class="service-ad-card">
+            <div class="service-ad-img">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div class="service-ad-body">
+              <div class="service-ad-title">Hitna popravka vodoinstalacija</div>
+              <div class="service-ad-desc">Dostupan 24/7 za hitne intervencije curenja vode, zamjenu ventila i popravku cijevi u stambenim i poslovnim objektima.</div>
+              <div class="service-ad-meta">
+                <span class="service-ad-price">Od 50 KM</span>
+                <span class="service-ad-loc">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Sarajevo
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-ad-card">
+            <div class="service-ad-img">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div class="service-ad-body">
+              <div class="service-ad-title">Montaža bojlera i sanitarija</div>
+              <div class="service-ad-desc">Profesionalna ugradnja bojlera, WC školjki, umivaonika i ostalih sanitarnih elemenata. Garancija na rad.</div>
+              <div class="service-ad-meta">
+                <span class="service-ad-price">Od 80 KM</span>
+                <span class="service-ad-loc">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Sarajevo, Centar
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-ad-card">
+            <div class="service-ad-img">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div class="service-ad-body">
+              <div class="service-ad-title">Renoviranje kupatila</div>
+              <div class="service-ad-desc">Kompletna rekonstrukcija kupatila — zamjena cijevi, postavljanje keramike i ugradnja sanitarija. Brzo i uredno.</div>
+              <div class="service-ad-meta">
+                <span class="service-ad-price">Po dogovoru</span>
+                <span class="service-ad-loc">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Kanton Sarajevo
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RECENZIJE -->
+      <div class="card">
+        <div class="section-title-row">
+          <div class="section-title" style="margin-bottom:0;">Recenzije klijenata</div>
+          <a href="#" class="see-all-link">Pogledaj sve →</a>
+        </div>
+
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-user">
+              <div class="review-avatar">
+                <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+              </div>
+              <div>
+                <div class="review-name">Amra Hadžić</div>
+                <div class="review-date">Prije 3 dana</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <div class="review-stars">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <button class="btn-report">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                Prijavi
+              </button>
+            </div>
+          </div>
+          <p class="review-text">Izvrsan majstor! Došao je za manje od sat vremena. Brzo i kvalitetno riješio problem. Topla preporuka!</p>
+        </div>
+
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-user">
+              <div class="review-avatar">
+                <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+              </div>
+              <div>
+                <div class="review-name">Marko Petrović</div>
+                <div class="review-date">Prije 1 sedmicu</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <div class="review-stars">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <button class="btn-report">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                Prijavi
+              </button>
+            </div>
+          </div>
+          <p class="review-text">Profesionalan, tačan i korektan. Zamijenio je cijelu instalaciju za jedan dan. Definitivno ću ga ponovo angažirati.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div>
+      <!-- PORTFOLIO -->
+      <div class="contact-card">
+        <div class="contact-title">Portfolio</div>
+        <div class="portfolio-grid">
+          <div class="portfolio-img">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="portfolio-img">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="portfolio-img">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="portfolio-img">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div>© <strong>Popravka.ba</strong>, 2026</div>
+  <div>Projekt izrađen u sklopu kursa <strong>"Objektno orijentisana analiza i dizajn"</strong></div>
+  <div>Elektrotehnički fakultet – Univerzitet u Sarajevu</div>
+</footer>
+
+</body>
+</html>

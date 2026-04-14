@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rang lista – Popravka.ba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a6fd4;
+    --blue-dark: #1558aa;
+    --blue-light: #e8f0fb;
+    --navy: #1e2d4a;
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --gold: #f59e0b;
+  }
+
+  body {
+    font-family: 'Noto Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, h2, h3, h4, .nav-logo {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--blue);
+  }
+
+  .nav-logo svg {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--blue); }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.3rem 0.75rem 0.3rem 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .nav-user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #c8d3e0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .nav-user-avatar svg { width: 22px; height: 22px; }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem 3rem;
+    width: 100%;
+    flex: 1;
+  }
+
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--blue);
+    margin-bottom: 0.3rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .updated-label { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* CONTROLS */
+  .controls-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .filter-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    min-width: 60px;
+  }
+
+  .cat-tabs {
+    display: flex;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+
+  .cat-tab {
+    padding: 0.45rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-right: 1px solid var(--border);
+    transition: all .12s;
+    white-space: nowrap;
+  }
+  .cat-tab:last-child { border-right: none; }
+  .cat-tab:hover { background: var(--bg); color: var(--text); }
+  .cat-tab.active { background: var(--blue); color: white; }
+
+  .topn-toggle { display: flex; align-items: center; gap: 0.45rem; }
+  .topn-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+
+  .topn-btns {
+    display: flex;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .topn-btn {
+    padding: 0.38rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-muted);
+    border: none;
+    background: transparent;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    transition: all .12s;
+  }
+  .topn-btn:last-child { border-right: none; }
+  .topn-btn:hover { background: var(--bg); color: var(--text); }
+  .topn-btn.active { background: var(--navy); color: white; }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead tr { background: #f9fafb; border-bottom: 1.5px solid var(--border); }
+
+  th {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  th.sortable { cursor: pointer; transition: color .12s; }
+  th.sortable:hover { color: var(--blue); }
+  th.sort-asc, th.sort-desc { color: var(--blue); }
+
+  .sort-icon {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 1px;
+    vertical-align: middle;
+    margin-left: 3px;
+    opacity: 0.35;
+  }
+  th.sort-asc .sort-icon, th.sort-desc .sort-icon { opacity: 1; }
+  .sort-icon svg { width: 7px; height: 5px; }
+  th.sort-asc .sort-down { opacity: 0.2; }
+  th.sort-desc .sort-up { opacity: 0.2; }
+  th.center, td.center { text-align: center; }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f9fafb; }
+  td { padding: 0.85rem 1rem; font-size: 0.875rem; vertical-align: middle; }
+
+  .rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+  }
+  .rank-1 { background: #fef3c7; color: #b45309; border: 2px solid #fcd34d; }
+  .rank-2 { background: #f1f5f9; color: #475569; border: 2px solid #cbd5e1; }
+  .rank-3 { background: #fff7ed; color: #c2410c; border: 2px solid #fdba74; }
+  .rank-other { background: var(--bg); color: var(--text-muted); border: 1.5px solid var(--border); font-size: 0.75rem; }
+
+  .majstor-cell { display: flex; align-items: center; gap: 0.75rem; }
+  .majstor-info { display: flex; flex-direction: column; gap: 0.12rem; }
+
+  .majstor-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .majstor-avatar svg { width: 30px; height: 30px; }
+
+  .majstor-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--blue);
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  .majstor-name:hover { opacity: 0.72; text-decoration: underline; }
+
+  .verified-row {
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .verified-icon {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #374151;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .verified-icon svg { width: 7px; height: 7px; color: white; }
+
+  .star-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.28rem;
+    white-space: nowrap;
+  }
+  .star-cell svg { width: 13px; height: 13px; color: var(--gold); flex-shrink: 0; }
+  .star-val { font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.88rem; }
+
+  .empty-state { padding: 3rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.75);
+    padding: 1.75rem 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+    Popravka.ba
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Početna</a></li>
+    <li><a href="#">Statistika</a></li>
+    <li><a href="#" class="active">Rang lista</a></li>
+    <li><a href="#">Pretraga</a></li>
+  </ul>
+  <div class="nav-user">
+    <div class="nav-user-avatar">
+      <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+    </div>
+    Klijent: Eldar M.
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <h1 class="page-title">Mjesečna rang lista</h1>
+    <p class="page-subtitle">Najbolje ocijenjeni izvršioci usluga na platformi. <span style="margin-left:0.5rem;font-size:0.8rem;color:var(--text-muted);">Ažurirano: Prije 2h</span></p>
+  </div>
+
+  <div class="controls-bar">
+    <div class="filter-row">
+      <div class="filter-group">
+        <span class="filter-label">Kategorija</span>
+        <div class="cat-tabs" id="catTabs">
+          <button class="cat-tab active" data-cat="Sve">Sve</button>
+          <button class="cat-tab" data-cat="Vodoinstalater">Vodoinstalater</button>
+          <button class="cat-tab" data-cat="Električar">Električar</button>
+          <button class="cat-tab" data-cat="Stolar">Stolar</button>
+          <button class="cat-tab" data-cat="Farbanje">Farbanje</button>
+          <button class="cat-tab" data-cat="Krovopokrivački poslovi">Krovopokrivački poslovi</button>
+          <button class="cat-tab" data-cat="Prevoznik">Prevoznik</button>
+          <button class="cat-tab" data-cat="Armirani beton">Armirani beton</button>
+          <button class="cat-tab" data-cat="Moler">Moler</button>
+          <button class="cat-tab" data-cat="Grill majstor">Grill majstor</button>
+          <button class="cat-tab" data-cat="Kozmetičar">Kozmetičar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <div class="filter-group">
+        <span class="filter-label">Lokacija</span>
+        <div class="cat-tabs" id="locTabs">
+          <button class="cat-tab active" data-loc="Sve">Sve</button>
+          <button class="cat-tab" data-loc="Bugojno">Bugojno</button>
+          <button class="cat-tab" data-loc="Jablanica">Jablanica</button>
+          <button class="cat-tab" data-loc="Mostar">Mostar</button>
+          <button class="cat-tab" data-loc="Pale">Pale</button>
+          <button class="cat-tab" data-loc="Sarajevo">Sarajevo</button>
+          <button class="cat-tab" data-loc="Tuzla">Tuzla</button>
+          <button class="cat-tab" data-loc="Visoko">Visoko</button>
+          <button class="cat-tab" data-loc="Vogošća">Vogošća</button>
+          <button class="cat-tab" data-loc="Zenica">Zenica</button>
+        </div>
+      </div>
+
+      <div class="topn-toggle">
+        <span class="topn-label">Prikaži:</span>
+        <div class="topn-btns" id="topnBtns">
+          <button class="topn-btn active" data-n="10">Top 10</button>
+          <button class="topn-btn" data-n="15">Top 15</button>
+          <button class="topn-btn" data-n="30">Top 30</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="center" style="width:52px;">#</th>
+          <th>Majstor</th>
+          <th class="sortable" data-col="kategorija">Kategorija <span class="sort-icon"><svg class="sort-up" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,0 7,5 0,5"/></svg><svg class="sort-down" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,5 7,0 0,0"/></svg></span></th>
+          <th class="sortable" data-col="lokacija">Lokacija <span class="sort-icon"><svg class="sort-up" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,0 7,5 0,5"/></svg><svg class="sort-down" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,5 7,0 0,0"/></svg></span></th>
+          <th class="sortable center" data-col="ocjena">Ocjena <span class="sort-icon"><svg class="sort-up" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,0 7,5 0,5"/></svg><svg class="sort-down" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,5 7,0 0,0"/></svg></span></th>
+          <th class="sortable center" data-col="poslovi">Poslovi <span class="sort-icon"><svg class="sort-up" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,0 7,5 0,5"/></svg><svg class="sort-down" viewBox="0 0 7 5" fill="currentColor"><polygon points="3.5,5 7,0 0,0"/></svg></span></th>
+        </tr>
+      </thead>
+      <tbody id="rankBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <div>© <strong>Popravka.ba</strong>, 2026</div>
+  <div>Projekt izrađen u sklopu kursa <strong>"Objektno orijentisana analiza i dizajn"</strong></div>
+  <div>Elektrotehnički fakultet – Univerzitet u Sarajevu</div>
+</footer>
+
+<script>
+  const ALL_DATA = [
+    { name: 'Muhamed Islamović d.o.o.', kategorija: 'Vodoinstalater',        lokacija: 'Sarajevo', ocjena: 5.0, poslovi: 342, bg: '#3b82f6', fill: '#93c5fd' },
+    { name: 'SaniChampi d.o.o.',        kategorija: 'Vodoinstalater',        lokacija: 'Tuzla',    ocjena: 4.9, poslovi: 256, bg: '#f97316', fill: '#fed7aa' },
+    { name: 'Demais d.o.o.',            kategorija: 'Električar',            lokacija: 'Mostar',   ocjena: 4.8, poslovi: 201, bg: '#eab308', fill: '#fde68a' },
+    { name: 'Stolarija Stanišić',       kategorija: 'Stolar',                lokacija: 'Pale',     ocjena: 4.8, poslovi: 189, bg: '#6b7280', fill: '#d1d5db' },
+    { name: 'SteleksKrec d.o.o.',       kategorija: 'Farbanje',              lokacija: 'Zenica',   ocjena: 4.7, poslovi: 134, bg: '#10b981', fill: '#6ee7b7' },
+    { name: 'Ahmed Spahić',             kategorija: 'Vodoinstalater',        lokacija: 'Sarajevo', ocjena: 4.6, poslovi: 145, bg: '#3b82f6', fill: '#93c5fd' },
+    { name: 'Tahirović Cosmetic',       kategorija: 'Kozmetičar',            lokacija: 'Vogošća',  ocjena: 4.6, poslovi: 88,  bg: '#14b8a6', fill: '#99f6e4' },
+    { name: 'Sergej Barbarez',          kategorija: 'Prevoznik',             lokacija: 'Mostar',   ocjena: 4.5, poslovi: 112, bg: '#8b5cf6', fill: '#c4b5fd' },
+    { name: 'Jusuf Maksumić',           kategorija: 'Grill majstor',         lokacija: 'Jablanica', ocjena: 4.5, poslovi: 67,  bg: '#f43f5e', fill: '#fda4af' },
+    { name: 'Sead Kolašinac',           kategorija: 'Armirani beton',        lokacija: 'Visoko',   ocjena: 4.4, poslovi: 98,  bg: '#ef4444', fill: '#fca5a5' },
+    { name: 'Damir Kovačević',          kategorija: 'Vodoinstalater',        lokacija: 'Sarajevo', ocjena: 4.2, poslovi: 78,  bg: '#6366f1', fill: '#a5b4fc' },
+    { name: 'Struja Maja',              kategorija: 'Električar',            lokacija: 'Zenica',   ocjena: 4.3, poslovi: 54,  bg: '#84cc16', fill: '#d9f99d' },
+    { name: 'Krov-Mates',               kategorija: 'Krovopokrivački poslovi', lokacija: 'Sarajevo', ocjena: 4.1, poslovi: 41, bg: '#0ea5e9', fill: '#bae6fd' },
+    { name: 'CiglaMaja d.o.o.',         kategorija: 'Armirani beton',        lokacija: 'Bugojno',  ocjena: 4.0, poslovi: 36,  bg: '#d97706', fill: '#fde68a' },
+    { name: 'Stol & More',              kategorija: 'Stolar',                lokacija: 'Zenica',   ocjena: 3.9, poslovi: 29,  bg: '#7c3aed', fill: '#ddd6fe' },
+  ];
+
+  // Base order: by ocjena desc, then poslovi desc
+  ALL_DATA.sort((a, b) => b.ocjena - a.ocjena || b.poslovi - a.poslovi);
+
+  let activeCat = 'Sve';
+  let activeLoc = 'Sve';
+  let topN      = 10;
+  let sortCol   = null;
+  let sortDir   = 'desc';
+
+  const checkSVG = `<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,5 4,7 8,3"/></svg>`;
+  const starSVG  = `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+
+  function rankClass(i) {
+    return ['rank rank-1','rank rank-2','rank rank-3'][i] ?? 'rank rank-other';
+  }
+
+  function render() {
+    let rows = activeCat === 'Sve' ? [...ALL_DATA] : ALL_DATA.filter(r => r.kategorija === activeCat);
+    if (activeLoc !== 'Sve') rows = rows.filter(r => r.lokacija === activeLoc);
+
+    if (sortCol) {
+      rows.sort((a, b) => {
+        let va = a[sortCol], vb = b[sortCol];
+        if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+        return sortDir === 'asc' ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+      });
+    }
+
+    rows = rows.slice(0, topN);
+
+    const tbody = document.getElementById('rankBody');
+
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Nema rezultata za ovu kategoriju.</div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map((r, i) => `
+      <tr>
+        <td class="center"><span class="${rankClass(i)}">${i + 1}</span></td>
+        <td>
+          <div class="majstor-cell">
+            <div class="majstor-avatar" style="background:${r.bg};">
+              <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="${r.fill}"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="${r.fill}"/></svg>
+            </div>
+            <div class="majstor-info">
+              <span class="majstor-name">${r.name}</span>
+            </div>
+          </div>
+        </td>
+        <td>${r.kategorija}</td>
+        <td>${r.lokacija}</td>
+        <td class="center"><div class="star-cell">${starSVG}<span class="star-val">${r.ocjena.toFixed(1)}</span></div></td>
+        <td class="center">${r.poslovi}</td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('catTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-tab');
+    if (!btn) return;
+    document.querySelectorAll('#catTabs .cat-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    sortCol = null;
+    document.querySelectorAll('th.sortable').forEach(t => t.classList.remove('sort-asc','sort-desc'));
+    render();
+  });
+
+  document.getElementById('locTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-tab');
+    if (!btn) return;
+    document.querySelectorAll('#locTabs .cat-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeLoc = btn.dataset.loc;
+    sortCol = null;
+    document.querySelectorAll('th.sortable').forEach(t => t.classList.remove('sort-asc','sort-desc'));
+    render();
+  });
+
+  document.getElementById('topnBtns').addEventListener('click', e => {
+    const btn = e.target.closest('.topn-btn');
+    if (!btn) return;
+    document.querySelectorAll('.topn-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    topN = parseInt(btn.dataset.n);
+    render();
+  });
+
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      sortDir = sortCol === col && sortDir === 'desc' ? 'asc' : 'desc';
+      sortCol = col;
+      document.querySelectorAll('th.sortable').forEach(t => t.classList.remove('sort-asc','sort-desc'));
+      th.classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+      render();
+    });
+  });
+
+  render();
+</script>
+
+</body>
+</html>

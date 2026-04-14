@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postavi oglas radnog mjesta – Popravka.ba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a6fd4;
+    --blue-dark: #1558aa;
+    --blue-light: #e8f0fb;
+    --navy: #1e2d4a;
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --red: #ef4444;
+  }
+
+  body {
+    font-family: 'Noto Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, h2, h3, h4, .nav-logo, label, .form-card-header h2, .section-label {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--blue);
+  }
+
+  .nav-logo svg {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--blue); }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.3rem 0.75rem 0.3rem 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .nav-user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #c8d3e0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .nav-user-avatar svg { width: 22px; height: 22px; }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem 3rem;
+    width: 100%;
+    flex: 1;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    transition: opacity .2s;
+  }
+  .back-link:hover { opacity: 0.75; }
+
+  .page-title { font-size: 1.5rem; font-weight: 800; color: var(--blue); margin-bottom: 0.25rem; }
+  .page-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-card-header {
+    padding: 0.9rem 1.25rem;
+    background: #f9fafb;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .form-card-header h2 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .header-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .form-body { padding: 1.25rem; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-row.thirds {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .label-hint { font-weight: 400; color: var(--text-muted); font-size: 0.75rem; margin-left: 0.3rem; }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: 'Noto Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    width: 100%;
+    -webkit-appearance: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,111,212,0.1);
+  }
+
+  input::placeholder, textarea::placeholder { color: #b0b7c0; }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.65; }
+  select { cursor: pointer; }
+
+  /* Salary range row */
+  .salary-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .salary-row input { flex: 1; }
+  .salary-sep { color: var(--text-muted); font-size: 0.9rem; flex-shrink: 0; }
+  .salary-suffix {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Tip zaposlenja chips */
+  .tip-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.1rem;
+  }
+
+  .tip-btn {
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--text-muted);
+    border-radius: 5px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .12s;
+  }
+  .tip-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .tip-btn.active { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+
+  /* Requirements builder */
+  .req-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.6rem; }
+
+  .req-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .req-item input { flex: 1; }
+
+  .req-remove {
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: all .12s;
+  }
+  .req-remove:hover { border-color: var(--red); color: var(--red); }
+  .req-remove svg { width: 13px; height: 13px; }
+
+  .btn-add-req {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--blue);
+    border-radius: 5px;
+    padding: 0.38rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .12s;
+  }
+  .btn-add-req:hover { border-color: var(--blue); background: var(--blue-light); }
+  .btn-add-req svg { width: 13px; height: 13px; }
+
+  /* Image upload */
+  .img-upload {
+    width: 100%;
+    height: 140px;
+    border: 2px dashed #c7d6ee;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    background: #f8fafd;
+    transition: border-color .15s, background .15s;
+    color: #9eb3d4;
+  }
+  .img-upload:hover { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+  .img-upload svg { width: 28px; height: 28px; }
+  .img-upload span { font-size: 0.8rem; font-weight: 500; }
+  .img-upload small { font-size: 0.72rem; opacity: 0.7; }
+
+  /* Char count */
+  .char-count { font-size: 0.72rem; color: var(--text-muted); text-align: right; margin-top: 0.2rem; }
+
+  /* Form footer */
+  .form-footer {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+  }
+
+  .btn-cancel {
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--text-muted);
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .15s;
+  }
+  .btn-cancel:hover { border-color: #9ca3af; color: var(--text); }
+
+  .btn-preview {
+    border: 1.5px solid var(--blue);
+    background: var(--white);
+    color: var(--blue);
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .15s;
+  }
+  .btn-preview:hover { background: var(--blue-light); }
+
+  .btn-submit {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background .15s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .btn-submit:hover { background: var(--blue-dark); }
+  .btn-submit svg { width: 15px; height: 15px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.75);
+    padding: 1.75rem 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    Popravka.ba
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Početna</a></li>
+    <li><a href="#">Statistika</a></li>
+    <li><a href="#">Pretraga</a></li>
+  </ul>
+  <div class="nav-user">
+    <div class="nav-user-avatar">
+      <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+    </div>
+    Firma: HV Obrt
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <a href="#" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Povratak
+  </a>
+
+  <h1 class="page-title">Postavi oglas radnog mjesta</h1>
+  <p class="page-subtitle">Ispunite detalje i vaš oglas će biti vidljiv svim registriranim korisnicima platforme.</p>
+
+  <!-- SECTION 1: OSNOVNO -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="header-num">1</div>
+      <h2>Osnovne informacije</h2>
+    </div>
+    <div class="form-body">
+      <div class="form-row">
+        <div class="form-group full">
+          <label>Naziv radnog mjesta <span class="label-hint">(obavezno)</span></label>
+          <input type="text" placeholder="npr. Komercijalni prevoznik/ica">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategorija <span class="label-hint">(obavezno)</span></label>
+          <select>
+            <option value="" disabled selected>Odaberite...</option>
+            <option>Vodoinstalater</option>
+            <option>Električar</option>
+            <option>Stolar</option>
+            <option>Farbanje</option>
+            <option>Krovopokrivački poslovi</option>
+            <option>Prevoznik</option>
+            <option>Armirani beton</option>
+            <option>Moler</option>
+            <option>Grill majstor</option>
+            <option>Kozmetičar</option>
+            <option>Ostalo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Lokacija <span class="label-hint">(obavezno)</span></label>
+          <select>
+            <option value="" disabled selected>Odaberite grad...</option>
+            <option>Bugojno</option>
+            <option>Jablanica</option>
+            <option>Mostar</option>
+            <option>Pale</option>
+            <option>Sarajevo</option>
+            <option>Tuzla</option>
+            <option>Visoko</option>
+            <option>Vogošća</option>
+            <option>Zenica</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tip zaposlenja</label>
+          <div class="tip-row" id="tipRow">
+            <button class="tip-btn active" data-tip="stalni">Stalni radni odnos</button>
+            <button class="tip-btn" data-tip="ugovor">Ugovor o djelu</button>
+            <button class="tip-btn" data-tip="honorar">Honorarno</button>
+            <button class="tip-btn" data-tip="sezonski">Sezonski</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Broj izvršilaca <span class="label-hint">(obavezno)</span></label>
+          <input type="number" placeholder="npr. 1" min="1">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: OPIS -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="header-num">2</div>
+      <h2>Opis posla i uvjeti</h2>
+    </div>
+    <div class="form-body">
+      <div class="form-row">
+        <div class="form-group full">
+          <label>Opis radnog mjesta <span class="label-hint">(obavezno)</span></label>
+          <textarea id="descArea" placeholder="Opišite radno mjesto, odgovornosti, radno okruženje i sve što smatrate važnim za kandidata..." oninput="document.getElementById('descCount').textContent = this.value.length"></textarea>
+          <div class="char-count"><span id="descCount">0</span> / 800 znakova</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Uvjeti <span class="label-hint">(opcionalno)</span></label>
+        <div class="req-list" id="reqList">
+          <div class="req-item">
+            <input type="text" placeholder="npr. Vozačka dozvola kategorije C/CE">
+            <button class="req-remove" onclick="removeReq(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="req-item">
+            <input type="text" placeholder="npr. CMR dokumentacija prednost">
+            <button class="req-remove" onclick="removeReq(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn-add-req" id="addReqBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Dodaj uvjet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PRIHOD -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="header-num">3</div>
+      <h2>Prihod</h2>
+    </div>
+    <div class="form-body">
+      <div class="form-row thirds">
+        <div class="form-group">
+          <label>Minimalni prihod</label>
+          <div class="salary-row">
+            <input type="number" placeholder="1.500" min="0">
+            <span class="salary-suffix">KM</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Maksimalni prihod</label>
+          <div class="salary-row">
+            <input type="number" placeholder="2.200" min="0">
+            <span class="salary-suffix">KM</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Period isplate</label>
+          <select>
+            <option value="" disabled selected>Odaberite...</option>
+            <option selected>Mjesečno</option>
+            <option>Sedmično</option>
+            <option>Po satu (KM/h)</option>
+            <option>Po projektu</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SLIKA -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="header-num">4</div>
+      <h2>Slika oglasa <span style="font-weight:400;font-size:0.8rem;color:var(--text-muted);">(opcionalno)</span></h2>
+    </div>
+    <div class="form-body">
+      <div class="img-upload" onclick="document.getElementById('imgInput').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>Kliknite za upload slike</span>
+        <small>JPG, PNG – max 5MB</small>
+      </div>
+      <input type="file" id="imgInput" accept="image/*" style="display:none;">
+    </div>
+  </div>
+
+  <!-- FOOTER ACTIONS -->
+  <div class="form-footer">
+    <button class="btn-cancel">Odustani</button>
+    <button class="btn-submit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Objavi oglas
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  <div>© <strong>Popravka.ba</strong>, 2026</div>
+  <div>Projekt izrađen u sklopu kursa <strong>"Objektno orijentisana analiza i dizajn"</strong></div>
+  <div>Elektrotehnički fakultet – Univerzitet u Sarajevu</div>
+</footer>
+
+<script>
+  // Tip zaposlenja toggle
+  document.getElementById('tipRow').addEventListener('click', e => {
+    const btn = e.target.closest('.tip-btn');
+    if (!btn) return;
+    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+
+  // Add requirement
+  document.getElementById('addReqBtn').addEventListener('click', () => {
+    const list = document.getElementById('reqList');
+    const item = document.createElement('div');
+    item.className = 'req-item';
+    item.innerHTML = `
+      <input type="text" placeholder="Unesite uvjet...">
+      <button class="req-remove" onclick="removeReq(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    list.appendChild(item);
+    item.querySelector('input').focus();
+  });
+
+  function removeReq(btn) {
+    btn.closest('.req-item').remove();
+  }
+
+  // Image preview
+  document.getElementById('imgInput').addEventListener('change', function() {
+    if (!this.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const upload = document.querySelector('.img-upload');
+      upload.style.backgroundImage = `url(${e.target.result})`;
+      upload.style.backgroundSize = 'cover';
+      upload.style.backgroundPosition = 'center';
+      upload.innerHTML = '';
+    };
+    reader.readAsDataURL(this.files[0]);
+  });
+</script>
+
+</body>
+</html>
