@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popravka curenja vode u kupatilu – Popravka.ba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a6fd4;
+    --blue-dark: #1558aa;
+    --blue-light: #e8f0fb;
+    --navy: #1e2d4a;
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --badge-active-bg: #e6faf0;
+    --badge-active-text: #1a7a45;
+    --gold: #f59e0b;
+  }
+
+  body {
+    font-family: 'Noto Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, h2, h3, h4, .nav-logo, .ponuda-name, .section-title, .ad-title, .btn-primary, .btn-outline, .btn-send {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--blue);
+  }
+
+  .nav-logo svg {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color .2s;
+  }
+
+  .nav-links a:hover { color: var(--blue); }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .btn-outline {
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    background: transparent;
+    padding: 0.4rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-outline:hover { background: var(--blue-light); }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 0.45rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-primary:hover { background: var(--blue-dark); }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 3rem;
+    width: 100%;
+    flex: 1;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+    transition: opacity .2s;
+  }
+  .back-link:hover { opacity: 0.75; }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* LEFT COLUMN */
+  .card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .badge-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #f3f4f6;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+  }
+
+  .badge-active::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #9ca3af;
+  }
+
+  .ad-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .ad-meta {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .ad-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .ad-meta-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .ad-description {
+    font-size: 0.92rem;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .ad-budget {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 1rem;
+  }
+
+  /* PONUDE */
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .ponuda-card {
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 0.85rem;
+    background: var(--white);
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+  }
+
+  .ponuda-card:hover {
+    border-color: #aac4ea;
+    box-shadow: 0 1px 6px rgba(26,111,212,0.1);
+  }
+
+  .ponuda-card.selected {
+    border-color: var(--green-dark);
+  }
+
+  .ponuda-card-body {
+    padding: 0.9rem 1rem 0.75rem;
+  }
+
+  .ponuda-top {
+    display: flex;
+    gap: 0.85rem;
+    margin-bottom: 0rem;
+  }
+
+  .ponuda-avatar-block { flex-shrink: 0; }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 4px;
+    background: #c8d3e0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .avatar svg { width: 40px; height: 40px; }
+
+  .ponuda-body { flex: 1; min-width: 0; }
+
+  .ponuda-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .ponuda-name {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .verified-check {
+    width: 15px; height: 15px;
+    background: #9ca3af;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .verified-check svg { width: 9px; height: 9px; color: white; }
+
+  .ponuda-role {
+    font-size: 0.775rem;
+    color: var(--text-muted);
+    font-family: 'Noto Sans', system-ui, sans-serif;
+    margin-bottom: 0.5rem;
+  }
+
+  .ponuda-price-col { text-align: right; flex-shrink: 0; }
+
+  .ponuda-price-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-family: 'Noto Sans', sans-serif;
+  }
+
+  .ponuda-price {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--blue);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    white-space: nowrap;
+  }
+
+  .ponuda-dates {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.55rem;
+  }
+
+  .date-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .date-item svg { flex-shrink: 0; color: var(--text-muted); width: 13px; height: 13px; }
+
+  .date-label { font-weight: 600; color: var(--text); }
+
+  .date-null { opacity: 0.5; }
+  .date-null em { font-style: italic; }
+
+  /* Footer band - grey like the reference */
+  .ponuda-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: #f3f4f6;
+    border-top: 1px solid var(--border);
+  }
+
+  .stars {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .star-icon {
+    width: 15px; height: 15px;
+    color: var(--blue);
+  }
+
+  .price-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.73rem;
+    font-weight: 700;
+    padding: 0.18rem 0.55rem;
+    border-radius: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .price-chip svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+  .chip-green { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+  .chip-yellow { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
+  .chip-red { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+  .ponuda-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border);
+    background: #f9fafb;
+  }
+
+  .badge-prihvacena {
+    background: var(--green-dark);
+    color: white;
+    padding: 0.28rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .badge-odabrana {
+    background: var(--green-dark);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .btn-sm {
+    padding: 0.28rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .btn-accept { background: var(--blue); color: white; border: none; }
+  .btn-accept:hover { background: var(--blue-dark); }
+  .btn-reject { background: transparent; color: var(--text-muted); border: 1.5px solid var(--border); }
+  .btn-reject:hover { border-color: #ef4444; color: #ef4444; }
+
+  /* RIGHT COLUMN */
+  .sidebar-card {
+    background: var(--blue);
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .sidebar-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .sidebar-card p {
+    font-size: 0.82rem;
+    opacity: 0.85;
+    margin-bottom: 1.1rem;
+  }
+
+  .btn-send {
+    background: white;
+    color: var(--blue);
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity .2s;
+  }
+  .btn-send:hover { opacity: 0.9; }
+
+  .info-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+  }
+
+  .info-card h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+
+  .info-row:last-child { border-bottom: none; }
+
+  .info-label { color: var(--text-muted); }
+
+  .info-value {
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+  }
+
+  .info-value.active { color: var(--green-dark); }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.75);
+    padding: 1.75rem 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+
+  footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    Popravka.ba
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#">Početna</a></li>
+    <li><a href="#">Statistika</a></li>
+    <li><a href="#">Pretraga</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <button class="btn-outline">Prijava</button>
+    <button class="btn-primary">Registracija</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <a href="#" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Nazad na pretragu
+  </a>
+
+  <div class="page-grid">
+
+    <!-- LEFT -->
+    <div>
+
+      <!-- AD DETAILS -->
+      <div class="card">
+        <div class="badge-active">Zatvoren oglas</div>
+
+        <h1 class="ad-title">Popravka curenja vode u kupatilu</h1>
+
+        <div class="ad-meta">
+          <span class="ad-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Sarajevo, Centar
+          </span>
+          <span class="ad-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Prije 2h
+          </span>
+          <span class="ad-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            5 ponuda
+          </span>
+          <span class="ad-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Edin Džeko
+          </span>
+        </div>
+
+        <!-- Image placeholder -->
+        <div style="width:100%;height:200px;background:#f0f4fa;border:2px dashed #c7d6ee;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1.25rem;color:#9eb3d4;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span style="font-size:0.8rem;font-weight:500;">Slika oglasa</span>
+        </div>
+
+        <p class="ad-description">
+          Potrebno je hitno popraviti curenje vode ispod umivaonika u kupatilu. Stan se nalazi na 3. spratu stambene zgrade izgrađene 2005. godine.
+        </p>
+        <p class="ad-description">
+          Curenje je primjetno posljednja 3 dana. Potrebno je zamijeniti spojni ventil i provjeriti cijelu instalaciju ispod umivaonika.
+        </p>
+
+        <div class="ad-budget">Budžet: <span style="color: var(--blue);">80 – 150 KM</span></div>
+      </div>
+
+      <!-- PONUDE -->
+      <div class="card">
+        <h2 class="section-title">Ponude majstora (5)</h2>
+
+        <!-- Ponuda 1 — Muhamed Islamović -->
+        <div class="ponuda-card selected">
+          <div class="ponuda-card-body">
+            <div class="ponuda-top">
+              <div class="ponuda-avatar-block">
+                <div class="avatar">
+                  <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="26" cy="18" r="11" fill="#8fa3b8"/>
+                    <ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ponuda-body">
+                <div class="ponuda-name-row">
+                  <span class="ponuda-name">
+                    Muhamed Islamović
+                    <span class="verified-check">
+                      <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,5 4,7 8,3"/></svg>
+                    </span>
+                  </span>
+                  <div class="ponuda-price-col">
+                    <div class="ponuda-price-label">Od:</div>
+                    <div class="ponuda-price">50 KM</div>
+                  </div>
+                </div>
+                <div class="ponuda-role">Vodoinstalater</div>
+                <div class="ponuda-dates">
+                  <span class="date-item">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="13" rx="2"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1" y1="7" x2="15" y2="7"/></svg>
+                    <span class="date-label">Početak:</span> 15.04.2026.
+                  </span>
+                  <span class="date-item">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="13" rx="2"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1" y1="7" x2="15" y2="7"/></svg>
+                    <span class="date-label">Kraj:</span> 16.04.2026.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ponuda-footer">
+            <div class="stars">
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span style="margin-left:3px;">5.0 (127 recenzija)</span>
+            </div>
+            <span class="price-chip chip-yellow">
+              <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,7 5,3 9,7"/></svg>
+              5 KM iznad prosjeka
+            </span>
+          </div>
+          <div class="ponuda-actions">
+            <span class="badge-prihvacena">✓ Prihvaćena</span>
+          </div>
+        </div>
+
+        <!-- Ponuda 2 — Ahmed Spahić -->
+        <div class="ponuda-card">
+          <div class="ponuda-card-body">
+            <div class="ponuda-top">
+              <div class="ponuda-avatar-block">
+                <div class="avatar">
+                  <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="26" cy="18" r="11" fill="#8fa3b8"/>
+                    <ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ponuda-body">
+                <div class="ponuda-name-row">
+                  <span class="ponuda-name">
+                    Ahmed Spahić
+                    <span class="verified-check">
+                      <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,5 4,7 8,3"/></svg>
+                    </span>
+                  </span>
+                  <div class="ponuda-price-col">
+                    <div class="ponuda-price-label">Od:</div>
+                    <div class="ponuda-price">40 KM</div>
+                  </div>
+                </div>
+                <div class="ponuda-role">Vodoinstalater</div>
+                <div class="ponuda-dates">
+                  <span class="date-item">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="13" rx="2"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1" y1="7" x2="15" y2="7"/></svg>
+                    <span class="date-label">Početak:</span> 15.04.2026.
+                  </span>
+                  <span class="date-item">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="13" rx="2"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1" y1="7" x2="15" y2="7"/></svg>
+                    <span class="date-label">Kraj:</span> 15.04.2026.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ponuda-footer">
+            <div class="stars">
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span style="margin-left:3px;">4.6 (64 recenzije)</span>
+            </div>
+            <span class="price-chip chip-green">
+              <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,3 5,7 9,3"/></svg>
+              5 KM ispod prosjeka
+            </span>
+          </div>
+          <div class="ponuda-actions">
+            <button class="btn-sm btn-accept">Prihvati</button>
+            <button class="btn-sm btn-reject">Odbij</button>
+          </div>
+        </div>
+
+        <!-- Ponuda 3 — Šemsudin D. Poplava -->
+        <div class="ponuda-card">
+          <div class="ponuda-card-body">
+            <div class="ponuda-top">
+              <div class="ponuda-avatar-block">
+                <div class="avatar">
+                  <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="26" cy="18" r="11" fill="#8fa3b8"/>
+                    <ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ponuda-body">
+                <div class="ponuda-name-row">
+                  <span class="ponuda-name">Šemsudin D. Poplava</span>
+                  <div class="ponuda-price-col">
+                    <div class="ponuda-price-label">Od:</div>
+                    <div class="ponuda-price">35 KM</div>
+                  </div>
+                </div>
+                <div class="ponuda-role">Vodoinstalater</div>
+                <div class="ponuda-dates">
+                  <span class="date-item">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="13" rx="2"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1" y1="7" x2="15" y2="7"/></svg>
+                    <span class="date-label">Početak:</span> 16.04.2026.
+                  </span>
+                  <span class="date-item date-null">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="13" rx="2"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1" y1="7" x2="15" y2="7"/></svg>
+                    <span class="date-label">Kraj:</span> <em>nije navedeno</em>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ponuda-footer">
+            <div class="stars">
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="star-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span style="margin-left:3px;">4.2 (31 recenzija)</span>
+            </div>
+            <span class="price-chip chip-green">
+              <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,3 5,7 9,3"/></svg>
+              10 KM ispod prosjeka
+            </span>
+          </div>
+          <div class="ponuda-actions">
+            <button class="btn-sm btn-accept">Prihvati</button>
+            <button class="btn-sm btn-reject">Odbij</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div>
+      <div class="sidebar-card">
+        <h3>Želite ponuditi svoje usluge?</h3>
+        <p>Samo verificirani radnici mogu slati ponude za oglase na platformi.</p>
+        <button class="btn-send">Pristupite nalogu</button>
+      </div>
+
+      <div class="info-card">
+        <h4>Informacije o oglasu</h4>
+        <div class="info-row">
+          <span class="info-label">Kategorija</span>
+          <span class="info-value">Vodoinstalacije</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Lokacija</span>
+          <span class="info-value">Sarajevo, Centar</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Autor</span>
+          <span class="info-value">Edin Džeko</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Budžet</span>
+          <span class="info-value">80 – 150 KM</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-value" style="color:#6b7280;">Zatvoren</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>© <strong>Popravka.ba</strong>, 2026</div>
+  <div>Projekt izrađen u sklopu kursa <strong>"Objektno orijentisana analiza i dizajn"</strong></div>
+  <div>Elektrotehnički fakultet – Univerzitet u Sarajevu</div>
+</footer>
+
+</body>
+</html>

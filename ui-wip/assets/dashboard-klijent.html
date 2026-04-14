@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moji oglasi – Popravka.ba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a6fd4;
+    --blue-dark: #1558aa;
+    --blue-light: #e8f0fb;
+    --navy: #1e2d4a;
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --gold: #f59e0b;
+  }
+
+  body {
+    font-family: 'Noto Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, h2, h3, h4, .nav-logo, .section-title, .stat-val {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--blue);
+  }
+
+  .nav-logo svg {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--blue); }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.3rem 0.75rem 0.3rem 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .nav-user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #c8d3e0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .nav-user-avatar svg { width: 22px; height: 22px; }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    display: flex;
+    flex: 1;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 60px);
+  }
+
+  .sidebar-section-label {
+    font-size: 0.67rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 0 1.25rem;
+    margin-bottom: 0.4rem;
+    margin-top: 1.25rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .sidebar-section-label:first-child { margin-top: 0; }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all .12s;
+    text-decoration: none;
+  }
+
+  .sidebar-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .sidebar-item:hover { background: var(--bg); color: var(--text); }
+  .sidebar-item.active {
+    border-left-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  .sidebar-badge {
+    margin-left: auto;
+    background: var(--blue);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main-content {
+    flex: 1;
+    padding: 1.75rem 2rem 3rem;
+    max-width: 900px;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .page-title { font-size: 1.5rem; font-weight: 800; color: var(--blue); }
+  .page-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+  .btn-new {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: 7px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .btn-new:hover { background: var(--blue-dark); }
+  .btn-new svg { width: 15px; height: 15px; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+  }
+
+  .stat-card-val {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-card-val.blue { color: var(--blue); }
+  .stat-card-val.green { color: var(--green-dark); }
+  .stat-card-val.muted { color: var(--text-muted); }
+
+  .stat-card-label { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── TABS ── */
+  .tabs-row {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 1.25rem;
+  }
+
+  .tab {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tab:hover { color: var(--text); }
+
+  .tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  .tab-count {
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .tab.active .tab-count { background: var(--blue-light); color: var(--blue); }
+
+  /* ── AD CARDS ── */
+  .ad-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+    transition: box-shadow .15s;
+  }
+  .ad-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+
+  .ad-card-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .ad-img-thumb {
+    width: 56px; height: 56px;
+    border-radius: 6px;
+    background: #f0f4fa;
+    border: 1px solid #dbe8f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #9eb3d4;
+  }
+  .ad-img-thumb svg { width: 22px; height: 22px; }
+
+  .ad-info { flex: 1; min-width: 0; }
+
+  .ad-title-link {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--blue);
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0.2rem;
+    transition: opacity .15s;
+  }
+  .ad-title-link:hover { opacity: 0.75; text-decoration: underline; }
+
+  .ad-meta-row {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .ad-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.77rem;
+    color: var(--text-muted);
+  }
+  .ad-meta-item svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+  .ad-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .badge-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #e6faf0;
+    color: #1a7a45;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .badge-active::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+  .badge-inactive {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #f3f4f6;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .badge-inactive::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #9ca3af; }
+
+  .ad-budget {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* Footer strip of card */
+  .ad-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1.25rem;
+    background: #f9fafb;
+    border-top: 1px solid var(--border);
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ponude-count {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .ponude-count svg { width: 13px; height: 13px; }
+  .ponude-count strong { color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  .card-actions { display: flex; gap: 0.5rem; }
+
+  .btn-card {
+    padding: 0.28rem 0.75rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .12s;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--text-muted);
+  }
+  .btn-card:hover { border-color: #9ca3af; color: var(--text); }
+
+  .btn-card-primary {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--white);
+  }
+  .btn-card-primary:hover { background: var(--blue-light); }
+
+  .btn-card-danger {
+    border-color: #fca5a5;
+    color: #b91c1c;
+    background: #fee2e2;
+  }
+  .btn-card-danger:hover { background: #fecaca; }
+
+  /* ── TAB SECTIONS ── */
+  .tab-section { display: none; }
+  .tab-section.active { display: block; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+  .empty-state svg { width: 40px; height: 40px; margin-bottom: 0.75rem; color: #d1d5db; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.75);
+    padding: 1.75rem 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    Popravka.ba
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Početna</a></li>
+    <li><a href="#">Statistika</a></li>
+    <li><a href="#" class="active">Moj nalog</a></li>
+    <li><a href="#">Pretraga</a></li>
+  </ul>
+  <div class="nav-user">
+    <div class="nav-user-avatar">
+      <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="18" r="11" fill="#8fa3b8"/><ellipse cx="26" cy="52" rx="22" ry="18" fill="#8fa3b8"/></svg>
+    </div>
+    Klijent: Eldar M.
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section-label">Pregled</div>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Pregled
+    </a>
+
+    <div class="sidebar-section-label">Oglasi</div>
+    <a class="sidebar-item active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Moji oglasi
+      <span class="sidebar-badge">5</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Ponude majstora
+      <span class="sidebar-badge">12</span>
+    </a>
+
+    <div class="sidebar-section-label">Nalog</div>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Moj profil
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Postavke
+    </a>
+    <a class="sidebar-item" style="color:#ef4444;" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Odjava
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Moji oglasi</h1>
+        <p class="page-subtitle">Pregled svih vaših aktivnih i zatvorenih oglasa.</p>
+      </div>
+      <button class="btn-new">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Novi oglas
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-val blue">3</div>
+        <div class="stat-card-label">Aktivnih oglasa</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val muted">2</div>
+        <div class="stat-card-label">Zatvorenih oglasa</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val green">12</div>
+        <div class="stat-card-label">Ukupno ponuda</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val">2</div>
+        <div class="stat-card-label">Završenih poslova</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-row">
+      <button class="tab active" onclick="switchTab('aktivni', this)">
+        Aktivni <span class="tab-count">3</span>
+      </button>
+      <button class="tab" onclick="switchTab('zatvoreni', this)">
+        Zatvoreni <span class="tab-count">2</span>
+      </button>
+    </div>
+
+    <!-- AKTIVNI -->
+    <div class="tab-section active" id="tabAktivni">
+
+      <!-- AD 1 -->
+      <div class="ad-card">
+        <div class="ad-card-body">
+          <div class="ad-img-thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="ad-info">
+            <a class="ad-title-link">Popravka curenja vode u kupatilu</a>
+            <div class="ad-meta-row">
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Sarajevo, Centar
+              </span>
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Postavljeno: 14.04.2026.
+              </span>
+              <span class="ad-meta-item">Vodoinstalacije</span>
+            </div>
+          </div>
+          <div class="ad-right">
+            <span class="badge-active">Aktivan</span>
+            <span class="ad-budget">80 – 150 KM</span>
+          </div>
+        </div>
+        <div class="ad-card-footer">
+          <div class="ponude-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong>5</strong> ponuda primljeno
+          </div>
+          <div class="card-actions">
+            <button class="btn-card btn-card-primary">Pogledaj ponude</button>
+            <button class="btn-card">Uredi</button>
+            <button class="btn-card btn-card-danger">Zatvori</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AD 2 -->
+      <div class="ad-card">
+        <div class="ad-card-body">
+          <div class="ad-img-thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="ad-info">
+            <a class="ad-title-link">Renoviranje kuhinje – stolarski radovi</a>
+            <div class="ad-meta-row">
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Sarajevo
+              </span>
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Postavljeno: 12.04.2026.
+              </span>
+              <span class="ad-meta-item">Stolarija</span>
+            </div>
+          </div>
+          <div class="ad-right">
+            <span class="badge-active">Aktivan</span>
+            <span class="ad-budget">300 – 800 KM</span>
+          </div>
+        </div>
+        <div class="ad-card-footer">
+          <div class="ponude-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong>3</strong> ponude primljeno
+          </div>
+          <div class="card-actions">
+            <button class="btn-card btn-card-primary">Pogledaj ponude</button>
+            <button class="btn-card">Uredi</button>
+            <button class="btn-card btn-card-danger">Zatvori</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AD 3 -->
+      <div class="ad-card">
+        <div class="ad-card-body">
+          <div class="ad-img-thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="ad-info">
+            <a class="ad-title-link">Montaža novog bojlera</a>
+            <div class="ad-meta-row">
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Sarajevo
+              </span>
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Postavljeno: 14.04.2026.
+              </span>
+              <span class="ad-meta-item">Vodoinstalacije</span>
+            </div>
+          </div>
+          <div class="ad-right">
+            <span class="badge-active">Aktivan</span>
+            <span class="ad-budget">200 – 350 KM</span>
+          </div>
+        </div>
+        <div class="ad-card-footer">
+          <div class="ponude-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong>0</strong> ponuda primljeno
+          </div>
+          <div class="card-actions">
+            <button class="btn-card btn-card-primary">Pogledaj ponude</button>
+            <button class="btn-card">Uredi</button>
+            <button class="btn-card btn-card-danger">Zatvori</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ZATVORENI -->
+    <div class="tab-section" id="tabZatvoreni">
+
+      <!-- CLOSED AD 1 -->
+      <div class="ad-card" style="opacity:0.75;">
+        <div class="ad-card-body">
+          <div class="ad-img-thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="ad-info">
+            <a class="ad-title-link" style="color:var(--text);">Zamjena vodovodnih instalacija</a>
+            <div class="ad-meta-row">
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Mostar
+              </span>
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Zatvoreno: 01.03.2026.
+              </span>
+              <span class="ad-meta-item">Vodoinstalacije</span>
+            </div>
+          </div>
+          <div class="ad-right">
+            <span class="badge-inactive">Zatvoren</span>
+            <span class="ad-budget">300 – 500 KM</span>
+          </div>
+        </div>
+        <div class="ad-card-footer">
+          <div class="ponude-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong>7</strong> ponuda primljeno
+          </div>
+          <div class="card-actions">
+            <button class="btn-card">Pogledaj</button>
+            <button class="btn-card">Ponovi oglas</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOSED AD 2 -->
+      <div class="ad-card" style="opacity:0.75;">
+        <div class="ad-card-body">
+          <div class="ad-img-thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="ad-info">
+            <a class="ad-title-link" style="color:var(--text);">Oštećena vrata kupatila od vlage</a>
+            <div class="ad-meta-row">
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Gradačac
+              </span>
+              <span class="ad-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Zatvoreno: 09.02.2026.
+              </span>
+              <span class="ad-meta-item">Stolarija</span>
+            </div>
+          </div>
+          <div class="ad-right">
+            <span class="badge-inactive">Zatvoren</span>
+            <span class="ad-budget">400 – 800 KM</span>
+          </div>
+        </div>
+        <div class="ad-card-footer">
+          <div class="ponude-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong>5</strong> ponuda primljeno
+          </div>
+          <div class="card-actions">
+            <button class="btn-card">Pogledaj</button>
+            <button class="btn-card">Ponovi oglas</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>© <strong>Popravka.ba</strong>, 2026</div>
+  <div>Projekt izrađen u sklopu kursa <strong>"Objektno orijentisana analiza i dizajn"</strong></div>
+  <div>Elektrotehnički fakultet – Univerzitet u Sarajevu</div>
+</footer>
+
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tabAktivni').classList.toggle('active', tab === 'aktivni');
+    document.getElementById('tabZatvoreni').classList.toggle('active', tab === 'zatvoreni');
+  }
+</script>
+
+</body>
+</html>
