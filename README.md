@@ -1,6 +1,6 @@
-<center><img src="ui-wip/assets/logo.png" alt="Popravka.ba logotip" width="300" height="200" align="center">
-<br>
-<br>
+<p align="center">
+  <img src="ui-wip/assets/logo.png" alt="Popravka.ba logotip" width="300" height="200">
+</p>
 
 # Popravka.ba - Objektno orijentisana analiza i dizajn (2025/26)
 
