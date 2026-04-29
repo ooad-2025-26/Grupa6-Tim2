@@ -1,6 +1,6 @@
 <Solution>
-  <Project Path="PopravkaBa.API/PopravkaBa.API.csproj" />
+  <Project Path="PopravkaBa.Web/PopravkaBa.Web.csproj" />
   <Project Path="PopravkaBa.Application/PopravkaBa.Application.csproj" />
   <Project Path="PopravkaBa.Domain/PopravkaBa.Domain.csproj" />
   <Project Path="PopravkaBa.Infrastructure/PopravkaBa.Infrastructure.csproj" />
-</Solution>
+</Solution>	
