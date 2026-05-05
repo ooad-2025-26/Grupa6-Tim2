@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PopravkaBa.Domain/PopravkaBa.Domain.csproj" Id="6490f659-6ff0-4469-9f88-c914f958e449" />
+  <Project Path="PopravkaBa.Infrastructure/PopravkaBa.Infrastructure.csproj" Id="24e9df29-5deb-4cb8-bd6e-c82ddfc9fca5" />
+  <Project Path="PopravkaBa.Web/PopravkaBa.Web.csproj" />
+  <Project Path="PopravkaBa.Application/PopravkaBa.Application.csproj" />
+</Solution>
