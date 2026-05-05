@@ -12,6 +12,7 @@ namespace Popravka.ba.Data
 
         public DbSet<Administrator> Administrator { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<EmailNotifikacijaOglas> emailNotifikacijaOglasi   { get; set; }
         public DbSet<Firma> Firme { get; set; }
 
         public DbSet<IzvrsilacKategorija> IzvrsilacKategorija { get; set; }
@@ -47,6 +48,7 @@ namespace Popravka.ba.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<EmailNotifikacijaOglas>().ToTable("EmailNotifikacijaOglas");
             builder.Entity<IzvrsilacKategorija>().ToTable("IzvrsilacKategorija");
             builder.Entity<Kategorija>().ToTable("Kategorija");
             builder.Entity<KorisnikMjesto>().ToTable("KorisnikMjesto");
@@ -61,7 +63,7 @@ namespace Popravka.ba.Data
             builder.Entity<PonudaUsluge>().ToTable("PonudaUsluge");
             builder.Entity<PortfolioSlika>().ToTable("PortfolioSlika");
             builder.Entity<PrijavaRadnoMjesto>().ToTable("PrijavaRadnoMjesto");
-            builder.Entity<Recenzija>().ToTable("Recenzija",t => t.HasCheckConstraint("CK_Recenzija_Ocjena", "Ocjena >= 1 AND Ocjena <= 5"))
+            builder.Entity<Recenzija>().ToTable("Recenzija", t => t.HasCheckConstraint("CK_Recenzija_Ocjena", "Ocjena >= 1 AND Ocjena <= 5"));
             builder.Entity<UvjetOglasa>().ToTable("UvjetOglasa");
             builder.Entity<VerifikacijaFirme>().ToTable("VerifikacijaFirme");
             
