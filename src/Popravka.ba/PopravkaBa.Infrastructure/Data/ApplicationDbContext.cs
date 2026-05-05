@@ -12,7 +12,8 @@ namespace Popravka.ba.Data
 
         public DbSet<Administrator> Administrator { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<EmailNotifikacijaOglas> emailNotifikacijaOglasi   { get; set; }
+        public DbSet<EmailNotifikacijaOglas> EmailNotifikacijaOglasi   { get; set; }
+        public DbSet<EmailVerifikacijaFirme> EmailVerifikacijaFirme { get; set; }
         public DbSet<Firma> Firme { get; set; }
 
         public DbSet<IzvrsilacKategorija> IzvrsilacKategorija { get; set; }
@@ -48,7 +49,8 @@ namespace Popravka.ba.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<EmailNotifikacijaOglas>().ToTable("EmailNotifikacijaOglas");
+            builder.Entity<EmailNotifikacijaOglas>().ToTable("EmailNotifikacijaOglasa");
+            builder.Entity<EmailVerifikacijaFirme>().ToTable("EmailVerifikacijaFirme");
             builder.Entity<IzvrsilacKategorija>().ToTable("IzvrsilacKategorija");
             builder.Entity<Kategorija>().ToTable("Kategorija");
             builder.Entity<KorisnikMjesto>().ToTable("KorisnikMjesto");
