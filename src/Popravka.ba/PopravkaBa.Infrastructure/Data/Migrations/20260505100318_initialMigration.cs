@@ -342,7 +342,7 @@ namespace PopravkaBa.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Oglasi",
+                name: "Oglas",
                 columns: table => new
                 {
                     OglasID = table.Column<int>(type: "int", nullable: false)
@@ -355,15 +355,15 @@ namespace PopravkaBa.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Oglasi", x => x.OglasID);
+                    table.PrimaryKey("PK_Oglas", x => x.OglasID);
                     table.ForeignKey(
-                        name: "FK_Oglasi_AspNetUsers_VlasnikOglasaID",
+                        name: "FK_Oglas_AspNetUsers_VlasnikOglasaID",
                         column: x => x.VlasnikOglasaID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Oglasi_Mjesto_MjestoID",
+                        name: "FK_Oglas_Mjesto_MjestoID",
                         column: x => x.MjestoID,
                         principalTable: "Mjesto",
                         principalColumn: "MjestoID",
@@ -389,7 +389,7 @@ namespace PopravkaBa.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NotifikacijeOglasi",
+                name: "NotifikacijaOglas",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -400,11 +400,11 @@ namespace PopravkaBa.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NotifikacijeOglasi", x => x.ID);
+                    table.PrimaryKey("PK_NotifikacijaOglas", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_NotifikacijeOglasi_Oglasi_OglasID",
+                        name: "FK_NotifikacijaOglas_Oglas_OglasID",
                         column: x => x.OglasID,
-                        principalTable: "Oglasi",
+                        principalTable: "Oglas",
                         principalColumn: "OglasID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -428,9 +428,9 @@ namespace PopravkaBa.Infrastructure.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OglasKategorija_Oglasi_OglasID",
+                        name: "FK_OglasKategorija_Oglas_OglasID",
                         column: x => x.OglasID,
-                        principalTable: "Oglasi",
+                        principalTable: "Oglas",
                         principalColumn: "OglasID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -447,9 +447,9 @@ namespace PopravkaBa.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_OglasMajstora", x => x.OglasID);
                     table.ForeignKey(
-                        name: "FK_OglasMajstora_Oglasi_OglasID",
+                        name: "FK_OglasMajstora_Oglas_OglasID",
                         column: x => x.OglasID,
-                        principalTable: "Oglasi",
+                        principalTable: "Oglas",
                         principalColumn: "OglasID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -470,9 +470,9 @@ namespace PopravkaBa.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_OglasRadnoMjesto", x => x.OglasID);
                     table.ForeignKey(
-                        name: "FK_OglasRadnoMjesto_Oglasi_OglasID",
+                        name: "FK_OglasRadnoMjesto_Oglas_OglasID",
                         column: x => x.OglasID,
-                        principalTable: "Oglasi",
+                        principalTable: "Oglas",
                         principalColumn: "OglasID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -490,9 +490,9 @@ namespace PopravkaBa.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_OglasUsluge", x => x.OglasID);
                     table.ForeignKey(
-                        name: "FK_OglasUsluge_Oglasi_OglasID",
+                        name: "FK_OglasUsluge_Oglas_OglasID",
                         column: x => x.OglasID,
-                        principalTable: "Oglasi",
+                        principalTable: "Oglas",
                         principalColumn: "OglasID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -507,9 +507,9 @@ namespace PopravkaBa.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_EmailNotifikacijaOglasa", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_EmailNotifikacijaOglasa_NotifikacijeOglasi_ID",
+                        name: "FK_EmailNotifikacijaOglasa_NotifikacijaOglas_ID",
                         column: x => x.ID,
-                        principalTable: "NotifikacijeOglasi",
+                        principalTable: "NotifikacijaOglas",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -669,18 +669,18 @@ namespace PopravkaBa.Infrastructure.Migrations
                 column: "MjestoID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NotifikacijeOglasi_OglasID",
-                table: "NotifikacijeOglasi",
+                name: "IX_NotifikacijaOglas_OglasID",
+                table: "NotifikacijaOglas",
                 column: "OglasID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Oglasi_MjestoID",
-                table: "Oglasi",
+                name: "IX_Oglas_MjestoID",
+                table: "Oglas",
                 column: "MjestoID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Oglasi_VlasnikOglasaID",
-                table: "Oglasi",
+                name: "IX_Oglas_VlasnikOglasaID",
+                table: "Oglas",
                 column: "VlasnikOglasaID");
 
             migrationBuilder.CreateIndex(
@@ -802,7 +802,7 @@ namespace PopravkaBa.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "NotifikacijeOglasi");
+                name: "NotifikacijaOglas");
 
             migrationBuilder.DropTable(
                 name: "VerifikacijaFirme");
@@ -817,7 +817,7 @@ namespace PopravkaBa.Infrastructure.Migrations
                 name: "OglasRadnoMjesto");
 
             migrationBuilder.DropTable(
-                name: "Oglasi");
+                name: "Oglas");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

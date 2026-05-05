@@ -17,7 +17,6 @@ namespace Popravka.ba.Data
         public DbSet<Firma> Firme { get; set; }
 
         public DbSet<IzvrsilacKategorija> IzvrsilacKategorija { get; set; }
-        public DbSet<IzvrsilacUsluge> IzvrsiociUsluge { get; set; }
 
         public DbSet<Kategorija> Kategorije { get; set; }
         public DbSet<Klijent> Klijenti { get; set; }
@@ -25,8 +24,6 @@ namespace Popravka.ba.Data
         public DbSet<KorisnikMjesto> KorisnikMjesto { get; set; }
         public DbSet<Majstor> Majstori { get; set; }
         public DbSet<Mjesto> Mjesta { get; set; }
-        public DbSet<NotifikacijaOglas> NotifikacijeOglasi { get; set; }
-        public DbSet<Oglas> Oglasi { get; set; }
         public DbSet<OglasKategorija> OglasKategorije { get; set; }
 
         public DbSet<OglasMajstora> OglasiMajstora { get; set; }
@@ -42,7 +39,6 @@ namespace Popravka.ba.Data
         public DbSet<Recenzija> Recenzije { get; set; }
         
         public DbSet<UvjetOglasa> UvjetiOglasa { get; set; }
-        public DbSet<VerifikacijaFirme> VerifikacijaFirme { get; set; }
 
         
     

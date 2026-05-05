@@ -12,7 +12,7 @@ using Popravka.ba.Data;
 namespace PopravkaBa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260505095309_initialMigration")]
+    [Migration("20260505100318_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -352,7 +352,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("OglasID");
 
-                    b.ToTable("NotifikacijeOglasi");
+                    b.ToTable("NotifikacijaOglas");
 
                     b.UseTptMappingStrategy();
                 });
@@ -389,7 +389,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("VlasnikOglasaID");
 
-                    b.ToTable("Oglasi");
+                    b.ToTable("Oglas");
 
                     b.UseTptMappingStrategy();
                 });

@@ -349,7 +349,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("OglasID");
 
-                    b.ToTable("NotifikacijeOglasi");
+                    b.ToTable("NotifikacijaOglas");
 
                     b.UseTptMappingStrategy();
                 });
@@ -386,7 +386,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("VlasnikOglasaID");
 
-                    b.ToTable("Oglasi");
+                    b.ToTable("Oglas");
 
                     b.UseTptMappingStrategy();
                 });
