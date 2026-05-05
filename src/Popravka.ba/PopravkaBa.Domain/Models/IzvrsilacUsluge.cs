@@ -5,14 +5,20 @@ namespace PopravkaBa.Domain.Models
 {
     public abstract class IzvrsilacUsluge : ApplicationUser
     {
-        public string adresa { get; set; }
-        public string? stambeniBroj { get; set; }
-        public Double prosjecnaOcjena { get; set; } = 0.0;
-        public int brojZavrsenihPoslova { get; set;  } = 0;
-        public string? opis { get; set; }
+        public string Adresa { get; set; }
+        public string? StambeniBroj { get; set; }
+        public double ProsjecnaOcjena { get; set; } = 0.0;
+        public int BrojZavrsenihPoslova { get; set;  } = 0;
+        public string? Opis { get; set; }
+
+        public ICollection<IzvrsilacKategorija>? Kategorije { get; set; }
+        public ICollection<PortfolioSlika>? SlikePortfolija { get; set; }
+        public ICollection<PonudaUsluge>? Ponude { get; set; }
+        public ICollection<Recenzija>? Recenzije { get; set; }
+
 
         public void ZavrsiPosao() { }
         public void DodajKategoriju(Kategorija kategorija) { }
-        public void UkloniKategoriju(Kategorija kategorija) { }
+        public void UkloniKategoriju(int kategorijaID) { }
     }
 }

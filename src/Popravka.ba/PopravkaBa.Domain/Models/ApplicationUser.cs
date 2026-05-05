@@ -5,10 +5,11 @@ namespace PopravkaBa.Domain.Models
 
     public class ApplicationUser : IdentityUser
     {
-        public string? ime { get; set; }
-        public string? prezime  { get; set; }
-        public DateTime datumRegistracije { get; } = DateTime.Now;
-        public string? slika { get; set; }
+        public string? Ime { get; set; }
+        public string? Prezime  { get; set; }
+        public readonly DateTime DatumRegistracije = DateTime.Now;
+        public string? Slika { get; set; }
+        public ICollection<Oglas>? Oglasi { get; set; }
 
     }
 }
