@@ -55,19 +55,50 @@ namespace Popravka.ba.Data
             builder.Entity<Kategorija>().ToTable("Kategorija");
             builder.Entity<KorisnikMjesto>().ToTable("KorisnikMjesto");
             builder.Entity<Mjesto>().ToTable("Mjesto");
-            builder.Entity<NotifikacijaOglas>().ToTable("NotifikacijaOglas");
-            builder.Entity<Oglas>().ToTable("Oglas");
             builder.Entity<OglasKategorija>().ToTable("OglasKategorija");
             builder.Entity<OglasMajstora>().ToTable("OglasMajstora");
             builder.Entity<OglasRadnoMjesto>().ToTable("OglasRadnoMjesto");
             builder.Entity<OglasUsluge>().ToTable("OglasUsluge");
             builder.Entity<OglasVozackaDozvola>().ToTable("OglasVozackaDozvola");
             builder.Entity<PonudaUsluge>().ToTable("PonudaUsluge");
+            builder.Entity<PonudaUsluge>()
+                .HasOne(p => p.OglasUsluge)
+                .WithMany(o => o.Ponude)
+                .HasForeignKey(p => p.OglasUslugeID)
+                .OnDelete(DeleteBehavior.Cascade);
+            // Potrebno je service-side riješiti problem brisanja prijava kada se briše majstor.
+            builder.Entity<PonudaUsluge>()
+                .HasOne(p => p.Izvrsilac)
+                .WithMany(i => i.Ponude)
+                .HasForeignKey(p => p.IzvrsilacID)
+                .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<PortfolioSlika>().ToTable("PortfolioSlika");
             builder.Entity<PrijavaRadnoMjesto>().ToTable("PrijavaRadnoMjesto");
+            builder.Entity<PrijavaRadnoMjesto>()
+                .HasOne(p => p.OglasRadnoMjesto)
+                .WithMany(o => o.Prijave)
+                .HasForeignKey(p => p.OglasID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Potrebno je service-side riješiti problem brisanja prijava kada se briše majstor.
+            builder.Entity<PrijavaRadnoMjesto>()
+                .HasOne(p => p.Majstor)
+                .WithMany(m => m.PrijaveZaRadnoMjesto)
+                .HasForeignKey(p => p.MajstorID)
+                .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Recenzija>().ToTable("Recenzija", t => t.HasCheckConstraint("CK_Recenzija_Ocjena", "Ocjena >= 1 AND Ocjena <= 5"));
+            builder.Entity<Recenzija>()
+                .HasOne(r => r.Klijent)
+                .WithMany(k => k.Recenzije)
+                .HasForeignKey(r => r.KlijentID)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Recenzija>()
+                .HasOne(r => r.Izvrsilac)
+                .WithMany(i => i.Recenzije)
+                .HasForeignKey(r => r.IzvrsilacID)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<UvjetOglasa>().ToTable("UvjetOglasa");
-            builder.Entity<VerifikacijaFirme>().ToTable("VerifikacijaFirme");
+  
             
 
         }

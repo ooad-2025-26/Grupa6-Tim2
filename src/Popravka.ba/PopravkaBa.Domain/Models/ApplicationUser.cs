@@ -7,7 +7,7 @@ namespace PopravkaBa.Domain.Models
     {
         public string? Ime { get; set; }
         public string? Prezime  { get; set; }
-        public readonly DateTime DatumRegistracije = DateTime.Now;
+        public DateTime DatumRegistracije { get; set; } = DateTime.Now;
         public string? Slika { get; set; }
         public ICollection<Oglas>? Oglasi { get; set; }
 

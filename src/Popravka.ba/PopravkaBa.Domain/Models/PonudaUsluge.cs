@@ -19,8 +19,8 @@ namespace PopravkaBa.Domain.Models
         public int OglasUslugeID { get; set; }
         public OglasUsluge OglasUsluge { get; set; }
         public DateTime DatumSlanja { get; set; } = DateTime.Now;
-        public DateTime DatumPocetkaUsluge;
-        public DateTime? DatumOcekivanogZavrsetka;
+        public DateTime DatumPocetkaUsluge { get; set; }
+        public DateTime? DatumOcekivanogZavrsetka { get; set; }
         public Status StatusPonude { get; set; } = Status.NaCekanju;
 
         public void PrihvatiPonudu() {  }

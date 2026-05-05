@@ -21,7 +21,7 @@ namespace PopravkaBa.Domain.Models
         [ForeignKey("Majstor")]
         public string MajstorID { get; set; }
         public Majstor Majstor { get; set; }
-        public readonly DateTime VrijemePrijave = DateTime.Now;
+        public DateTime VrijemePrijave { get; set; } = DateTime.Now;
 
     }
 }
