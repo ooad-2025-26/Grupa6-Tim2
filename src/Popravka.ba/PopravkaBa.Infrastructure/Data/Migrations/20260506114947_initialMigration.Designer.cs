@@ -12,7 +12,7 @@ using Popravka.ba.Data;
 namespace PopravkaBa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260505100318_initialMigration")]
+    [Migration("20260506114947_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
