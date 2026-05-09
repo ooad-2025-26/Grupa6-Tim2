@@ -32,17 +32,17 @@ namespace PopravkaBa.Web.Controllers
             return View(oglas);
         }
 
-        public IActionResult KreirajOglas() => View();
+        public IActionResult ObjaviOglas() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> KreirajOglas(KreirajOglasMajstoraDto dto)
+        public async Task<IActionResult> ObjaviOglas(ObjaviOglasMajstoraDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
 
             try
             {
-                await _oglasMajstoraService.KreirajOglas(dto);
+                await _oglasMajstoraService.ObjaviOglas(dto);
                 TempData["Success"] = "Oglas je uspješno kreiran";
                 return RedirectToAction(nameof(Index));
             }
@@ -90,7 +90,7 @@ namespace PopravkaBa.Web.Controllers
             return View(oglas);
         }
 
-        // POST /Books/Delete/5
+        
         [HttpPost, ActionName("Brisanje oglasa")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PotvrdaBrisanjaOglasa(int id)
@@ -137,17 +137,17 @@ namespace PopravkaBa.Web.Controllers
             return View(oglas);
         }
 
-        public IActionResult KreirajOglas() => View();
+        public IActionResult ObjaviOglas() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> KreirajOglas(KreirajOglasRadnoMjestoDto dto)
+        public async Task<IActionResult> ObjaviOglas(ObjaviOglasRadnoMjestoDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
 
             try
             {
-                await _oglasRadnoMjestoService.KreirajOglas(dto);
+                await _oglasRadnoMjestoService.ObjaviOglas(dto);
                 TempData["Success"] = "Oglas je uspješno kreiran";
                 return RedirectToAction(nameof(Index));
             }
@@ -195,7 +195,7 @@ namespace PopravkaBa.Web.Controllers
             return View(oglas);
         }
 
-        // POST /Books/Delete/5
+        
         [HttpPost, ActionName("Brisanje oglasa")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PotvrdaBrisanjaOglasa(int id)
@@ -203,6 +203,111 @@ namespace PopravkaBa.Web.Controllers
             try
             {
                 await _oglasRadnoMjestoService.ObrisiOglas(id);
+                TempData["Success"] = "Oglas je obrisan.";
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    public class OglasUslugeController : Controller
+    {
+        private readonly IOglasUslugeService _oglasUslugeService;
+        private readonly ILogger<OglasUslugeController> _logger;
+
+        public OglasUslugeController(IOglasUslugeService oglasUslugeService, ILogger<OglasUslugeController> logger)
+        {
+            _oglasUslugeService = oglasUslugeService;
+            _logger = logger;
+        }
+
+
+        public async Task<IActionResult> Index(string? pretraga)
+        {
+            var oglasi = string.IsNullOrWhiteSpace(pretraga)
+                ? await _oglasUslugeService.DajSveOglase()
+                : await _oglasUslugeService.PronadjiOglase(pretraga);
+            ViewBag.Search = pretraga;
+            return View(oglasi);
+        }
+
+        public async Task<IActionResult> Detalji(int id)
+        {
+            var oglas = _oglasUslugeService.DajOglasPoId(id);
+            if (oglas is null) return NotFound();
+            return View(oglas);
+        }
+
+        public IActionResult ObjaviOglas() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ObjaviOglas(ObjaviOglasUslugeDto dto)
+        {
+            if (!ModelState.IsValid) return View(dto);
+
+            try
+            {
+                await _oglasUslugeService.ObjaviOglas(dto);
+                TempData["Success"] = "Oglas je uspješno kreiran";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return View(dto);
+            }
+        }
+
+        public async Task<IActionResult> UrediOglas(int id)
+        {
+            var oglas = await _oglasUslugeService.DajOglasPoId(id);
+            if (oglas is null) return NotFound();
+
+            var dto = new UrediOglasUslugeDto
+            { };
+
+            return View(dto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UrediOglas(int id, UrediOglasUslugeDto dto)
+        {
+            if (id != dto.id) return BadRequest();
+            if (!ModelState.IsValid) return View(dto);
+
+            try
+            {
+                await _oglasUslugeService.UrediOglas(dto);
+                TempData["Success"] = "Oglas je uspješno uređen";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> ObrisiOglas(int id)
+        {
+            var oglas = await _oglasUslugeService.DajKnjiguPoId(id);
+            if (oglas is null) return NotFound();
+            return View(oglas);
+        }
+
+
+        [HttpPost, ActionName("Brisanje oglasa")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PotvrdaBrisanjaOglasa(int id)
+        {
+            try
+            {
+                await _oglasUslugeService.ObrisiOglas(id);
                 TempData["Success"] = "Oglas je obrisan.";
             }
             catch (KeyNotFoundException)
