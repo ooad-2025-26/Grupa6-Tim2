@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PopravkaBa.Application.DTOs
 {
-    public class ObjaviOglasMajstoraDto
+    public class KreirajRecenzijaDto
     {
     }
 
-    public class UrediOglasMajstoraDto
+    public class PrijaviRecenzijaDto
     {
     }
 }

@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PopravkaBa.Application.DTOs
+namespace PopravkaBa.Domain.Interfaces
 {
-    public class ObjaviOglasMajstoraDto
-    {
-    }
-
-    public class UrediOglasMajstoraDto
+    public interface IPrijavaOglasService
     {
     }
 }

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace PopravkaBa.Application.DTOs
 {
-    internal class KreirajOglasMajstoraDto
+    public class ObjaviOglasRadnoMjestoDto
+    {
+    }
+
+    public class UrediOglasRadnoMjestoDto
     {
     }
 }

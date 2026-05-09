@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace PopravkaBa.Domain.Interfaces
 {
-    internal interface IOglasMajstoraService
+    public interface IOglasMajstoraService
+    {
+    }
+
+    public interface IOglasRadnoMjestoService
+    {
+    }
+
+    public interface IOglasUslugeService
     {
     }
 }
