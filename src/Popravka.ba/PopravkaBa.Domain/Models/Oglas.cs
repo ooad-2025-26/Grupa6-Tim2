@@ -20,7 +20,7 @@ namespace PopravkaBa.Domain.Models
         public string VlasnikOglasaID { get; set; }
         public ApplicationUser VlasnikOglasa { get; set; }
         public ICollection<NotifikacijaOglas>? Notifikacije { get; set; }
-
+        public ICollection<OglasKategorija> Kategorije {  get; set; }
         public abstract void DodajKategoriju(Kategorija kategorija);
          public abstract void UkloniKategoriju(int kategorijaID);
     }
