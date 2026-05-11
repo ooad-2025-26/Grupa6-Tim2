@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PopravkaBa.Infrastructure\PopravkaBa.Infrastructure.csproj" />
     <ProjectReference Include="..\PopravkaBa.Domain\PopravkaBa.Domain.csproj" />
     <ProjectReference Include="..\PopravkaBa.Application\PopravkaBa.Application.csproj" />
+    <ProjectReference Include="..\PopravkaBa.Infrastructure\PopravkaBa.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

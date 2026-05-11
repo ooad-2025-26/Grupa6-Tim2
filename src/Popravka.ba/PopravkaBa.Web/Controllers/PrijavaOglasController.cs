@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PopravkaBa.Domain.Interfaces;
+using PopravkaBa.Application.Services.Interface;
 using PopravkaBa.Application.DTOs;
 
 namespace PopravkaBa.Web.Controllers

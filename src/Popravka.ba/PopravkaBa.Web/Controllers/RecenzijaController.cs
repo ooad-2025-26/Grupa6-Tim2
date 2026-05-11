@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PopravkaBa.Application.DTOs;
-using PopravkaBa.Domain.Interfaces;
+using PopravkaBa.Application.Services.Interface;
 
 namespace PopravkaBa.Web.Controllers
 {
@@ -21,7 +21,7 @@ namespace PopravkaBa.Web.Controllers
     
         public async Task<IActionResult> Index(int izvrsilacId)
         {
-            var recenzije = await _recenzijaService.DajRecenzijePoId(izvrsilacId);
+            var recenzije = 0; // = await _recenzijaService.DajRecenzijePoId(izvrsilacId);
             ViewBag.Izvrsilac = izvrsilacId;
             return View(recenzije);
         }
