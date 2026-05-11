@@ -1,24 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PopravkaBa.Domain.Enums;
 
 namespace PopravkaBa.Domain.Models
 {
-
     public class EmailVerifikacijaFirme : VerifikacijaFirme
     {
-        public string AdminEmail { get; set; }
-
-        public override void ObradiVerifikaciju(bool odobri)
-        {
-            throw new NotImplementedException();
-        }
+        public string AdminEmail { get; set; } = string.Empty;
 
         public override void PodnesiVerifikaciju()
         {
-            throw new NotImplementedException();
+            StatusVerifikacije = Status.NaCekanju;
+            DatumPodnosenja = DateTime.Now;
+        }
+
+        public override void ObradiVerifikaciju(bool odobri)
+        {
+            StatusVerifikacije = odobri ? Status.Prihvaceno : Status.Odbijeno;
+            DatumObrade = DateTime.Now;
+        }
+
+        public string FormatIntoEmail(bool zaAdmina)
+        {
+            if (zaAdmina)
+                return $"Nova firma \"{NazivFirme}\" je podnijela zahtjev za verifikaciju.\n\n" +
+                       $"Sjedište: {SjedisteFirme}\n" +
+                       $"Kontakt telefon: {KontaktTelefon}\n" +
+                       $"Odgovorna osoba: {OdgovornaOsobaIme} {OdgovornaOsobaPrezime} ({OdgovornaOsobaPozicija})\n" +
+                       $"Email odgovorne osobe: {OdgovornaOsobaEmail}\n" +
+                       $"Datum podnošenja: {DatumPodnosenja:dd.MM.yyyy}";
+
+            var rezultat = StatusVerifikacije == Status.Prihvaceno ? "odobrena" : "odbijena";
+            return $"Vaš zahtjev za verifikaciju firme \"{NazivFirme}\" je {rezultat}.\n\n" +
+                   $"Datum obrade: {DatumObrade:dd.MM.yyyy}";
         }
     }
 }
