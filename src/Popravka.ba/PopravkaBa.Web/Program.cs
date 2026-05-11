@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Popravka.ba.Data;
+using PopravkaBa.Application.Services;
+using PopravkaBa.Application.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +14,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IPonudaUslugeService, PonudaUslugeService>();
+builder.Services.AddScoped<IRecenzijaService, RecenzijaService>();
+builder.Services.AddScoped<IOglasMajstoraService, OglasMajstoraService>();
+builder.Services.AddScoped<IOglasRadnoMjestoService, OglasRadnoMjestoService>();
+builder.Services.AddScoped<IOglasUslugeService, OglasUslugeService>();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
