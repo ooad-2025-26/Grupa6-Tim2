@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PopravkaBa.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,5 +24,7 @@ namespace PopravkaBa.Domain.Models
         public Majstor Majstor { get; set; }
         public DateTime VrijemePrijave { get; set; } = DateTime.Now;
 
+        // TODO Uraditi migraciju, zaboravili smo ovo
+        public Status StatusPrijave { get; set; } = Status.NaCekanju;
     }
 }

@@ -1,16 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PopravkaBa.Application.DTOs
 {
+    // TODO Odrediti biznis pravilo dužina stringa u DTO
     public class ObjaviOglasUslugeDto
     {
+        [Required(ErrorMessage = "Naslov je obavezan.")]
+        public string Naslov { get; set; } 
+
+        [Required(ErrorMessage = "Opis je obavezan.")]
+    //    [StringLength(xmax, MinimumLength = x, ErrorMessage = "Opis mora biti između x i xmax karaktera.")]
+        public string Opis { get; set; }
+
+        [Required(ErrorMessage = "Mjesto je obavezno.")]
+        public int MjestoID { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Minimalni budžet ne može biti negativan.")]
+        public int MinBudzet { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Maksimalan budžet ne može biti negativan.")]
+        public int MaxBudzet { get; set; }
+
+        [MinLength(1, ErrorMessage = "Najmanje jedna kategorija.")]
+        public List<int> KategorijeID { get; set; } 
     }
 
     public class UrediOglasUslugeDto
     {
+        [Required]
+        public int OglasID { get; set; }
+
+        [Required(ErrorMessage = "Naslov je obavezan.")]
+       
+        public string Naslov { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Opis je obavezan.")]
+        //    [StringLength(xmax, MinimumLength = x, ErrorMessage = "Opis mora biti između x i xmax karaktera.")]
+        // Treba dodati business pravila ovdje
+        public string Opis { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Mjesto je obavezno.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Odaberite validno mjesto.")]
+        public int MjestoID { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Minimalni budžet ne može biti negativan.")]
+        public int MinBudzet { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Maksimalni budžet mora biti veći od nule.")]
+        public int MaxBudzet { get; set; }
+
+        [MinLength(1, ErrorMessage = "Najmanje jedna kategorija.")]
+        public List<int> KategorijeID { get; set; }
     }
 }

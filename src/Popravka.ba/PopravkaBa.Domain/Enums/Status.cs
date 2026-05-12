@@ -11,6 +11,7 @@ namespace PopravkaBa.Domain.Enums
         NaCekanju,
         Prihvaceno,
         Odbijeno,
+        Neaktivan, // TODO Tokeni i verifikacija
         Isporuceno
     }
 }

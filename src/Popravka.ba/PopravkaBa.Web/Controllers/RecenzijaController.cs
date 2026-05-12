@@ -34,10 +34,10 @@ namespace PopravkaBa.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Objavi(KreirajRecenzijaDto dto)
+        public async Task<IActionResult> Objavi(KreirajRecenzijuDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
-            // treba doraditi metodu
+            // TODO doraditi metodu
 
             return View();
         }
@@ -50,10 +50,10 @@ namespace PopravkaBa.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Prijavi(int recenzijaId, PrijaviRecenzijaDto dto)
+        public async Task<IActionResult> Prijavi(int recenzijaId, PrijaviRecenzijuDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
-            // treba doraditi metodu
+            // TODO doraditi metodu
 
             return View();
         }

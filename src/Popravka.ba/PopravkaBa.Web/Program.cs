@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Popravka.ba.Data;
 using PopravkaBa.Application.Services;
+using PopravkaBa.Application.Services.Implementation;
 using PopravkaBa.Application.Services.Interface;
+using PopravkaBa.Domain.Interfaces;
+using PopravkaBa.Infrastructure.Adapters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +20,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 
+// TODO Registriraj sve dependency injectione
+// Dependency Injection za interfejse (Možda treba ubaciti u metodu)
 builder.Services.AddScoped<IPonudaUslugeService, PonudaUslugeService>();
 builder.Services.AddScoped<IRecenzijaService, RecenzijaService>();
 builder.Services.AddScoped<IOglasMajstoraService, OglasMajstoraService>();
 builder.Services.AddScoped<IOglasRadnoMjestoService, OglasRadnoMjestoService>();
 builder.Services.AddScoped<IOglasUslugeService, OglasUslugeService>();
+builder.Services.AddScoped<IEmailSender, SmtpEmailAdapter>();
 
 var app = builder.Build();
 

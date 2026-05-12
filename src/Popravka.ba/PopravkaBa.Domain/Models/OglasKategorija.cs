@@ -15,6 +15,7 @@ namespace PopravkaBa.Domain.Models
         public Oglas Oglas { get; set; }
         [ForeignKey("Kategorija")]
         public int KategorijaID { get; set; }
+
         public Kategorija Kategorija { get; set; }
     }
 }

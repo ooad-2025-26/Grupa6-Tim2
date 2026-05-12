@@ -1,0 +1,35 @@
+using PopravkaBa.Domain.Models;
+
+namespace PopravkaBa.Domain.Interfaces
+{
+    public interface IOglasMajstoraRepository
+    {
+        Task<IEnumerable<OglasMajstora>> DajSveAsync();
+        Task<OglasMajstora?> DajPoIdAsync(int id);
+        Task DodajAsync(OglasMajstora oglas);
+        Task UrediAsync(OglasMajstora oglas);
+        Task ObrisiAsync(int id);
+        Task<IEnumerable<OglasMajstora>> IzvrsiPretraguTekstaAsync(string pretraga);
+    }
+
+    public interface IOglasUslugeRepository
+    {
+        Task<IEnumerable<OglasUsluge>> DajSveAsync();
+        Task<OglasUsluge?> DajPoIdAsync(int id);
+        Task DodajAsync(OglasUsluge oglas);
+        Task UrediAsync(OglasUsluge oglas);
+        Task ObrisiAsync(int id);
+        Task<IEnumerable<OglasUsluge>> IzvrsiPretraguTekstaAsync(string pretraga);
+    }
+
+    public interface IOglasRadnoMjestoRepository
+    {
+        Task<IEnumerable<OglasRadnoMjesto>> DajSveAsync();
+        Task<OglasRadnoMjesto?> DajPoIdAsync(int id);
+        Task DodajAsync(OglasRadnoMjesto oglas);
+        Task UrediAsync(OglasRadnoMjesto oglas);
+        Task ObrisiAsync(int id);
+        Task<IEnumerable<OglasRadnoMjesto>> IzvrsiPretraguTekstaAsync(string pretraga);
+    }
+
+}

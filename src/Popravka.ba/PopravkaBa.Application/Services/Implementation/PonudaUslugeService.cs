@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PopravkaBa.Application.Services
+namespace PopravkaBa.Application.Services.Implementation
 {
     public class PonudaUslugeService : IPonudaUslugeService
     {

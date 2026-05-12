@@ -1,92 +1,137 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PopravkaBa.Application.Services.Interface;
 using PopravkaBa.Application.DTOs;
+using PopravkaBa.Application.Services.Interface;
 
-namespace PopravkaBa.Web.Controllers
+public class PrijavaOglasController : Controller
 {
-    public class PrijavaOglasController : Controller
+    private readonly IPrijavaOglasService _prijavaOglasService;
+    private readonly IOglasRadnoMjestoService _oglasRadnoMjestoService;
+    private readonly ILogger<PrijavaOglasController> _logger;
+
+    public PrijavaOglasController(IPrijavaOglasService prijavaOglasService, IOglasRadnoMjestoService oglasRadnoMjestoService, ILogger<PrijavaOglasController> logger)
     {
-        private readonly IPrijavaOglasService _prijavaOglasService;
-        private readonly IOglasRadnoMjestoService _oglasRadnoMjestoService;
-        private readonly ILogger<PrijavaOglasController> _logger;
+        _prijavaOglasService = prijavaOglasService;
+        _oglasRadnoMjestoService = oglasRadnoMjestoService;
+        _logger = logger;
+    }
 
-        public PrijavaOglasController(IPrijavaOglasService prijavaOglasService, IOglasRadnoMjestoService oglasRadnoMjestoService, ILogger<PrijavaOglasController> logger)
+    public async Task<IActionResult> Index(int oglasId)
+    {
+        var prijave = await _prijavaOglasService.DajSvePrijave(oglasId);
+        ViewBag.OglasId = oglasId;
+        return View(prijave);
+    }
+
+
+    public IActionResult Apliciraj(int oglasId)
+    {
+        var dto = new KreirajPrijavaRadnoMjestoDto
         {
-            _prijavaOglasService = prijavaOglasService;
-            _oglasRadnoMjestoService = oglasRadnoMjestoService;
-            _logger = logger;
+            OglasID = oglasId
+        };
+        return View(dto);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Apliciraj(KreirajPrijavaRadnoMjestoDto dto)
+    {
+        if (!ModelState.IsValid) return View(dto);
+
+        try
+        {
+            await _prijavaOglasService.KreirajPrijavu(dto);
+            TempData["Success"] = "Prijava je uspješno poslana.";
+            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = dto.OglasID });
         }
-
-        public async Task<IActionResult> Index(int oglasId)
+        catch (Exception ex)
         {
-            var ponude = await _oglasRadnoMjestoService.DajSvePonude(oglasId);
-            ViewBag.Search = oglasId;
-            return View(ponude);
+            _logger.LogError(ex, "Greška pri kreiranju prijave.");
+            ModelState.AddModelError("", "Došlo je do greške.");
+            return View(dto);
         }
+    }
 
-        public async Task<IActionResult> Apliciraj(int oglasId)
+    public async Task<IActionResult> ObrisiPrijavu(int prijavaId)
+    {
+        var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
+        if (prijava is null) return NotFound();
+        return View(prijava);
+    }
+
+    [HttpPost, ActionName("ObrisiPrijavu")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ObrisanaPrijava(int prijavaId)
+    {
+        try
         {
-            ViewBag.OglasId = oglasId;
-            return View();
+            var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
+            if (prijava is null) return NotFound();
+
+            await _prijavaOglasService.ObrisiPrijavu(prijavaId);
+            TempData["Success"] = "Prijava je obrisana.";
+            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = prijava.OglasID });
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Apliciraj(KreirajPrijavaOglasDto dto)
+        catch (KeyNotFoundException)
         {
-            if (!ModelState.IsValid) return View(dto);
-            // treba doraditi metodu
-
-            return View();
+            return NotFound();
         }
+    }
 
-        //trenutno nema u dijagramu opcija uređivanja prijave pa nisam dodao
+    public async Task<IActionResult> PrihvatiPonudu(int prijavaId)
+    {
+        var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
+        if (prijava is null) return NotFound();
+        return View(prijava);
+    }
 
-        public async Task<IActionResult> ObrisiPrijavu(int prijavaId)
+    [HttpPost, ActionName("PrihvatiPonudu")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PrihvacenaPonuda(int prijavaId)
+    {
+        try
         {
-            //ovdje ubaciti provjeru da prijava pripada korisniku
-            //i da se otvori pop-up ekran ili nesto za potvrdu brisanja
-            return View();
-        }
+            var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
+            if (prijava is null) return NotFound();
 
-        [HttpPost, ActionName("Brisanje")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ObrisanaPrijava(int prijavaId)
-        {
-            //obrisi prijavu iz baze
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> PrihvatiPonudu(int prijavaId)
-        {
-            //ovdje ubaciti provjeru da prijava pripada klijentu
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PrihvacenaPonuda(int prijavaId)
-        {
             await _prijavaOglasService.PrihvatiPonudu(prijavaId);
-            // treba doraditi metodu
-
-            return View();
+            TempData["Success"] = "Ponuda je prihvaćena.";
+            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = prijava.OglasID });
         }
-
-        public async Task<IActionResult> OdbijPrijavu(int prijavaId)
+        catch (Exception ex)
         {
-            //ovdje ubaciti provjeru da prijava pripada klijentu
-            return View();
+            _logger.LogError(ex, "Greška pri prihvatanju ponude.");
+            TempData["Error"] = "Došlo je do greške pri prihvatanju ponude.";
+            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = prijavaId });
         }
+    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OdbijenaPrijava(int prijavaId)
+    public async Task<IActionResult> OdbijPrijavu(int prijavaId)
+    {
+        var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
+        if (prijava is null) return NotFound();
+        return View(prijava);
+    }
+
+
+    [HttpPost, ActionName("OdbijPrijavu")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> OdbijenaPrijava(int prijavaId)
+    {
+        try
         {
+            var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
+            if (prijava is null) return NotFound();
+
             await _prijavaOglasService.OdbijPrijavu(prijavaId);
-            // treba doraditi metodu
-
-            return View();
+            TempData["Success"] = "Prijava je odbijena.";
+            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = prijava.OglasID });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Greška pri odbijanju prijave.");
+            TempData["Error"] = "Došlo je do greške.";
+            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = prijavaId });
         }
     }
 }
