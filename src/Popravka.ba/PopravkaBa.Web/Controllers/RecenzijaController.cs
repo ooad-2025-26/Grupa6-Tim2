@@ -19,9 +19,9 @@ namespace PopravkaBa.Web.Controllers
         //da li je oglas aktivan ili tako nešto (lupam ali morat će imati povezanosti)
         //ako ništa iz oglasa da ima neki status
     
-        public async Task<IActionResult> Index(int izvrsilacId)
+        public async Task<IActionResult> Index(string izvrsilacId)
         {
-            var recenzije = 0; // = await _recenzijaService.DajRecenzijePoId(izvrsilacId);
+            var recenzije = await _recenzijaService.DajRecenzijePoId(izvrsilacId);
             ViewBag.Izvrsilac = izvrsilacId;
             return View(recenzije);
         }

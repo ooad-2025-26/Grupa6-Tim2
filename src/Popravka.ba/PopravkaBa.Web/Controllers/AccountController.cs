@@ -7,6 +7,8 @@ using PopravkaBa.Domain.Models;
 
 namespace PopravkaBa.Web.Controllers
 {
+    // TODO implementirati profilcontroller (s+r)
+    // TODO implementirati notificationcontrollere (s+r)
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -156,8 +158,6 @@ namespace PopravkaBa.Web.Controllers
             }
 
             await _userManager.AddToRoleAsync(user, "Majstor");
-
-       
             await _kategorijaService.DodajKategorijeIzvrsiocu(user.Id, dto.KategorijeID);
 
          

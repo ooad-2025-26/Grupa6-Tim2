@@ -92,6 +92,7 @@ namespace PopravkaBa.Application.Services
     {
         private readonly IOglasUslugeService _oglasService;
         private readonly IKategorijaService _kategorijaService;
+        // TODO Vidjeti da li ubaciti NotificationService
 
         public OglasUslugeFacade(IOglasUslugeService oglasService, IKategorijaService kategorijaService)
         {

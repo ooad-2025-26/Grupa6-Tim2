@@ -78,7 +78,7 @@ public class PrijavaOglasController : Controller
         }
     }
 
-    public async Task<IActionResult> PrihvatiPonudu(int prijavaId)
+    public async Task<IActionResult> PrihvatiPrijava(int prijavaId)
     {
         var prijava = await _prijavaOglasService.DajPrijavuPoId(prijavaId);
         if (prijava is null) return NotFound();
@@ -87,7 +87,7 @@ public class PrijavaOglasController : Controller
 
     [HttpPost, ActionName("PrihvatiPonudu")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PrihvacenaPonuda(int prijavaId)
+    public async Task<IActionResult> PrihvacenaPrijava(int prijavaId)
     {
         try
         {

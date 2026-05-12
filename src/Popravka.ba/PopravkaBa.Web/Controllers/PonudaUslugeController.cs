@@ -19,7 +19,7 @@ namespace PopravkaBa.Web.Controllers
 
         public async Task<IActionResult> Index(int oglasId)
         {
-            var ponude = await _oglasUslugeService.DajSvePonude(oglasId);
+            var ponude = await _ponudaUslugeService.DajSvePonudeOglasa(oglasId);
             ViewBag.Search = oglasId;
             return View(ponude);
         }
@@ -49,7 +49,7 @@ namespace PopravkaBa.Web.Controllers
             return View();
         }
 
-        [HttpPost, ActionName("Brisanje")]
+        [HttpPost, ActionName("ObrisiPonudu")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ObrisanaPonuda(int ponudaId)
         {
@@ -63,7 +63,7 @@ namespace PopravkaBa.Web.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("PrihvatiPonudu")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PrihvacenaPonuda(int ponudaId)
         {
