@@ -67,7 +67,7 @@ namespace PopravkaBa.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PrihvacenaPonuda(int ponudaId)
         {
-            await _ponudaUslugeService.PrihvatiPonudu(ponudaId);
+            //await _ponudaUslugeService.PrihvatiPonudu(ponudaId);
             // treba doraditi metodu
 
             return View();
@@ -83,7 +83,7 @@ namespace PopravkaBa.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OdbijenaPonuda(int ponudaId)
         {
-            await _ponudaUslugeService.OdbijPonudu(ponudaId);
+            //await _ponudaUslugeService.OdbijPonudu(ponudaId);
             // treba doraditi metodu
 
             return View();
