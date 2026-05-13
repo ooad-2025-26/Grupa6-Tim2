@@ -13,7 +13,7 @@ namespace PopravkaBa.Domain.Models
         private string? JIB { get; set; }
         public Status StatusVerifikacije { get; set; } = Status.NaCekanju;
 
-       // TODO Migracija: Cuvati informacije o satima u bazi, radnovrijeme za format i velicina kompanije kao enum
+       // TODO Migration1: Cuvati informacije o satima u bazi, radnovrijeme za format i  kao enum u Firma.
         public TimeSpan? OtvorenoOd { get; set; }
         public TimeSpan? OtvorenoDo { get; set; }
         public VelicinaFirme VelicinaFirme { get; set; } = VelicinaFirme.Mikro;

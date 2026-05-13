@@ -3,7 +3,7 @@
 namespace PopravkaBa.Domain.Interfaces.Repositories
 {
 
-    // TODO implementirati.
+    // TODO Implementirati RecenzijaRepository REPOSITORIES
     public interface IRecenzijaRepository
     {
         Task<IEnumerable<Recenzija>> DajSveAsync();

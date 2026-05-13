@@ -3,7 +3,7 @@ using PopravkaBa.Domain.Models;
 
 namespace PopravkaBa.Application.Services.Interface
 {
-    // TODO Implementirati servis
+    // TODO Implementirati RecenzijaService SERVICES
     public interface IRecenzijaService
     {
         Task<IEnumerable<Recenzija>> DajSveRecenzije();

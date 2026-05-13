@@ -24,7 +24,7 @@ namespace PopravkaBa.Domain.Models
         public Majstor Majstor { get; set; }
         public DateTime VrijemePrijave { get; set; } = DateTime.Now;
 
-        // TODO Uraditi migraciju, zaboravili smo ovo
+        // TODO Migration1: Uvodi StatusPrijave enum
         public Status StatusPrijave { get; set; } = Status.NaCekanju;
     }
 }

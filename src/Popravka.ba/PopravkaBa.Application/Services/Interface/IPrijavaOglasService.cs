@@ -1,6 +1,8 @@
 ﻿using PopravkaBa.Application.DTOs;
 using PopravkaBa.Domain.Models;
 
+
+// TODO Implementirati PrijavaOglasService i Repository SERVICES/REPOSITORY
 public interface IPrijavaOglasService
 {
     Task<IEnumerable<PrijavaRadnoMjesto>> DajSvePrijave(int oglasId);

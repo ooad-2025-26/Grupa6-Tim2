@@ -19,6 +19,6 @@ namespace PopravkaBa.Application.DTOs
 
     public class UrediPonudaUslugeDto
     {
-        // TODO Ako implementirali uređivanje ponuda, potrebno kreirati i DTO za uređivanje
+        // TODO Ako implementirali uređivanje ponuda, potrebno kreirati i DTO za uređivanje. DATATRANSFEROBJECTS
     }
 }

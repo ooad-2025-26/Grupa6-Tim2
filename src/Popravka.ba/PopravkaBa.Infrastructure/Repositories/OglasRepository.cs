@@ -110,4 +110,54 @@ namespace PopravkaBa.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
     }
+
+    // TODO Implementirati OglasRadnoMjestoRepository REPOSITORIES
+    // TODO 1HIGHPRIORITY: Provjeriti da li su svi navigation propertyevi pravilno povezani na queryeve
+    public class OglasRadnoMjestoRepository : IOglasRadnoMjestoRepository
+    {
+        private readonly ApplicationDbContext _context;
+
+        public async Task<OglasRadnoMjesto?> DajPoIdAsync(int id) => 
+            await  _context.OglasiRadnogMjesta
+            .Include(orm => orm.VozackeDozvole)
+            .Include(orm => orm.Uvjeti)
+            .Include(orm => orm.VlasnikOglasa)
+            .Include(orm => orm.Prijave)
+            .Include(orm => orm.Mjesto)
+            .Include(orm => orm.Kategorije)
+            .Include(orm => orm.Notifikacije)
+            .FirstOrDefaultAsync(orm => orm.OglasID == id);
+
+
+        public async Task<IEnumerable<OglasRadnoMjesto>> DajSveAsync() =>
+        await _context.OglasiRadnogMjesta
+            .Include(orm => orm.VozackeDozvole)
+            .Include(orm => orm.Uvjeti)
+            .Include(orm => orm.VlasnikOglasa)
+            .Include(orm => orm.Prijave)
+            .Include(orm => orm.Mjesto)
+            .Include(orm => orm.Kategorije)
+            .Include(orm => orm.Notifikacije)
+            .ToListAsync();
+
+        public Task DodajAsync(OglasRadnoMjesto oglas)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<OglasRadnoMjesto>> IzvrsiPretraguTekstaAsync(string pretraga)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ObrisiAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UrediAsync(OglasRadnoMjesto oglas)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

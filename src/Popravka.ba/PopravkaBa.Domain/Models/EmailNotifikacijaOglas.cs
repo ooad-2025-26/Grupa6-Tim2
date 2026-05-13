@@ -1,8 +1,9 @@
 ﻿namespace PopravkaBa.Domain.Models
 {
+
     public class EmailNotifikacijaOglas : NotifikacijaOglas
     {
-        public string EmailPrimalac { get; set; } = string.Empty;
+        public string EmailPrimalac { get; set; }
 
         public string FormatIntoEmail()
         {
