@@ -17,14 +17,6 @@ namespace PopravkaBa.Infrastructure.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-               name: "StatusVerifikacije",
-               table: "AspNetUsers",
-               type: "integer",
-               nullable: false,
-               defaultValue: 0
-            );
-
         }
 
        
@@ -35,11 +27,6 @@ namespace PopravkaBa.Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "MinIskustvo",
                 table: "OglasRadnoMjesto");
-
-            migrationBuilder.DropColumn(
-               name: "StatusVerifikacije",
-               table: "AspNetUsers"
-               );
         }
     }
 }

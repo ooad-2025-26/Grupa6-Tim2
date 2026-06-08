@@ -354,7 +354,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("OglasID");
 
-                    b.ToTable("NotifikacijaOglas");
+                    b.ToTable("NotifikacijaOglas", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -396,7 +396,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("VlasnikOglasaID");
 
-                    b.ToTable("Oglas");
+                    b.ToTable("Oglas", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -687,7 +687,7 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     b.HasIndex("FirmaID");
 
-                    b.ToTable("VerifikacijaFirme");
+                    b.ToTable("VerifikacijaFirme", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
