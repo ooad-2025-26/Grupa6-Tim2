@@ -28,6 +28,25 @@ namespace PopravkaBa.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<IzvrsilacUsluge?> DajProfilPoIdAsync(string id)
+        {
+            var majstor = await _context.Majstori
+                .Include(i => i.Kategorije).ThenInclude(k => k.Kategorija)
+                .Include(i => i.SlikePortfolija)
+                .Include(i => i.Recenzije).ThenInclude(r => r.Klijent)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (majstor != null) return majstor;
+
+            return await _context.Firme
+                .Include(i => i.Kategorije).ThenInclude(k => k.Kategorija)
+                .Include(i => i.SlikePortfolija)
+                .Include(i => i.Recenzije).ThenInclude(r => r.Klijent)
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+
         public async Task<StraniceniRezultat<IzvrsilacUsluge>> PronadjiAsync(
             ISpecification<IzvrsilacUsluge> spec, int stranica, int stavkiPoStranici)
         {

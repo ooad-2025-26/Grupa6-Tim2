@@ -371,7 +371,10 @@
                         {
                             foreach (var izv in Model.Rezultat.Izvrsioci)
                             {
-                                <a class="result-card result-card--izvrsilac" href="#">
+                                <a class="result-card result-card--izvrsilac" 
+                                    asp-controller="Profil" 
+                                    asp-action="Detalji" 
+                                    asp-route-id="@izv.Id">
                                     <div class="result-card-main">
                                         <div class="izv-avatar">
                                             @if (!string.IsNullOrEmpty(izv.Slika))

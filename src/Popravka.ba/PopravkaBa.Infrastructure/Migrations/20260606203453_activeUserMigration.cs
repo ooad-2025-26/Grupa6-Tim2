@@ -33,7 +33,7 @@ namespace PopravkaBa.Infrastructure.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "MinIskustvo",
-                table: "OglasRadnoMjesto");
+                table: "OglasRadnoMjesto");     
 
             migrationBuilder.DropColumn(
                name: "StatusVerifikacije",

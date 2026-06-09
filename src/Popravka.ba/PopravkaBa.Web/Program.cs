@@ -94,6 +94,7 @@ builder.Services.AddScoped<IOglasUslugeFacade, OglasUslugeFacade>();
 builder.Services.AddScoped<IPonudaUslugeService, PonudaUslugeService>();
 // builder.Services.AddScoped<IPrijavaOglasService, PrijavaOglasService>();
 builder.Services.AddScoped<IRecenzijaService, RecenzijaService>();
+builder.Services.AddScoped<IProfilService, ProfilService>(); // servis za detaljan profil
 
 builder.Services.AddScoped<IPretragaStrategy, KlijentStrategy>();
 builder.Services.AddScoped<IPretragaStrategy, MajstorStrategy>();

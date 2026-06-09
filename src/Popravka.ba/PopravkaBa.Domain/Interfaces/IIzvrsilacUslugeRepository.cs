@@ -14,5 +14,7 @@ namespace PopravkaBa.Domain.Interfaces
         Task UrediAsync(IzvrsilacUsluge oglas);
         Task ObrisiAsync(int id);
         Task<IEnumerable<IzvrsilacUsluge>> IzvrsiPretraguTekstaAsync(string pretraga);
+        Task<IzvrsilacUsluge?> DajProfilPoIdAsync(string id);
     }
-}
+    
+    }

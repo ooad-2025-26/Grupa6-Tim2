@@ -1,0 +1,619 @@
+﻿@model PopravkaBa.Application.DTOs.ProfilIzvrsilacDto
+@{
+    ViewData["Title"] = Model.DisplayName;
+}
+
+<div class="profil-wrapper">
+
+    <div class="profil-header-card">
+        <div class="profil-banner"></div>
+        <div class="profil-header-body">
+            <div class="profil-avatar-wrap">
+                @if (!string.IsNullOrEmpty(Model.Slika))
+                {
+                    <img src="@Model.Slika" alt="@Model.DisplayName" class="profil-avatar" />
+                }
+                else
+                {
+                    <div class="profil-avatar profil-avatar--placeholder">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                }
+            </div>
+
+            <div class="profil-header-info">
+                <div class="profil-name-row">
+                    <h1 class="profil-name">@Model.DisplayName</h1>
+                    @if (!Model.JeMajstor)
+                    {
+                        <span class="profil-verified-badge" title="Verificirana firma">
+                            <i class="bi bi-patch-check-fill"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="profil-verified-badge" title="Verificiran majstor">
+                            <i class="bi bi-patch-check-fill"></i>
+                        </span>
+                    }
+                </div>
+                <p class="profil-tip">@(Model.JeMajstor ? "Majstor" : "Firma")</p>
+                @if (!string.IsNullOrEmpty(Model.Lokacija))
+                {
+                    <p class="profil-lokacija">
+                        <i class="bi bi-geo-alt-fill"></i> @Model.Lokacija
+                    </p>
+                }
+            </div>
+
+            <div class="profil-header-stats">
+                <div class="profil-stat">
+                    <span class="profil-stat-value">@Model.ProsjecnaOcjena.ToString("F1")</span>
+                    <span class="profil-stat-label">Ocjena</span>
+                </div>
+                <div class="profil-stat">
+                    <span class="profil-stat-value">@Model.BrojRecenzija</span>
+                    <span class="profil-stat-label">Recenzija</span>
+                </div>
+                <div class="profil-stat">
+                    <span class="profil-stat-value">@Model.BrojZavrsenihPoslova</span>
+                    <span class="profil-stat-label">Poslova</span>
+                </div>
+                @if (Model.GodinaIskustva.HasValue)
+                {
+                    <div class="profil-stat">
+                        <span class="profil-stat-value">@Model.GodinaIskustva</span>
+                        <span class="profil-stat-label">God. iskustva</span>
+                    </div>
+                }
+            </div>
+
+            <a asp-controller="Recenzija" asp-action="Objavi"
+               asp-route-izvrsilacId="@Model.Id"
+               class="profil-kontakt-btn">
+                Kontaktiraj
+            </a>
+        </div>
+    </div>
+
+    <div class="profil-content-grid">
+        <div class="profil-left-col">
+
+            @if (!string.IsNullOrEmpty(Model.Opis))
+            {
+                <div class="profil-card">
+                    <h2 class="profil-card-title">O meni</h2>
+                    <p class="profil-card-text">@Model.Opis</p>
+                </div>
+            }
+
+
+            @if (Model.Kategorije.Any())
+            {
+                <div class="profil-card">
+                    <h2 class="profil-card-title">Vještine i usluge</h2>
+                    <div class="profil-tags">
+                        @foreach (var kat in Model.Kategorije)
+                        {
+                            <span class="profil-tag">@kat</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.OglasiMajstora.Any())
+            {
+                <div class="profil-card">
+                    <h2 class="profil-card-title">Opći oglas usluga</h2>
+                    <div class="profil-oglasi-lista">
+                        @foreach (var oglas in Model.OglasiMajstora)
+                        {
+                            <a asp-controller="OglasMajstora" asp-action="Detalji"
+                               asp-route-id="@oglas.Id" class="profil-oglas-item">
+                                <div class="profil-oglas-ikona">
+                                    <i class="bi bi-tools"></i>
+                                </div>
+                                <div class="profil-oglas-info">
+                                    <span class="profil-oglas-naslov">@oglas.Naslov</span>
+                                    <span class="profil-oglas-opis">@oglas.Opis</span>
+                                    <span class="profil-oglas-cijena">
+                                        Od @oglas.MinCijena KM — @oglas.Lokacija
+                                    </span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="profil-card">
+                <div class="profil-card-header-row">
+                    <h2 class="profil-card-title">Recenzije klijenata</h2>
+                    <a asp-controller="Recenzija" asp-action="Index"
+                       asp-route-izvrsilacId="@Model.Id" class="profil-vidi-sve">
+                        Pogledaj sve →
+                    </a>
+                </div>
+
+                @if (!Model.Recenzije.Any())
+                {
+                    <p class="profil-card-text text-muted">Još nema recenzija.</p>
+                }
+                else
+                {
+                    @foreach (var rec in Model.Recenzije)
+                    {
+                        <div class="profil-recenzija">
+                            <div class="profil-recenzija-header">
+                                <div class="profil-recenzija-avatar">
+                                    @if (!string.IsNullOrEmpty(rec.KlijentSlika))
+                                    {
+                                        <img src="@rec.KlijentSlika" alt="@rec.KlijentIme" />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-person-fill"></i>
+                                    }
+                                </div>
+                                <div class="profil-recenzija-meta">
+                                    <span class="profil-recenzija-ime">@rec.KlijentIme</span>
+                                    <span class="profil-recenzija-datum">
+                                        Prije @((DateTime.UtcNow - rec.DatumRecenzije).Days) dana
+                                    </span>
+                                </div>
+                                <div class="profil-recenzija-zvjezdice ms-auto">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi @(i <= rec.Ocjena ? "bi-star-fill" : "bi-star") profil-zvjezdica"></i>
+                                    }
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(rec.Komentar))
+                            {
+                                <p class="profil-recenzija-tekst">@rec.Komentar</p>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+
+        </div>
+
+        <div class="profil-right-col">
+            <div class="profil-card">
+                <h2 class="profil-card-title">Portfolio</h2>
+                @if (!Model.SlikePortfolija.Any())
+                {
+                    <div class="profil-portfolio-placeholder">
+                        <i class="bi bi-image"></i>
+                        <span>Nema slika</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="profil-portfolio-grid">
+                        @foreach (var slika in Model.SlikePortfolija)
+                        {
+                            <a href="@slika.URL" target="_blank" class="profil-portfolio-item"
+                               title="@slika.Opis">
+                                <img src="@slika.URL" alt="@slika.Opis" />
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.WebStranica) || !string.IsNullOrEmpty(Model.RadnoVrijeme))
+            {
+                <div class="profil-card">
+                    <h2 class="profil-card-title">Informacije</h2>
+                    @if (!string.IsNullOrEmpty(Model.RadnoVrijeme))
+                    {
+                        <div class="profil-info-row">
+                            <i class="bi bi-clock"></i>
+                            <span>@Model.RadnoVrijeme</span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.WebStranica))
+                    {
+                        <div class="profil-info-row">
+                            <i class="bi bi-globe"></i>
+                            <a href="@Model.WebStranica" target="_blank">@Model.WebStranica</a>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.VelicinaFirme))
+                    {
+                        <div class="profil-info-row">
+                            <i class="bi bi-building"></i>
+                            <span>@Model.VelicinaFirme</span>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (Model.MinCijenaUsluge.HasValue)
+            {
+                <div class="profil-card profil-cijena-card">
+                    <p class="profil-cijena-label">Usluge od</p>
+                    <p class="profil-cijena-iznos">@Model.MinCijenaUsluge KM/h</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .profil-wrapper {
+        max-width: 1100px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .profil-header-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .profil-banner {
+        height: 120px;
+        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
+    }
+
+    .profil-header-body {
+        display: flex;
+        align-items: flex-end;
+        gap: 1.5rem;
+        padding: 0 2rem 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .profil-avatar-wrap {
+        margin-top: -48px;
+        flex-shrink: 0;
+    }
+
+    .profil-avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        object-fit: cover;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #9ca3af;
+    }
+
+    .profil-avatar--placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profil-header-info {
+        flex: 1;
+        padding-top: .5rem;
+    }
+
+    .profil-name-row {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .profil-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .profil-verified-badge {
+        color: #1a56db;
+        font-size: 1.1rem;
+    }
+
+    .profil-tip {
+        color: #6b7280;
+        font-size: .9rem;
+        margin: .1rem 0 0;
+    }
+
+    .profil-lokacija {
+        color: #6b7280;
+        font-size: .85rem;
+        margin: .25rem 0 0;
+    }
+
+    .profil-header-stats {
+        display: flex;
+        gap: 2rem;
+        margin-left: auto;
+    }
+
+    .profil-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profil-stat-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #111;
+    }
+
+    .profil-stat-label {
+        font-size: .75rem;
+        color: #6b7280;
+    }
+
+    .profil-kontakt-btn {
+        background: #1a56db;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: .6rem 1.4rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        align-self: center;
+    }
+
+        .profil-kontakt-btn:hover {
+            background: #1447b8;
+            color: #fff;
+        }
+
+    .profil-content-grid {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    .profil-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .profil-card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0 0 1rem;
+        color: #111;
+    }
+
+    .profil-card-text {
+        color: #4b5563;
+        font-size: .9rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .profil-card-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+        .profil-card-header-row .profil-card-title {
+            margin-bottom: 0;
+        }
+
+    .profil-vidi-sve {
+        font-size: .85rem;
+        color: #1a56db;
+        text-decoration: none;
+    }
+
+    .profil-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    .profil-tag {
+        background: #eff6ff;
+        color: #1a56db;
+        border-radius: 20px;
+        padding: .3rem .8rem;
+        font-size: .8rem;
+        font-weight: 500;
+    }
+
+    .profil-oglasi-lista {
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .profil-oglas-item {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        padding: .75rem;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color .15s;
+    }
+
+        .profil-oglas-item:hover {
+            border-color: #1a56db;
+        }
+
+    .profil-oglas-ikona {
+        width: 40px;
+        height: 40px;
+        background: #eff6ff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1a56db;
+        flex-shrink: 0;
+    }
+
+    .profil-oglas-info {
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+    }
+
+    .profil-oglas-naslov {
+        font-weight: 600;
+        font-size: .9rem;
+        color: #111;
+    }
+
+    .profil-oglas-opis {
+        font-size: .8rem;
+        color: #6b7280;
+    }
+
+    .profil-oglas-cijena {
+        font-size: .8rem;
+        color: #1a56db;
+        font-weight: 500;
+    }
+
+    .profil-recenzija {
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+        .profil-recenzija:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .profil-recenzija-header {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: .5rem;
+    }
+
+    .profil-recenzija-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: #9ca3af;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+        .profil-recenzija-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .profil-recenzija-meta {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profil-recenzija-ime {
+        font-weight: 600;
+        font-size: .85rem;
+    }
+
+    .profil-recenzija-datum {
+        font-size: .75rem;
+        color: #9ca3af;
+    }
+
+    .profil-recenzija-tekst {
+        font-size: .85rem;
+        color: #4b5563;
+        margin: 0;
+    }
+
+    .profil-zvjezdica {
+        color: #f59e0b;
+        font-size: .85rem;
+    }
+
+    .profil-portfolio-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .5rem;
+    }
+
+    .profil-portfolio-item img {
+        width: 100%;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .profil-portfolio-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        padding: 2rem;
+        color: #9ca3af;
+        font-size: .85rem;
+        background: #f9fafb;
+        border-radius: 8px;
+    }
+
+        .profil-portfolio-placeholder i {
+            font-size: 2rem;
+        }
+
+    .profil-info-row {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        font-size: .9rem;
+        color: #4b5563;
+        margin-bottom: .5rem;
+    }
+
+        .profil-info-row i {
+            color: #1a56db;
+        }
+
+        .profil-info-row a {
+            color: #1a56db;
+            text-decoration: none;
+        }
+
+    .profil-cijena-card {
+        text-align: center;
+    }
+
+    .profil-cijena-label {
+        color: #6b7280;
+        font-size: .85rem;
+        margin: 0;
+    }
+
+    .profil-cijena-iznos {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a56db;
+        margin: .25rem 0 0;
+    }
+</style>
