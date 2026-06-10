@@ -4,7 +4,7 @@ using PopravkaBa.Infrastructure.Wrappers;
 
 namespace PopravkaBa.Domain.Interfaces
 {
-    public interface IIzvrsilacUslugeRepository
+    public interface IIzvrsilacUslugeRepository 
     {
         Task<IEnumerable<IzvrsilacUsluge>> DajSveAsync();
         Task<IzvrsilacUsluge?> DajPoIdAsync(int id);
@@ -15,6 +15,8 @@ namespace PopravkaBa.Domain.Interfaces
         Task ObrisiAsync(int id);
         Task<IEnumerable<IzvrsilacUsluge>> IzvrsiPretraguTekstaAsync(string pretraga);
         Task<IzvrsilacUsluge?> DajProfilPoIdAsync(string id);
+
+        // Nova metoda: snima promjene na tracked entitetu
+        Task SacuvajAsync();
     }
-    
-    }
+}

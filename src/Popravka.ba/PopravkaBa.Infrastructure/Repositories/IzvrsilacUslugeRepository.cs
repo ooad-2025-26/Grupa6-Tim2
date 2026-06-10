@@ -4,48 +4,35 @@ using PopravkaBa.Domain.Interfaces;
 using PopravkaBa.Domain.Models;
 using PopravkaBa.Domain.Specifications.Interface;
 using PopravkaBa.Infrastructure.Wrappers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PopravkaBa.Infrastructure.Repositories
 {
     public class IzvrsilacUslugeRepository : IIzvrsilacUslugeRepository
     {
         private readonly ApplicationDbContext _context;
+
         public IzvrsilacUslugeRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public Task<IEnumerable<IzvrsilacUsluge>> DajSveAsync()
-        {
-            throw new NotImplementedException();
-        }
-        public Task<IzvrsilacUsluge?> DajPoIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+        // Dohvata profil sa svim navigation propertijima za prikaz
+        // VAŽNO: bez AsNoTracking() kada ćemo snimati izmjene
         public async Task<IzvrsilacUsluge?> DajProfilPoIdAsync(string id)
         {
-            var majstor = await _context.Majstori
-                .Include(i => i.Kategorije).ThenInclude(k => k.Kategorija)
-                .Include(i => i.SlikePortfolija)
-                .Include(i => i.Recenzije).ThenInclude(r => r.Klijent)
-                .FirstOrDefaultAsync(i => i.Id == id);
-
-            if (majstor != null) return majstor;
-
-            return await _context.Firme
+            return await _context.ApplicationUsers
+                .OfType<IzvrsilacUsluge>() 
                 .Include(i => i.Kategorije).ThenInclude(k => k.Kategorija)
                 .Include(i => i.SlikePortfolija)
                 .Include(i => i.Recenzije).ThenInclude(r => r.Klijent)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        // Snima sve izmjene koje su napravljene na tracked entitetima
+        public async Task SacuvajAsync()
+        {
+            var rows = await _context.SaveChangesAsync();
+        }
 
         public async Task<StraniceniRezultat<IzvrsilacUsluge>> PronadjiAsync(
             ISpecification<IzvrsilacUsluge> spec, int stranica, int stavkiPoStranici)
@@ -73,21 +60,23 @@ namespace PopravkaBa.Infrastructure.Repositories
 
             return new StraniceniRezultat<IzvrsilacUsluge> { Stavke = stavke, Ukupno = ukupno };
         }
+
+        public Task<IEnumerable<IzvrsilacUsluge>> DajSveAsync()
+            => throw new NotImplementedException();
+
+        public Task<IzvrsilacUsluge?> DajPoIdAsync(int id)
+            => throw new NotImplementedException();
+
         public Task DodajAsync(IzvrsilacUsluge oglas)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
+
         public Task UrediAsync(IzvrsilacUsluge oglas)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
+
         public Task ObrisiAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
+
         public Task<IEnumerable<IzvrsilacUsluge>> IzvrsiPretraguTekstaAsync(string pretraga)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

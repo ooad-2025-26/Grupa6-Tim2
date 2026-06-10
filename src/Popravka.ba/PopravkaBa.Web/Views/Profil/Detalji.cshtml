@@ -1,6 +1,18 @@
-﻿@model PopravkaBa.Application.DTOs.ProfilIzvrsilacDto
+﻿@* Lokacija: PopravkaBa.Web/Views/Profil/Detalji.cshtml *@
+@model PopravkaBa.Application.DTOs.ProfilIzvrsilacDto
 @{
     ViewData["Title"] = Model.DisplayName;
+    var trenutniKorisnikId = ViewBag.TrenutniKorisnikId as string;
+    var jeVlasnik = trenutniKorisnikId == Model.Id;
+}
+
+@* Poruka o uspješnom snimanju *@
+@if (TempData["UspjehPoruka"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mx-4 mt-3" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["UspjehPoruka"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
 }
 
 <div class="profil-wrapper">
@@ -24,18 +36,9 @@
             <div class="profil-header-info">
                 <div class="profil-name-row">
                     <h1 class="profil-name">@Model.DisplayName</h1>
-                    @if (!Model.JeMajstor)
-                    {
-                        <span class="profil-verified-badge" title="Verificirana firma">
-                            <i class="bi bi-patch-check-fill"></i>
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="profil-verified-badge" title="Verificiran majstor">
-                            <i class="bi bi-patch-check-fill"></i>
-                        </span>
-                    }
+                    <span class="profil-verified-badge" title="@(Model.JeMajstor ? "Verificiran majstor" : "Verificirana firma")">
+                        <i class="bi bi-patch-check-fill"></i>
+                    </span>
                 </div>
                 <p class="profil-tip">@(Model.JeMajstor ? "Majstor" : "Firma")</p>
                 @if (!string.IsNullOrEmpty(Model.Lokacija))
@@ -68,11 +71,26 @@
                 }
             </div>
 
-            <a asp-controller="Recenzija" asp-action="Objavi"
-               asp-route-izvrsilacId="@Model.Id"
-               class="profil-kontakt-btn">
-                Kontaktiraj
-            </a>
+            @* Dugmad — uvijek prikazujemo Kontaktiraj, a Uredi profil samo vlasniku *@
+            <div class="profil-akcije">
+                @if (!jeVlasnik)
+                {
+                    <a asp-controller="Recenzija" asp-action="Objavi"
+                       asp-route-izvrsilacId="@Model.Id"
+                       class="profil-kontakt-btn">
+                        Kontaktiraj
+                    </a>
+                }
+
+                @if (jeVlasnik)
+                {
+                    <a asp-controller="Profil" asp-action="UrediProfil"
+                       asp-route-id="@Model.Id"
+                       class="profil-uredi-btn">
+                        <i class="bi bi-pencil-square me-1"></i> Uredi profil
+                    </a>
+                }
+            </div>
         </div>
     </div>
 
@@ -86,7 +104,6 @@
                     <p class="profil-card-text">@Model.Opis</p>
                 </div>
             }
-
 
             @if (Model.Kategorije.Any())
             {
@@ -243,377 +260,64 @@
 </div>
 
 <style>
-    .profil-wrapper {
-        max-width: 1100px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
-
-    .profil-header-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 1px 4px rgba(0,0,0,.08);
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-    }
-
-    .profil-banner {
-        height: 120px;
-        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
-    }
-
-    .profil-header-body {
-        display: flex;
-        align-items: flex-end;
-        gap: 1.5rem;
-        padding: 0 2rem 1.5rem;
-        flex-wrap: wrap;
-    }
-
-    .profil-avatar-wrap {
-        margin-top: -48px;
-        flex-shrink: 0;
-    }
-
-    .profil-avatar {
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
-        border: 4px solid #fff;
-        object-fit: cover;
-        background: #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        color: #9ca3af;
-    }
-
-    .profil-avatar--placeholder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .profil-header-info {
-        flex: 1;
-        padding-top: .5rem;
-    }
-
-    .profil-name-row {
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-    }
-
-    .profil-name {
-        font-size: 1.4rem;
-        font-weight: 700;
-        margin: 0;
-    }
-
-    .profil-verified-badge {
-        color: #1a56db;
-        font-size: 1.1rem;
-    }
-
-    .profil-tip {
-        color: #6b7280;
-        font-size: .9rem;
-        margin: .1rem 0 0;
-    }
-
-    .profil-lokacija {
-        color: #6b7280;
-        font-size: .85rem;
-        margin: .25rem 0 0;
-    }
-
-    .profil-header-stats {
-        display: flex;
-        gap: 2rem;
-        margin-left: auto;
-    }
-
-    .profil-stat {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .profil-stat-value {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #111;
-    }
-
-    .profil-stat-label {
-        font-size: .75rem;
-        color: #6b7280;
-    }
-
-    .profil-kontakt-btn {
-        background: #1a56db;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: .6rem 1.4rem;
-        font-weight: 600;
-        text-decoration: none;
-        white-space: nowrap;
-        align-self: center;
-    }
-
-        .profil-kontakt-btn:hover {
-            background: #1447b8;
-            color: #fff;
-        }
-
-    .profil-content-grid {
-        display: grid;
-        grid-template-columns: 1fr 300px;
-        gap: 1.5rem;
-        align-items: start;
-    }
-
-    .profil-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 1px 4px rgba(0,0,0,.08);
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .profil-card-title {
-        font-size: 1rem;
-        font-weight: 700;
-        margin: 0 0 1rem;
-        color: #111;
-    }
-
-    .profil-card-text {
-        color: #4b5563;
-        font-size: .9rem;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .profil-card-header-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-        .profil-card-header-row .profil-card-title {
-            margin-bottom: 0;
-        }
-
-    .profil-vidi-sve {
-        font-size: .85rem;
-        color: #1a56db;
-        text-decoration: none;
-    }
-
-    .profil-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .5rem;
-    }
-
-    .profil-tag {
-        background: #eff6ff;
-        color: #1a56db;
-        border-radius: 20px;
-        padding: .3rem .8rem;
-        font-size: .8rem;
-        font-weight: 500;
-    }
-
-    .profil-oglasi-lista {
-        display: flex;
-        flex-direction: column;
-        gap: .75rem;
-    }
-
-    .profil-oglas-item {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-start;
-        padding: .75rem;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-        text-decoration: none;
-        color: inherit;
-        transition: border-color .15s;
-    }
-
-        .profil-oglas-item:hover {
-            border-color: #1a56db;
-        }
-
-    .profil-oglas-ikona {
-        width: 40px;
-        height: 40px;
-        background: #eff6ff;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #1a56db;
-        flex-shrink: 0;
-    }
-
-    .profil-oglas-info {
-        display: flex;
-        flex-direction: column;
-        gap: .2rem;
-    }
-
-    .profil-oglas-naslov {
-        font-weight: 600;
-        font-size: .9rem;
-        color: #111;
-    }
-
-    .profil-oglas-opis {
-        font-size: .8rem;
-        color: #6b7280;
-    }
-
-    .profil-oglas-cijena {
-        font-size: .8rem;
-        color: #1a56db;
-        font-weight: 500;
-    }
-
-    .profil-recenzija {
-        border-bottom: 1px solid #f3f4f6;
-        padding-bottom: 1rem;
-        margin-bottom: 1rem;
-    }
-
-        .profil-recenzija:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-    .profil-recenzija-header {
-        display: flex;
-        align-items: center;
-        gap: .75rem;
-        margin-bottom: .5rem;
-    }
-
-    .profil-recenzija-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        color: #9ca3af;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-
-        .profil-recenzija-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-    .profil-recenzija-meta {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .profil-recenzija-ime {
-        font-weight: 600;
-        font-size: .85rem;
-    }
-
-    .profil-recenzija-datum {
-        font-size: .75rem;
-        color: #9ca3af;
-    }
-
-    .profil-recenzija-tekst {
-        font-size: .85rem;
-        color: #4b5563;
-        margin: 0;
-    }
-
-    .profil-zvjezdica {
-        color: #f59e0b;
-        font-size: .85rem;
-    }
-
-    .profil-portfolio-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: .5rem;
-    }
-
-    .profil-portfolio-item img {
-        width: 100%;
-        height: 110px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    .profil-portfolio-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: .5rem;
-        padding: 2rem;
-        color: #9ca3af;
-        font-size: .85rem;
-        background: #f9fafb;
-        border-radius: 8px;
-    }
-
-        .profil-portfolio-placeholder i {
-            font-size: 2rem;
-        }
-
-    .profil-info-row {
-        display: flex;
-        align-items: center;
-        gap: .75rem;
-        font-size: .9rem;
-        color: #4b5563;
-        margin-bottom: .5rem;
-    }
-
-        .profil-info-row i {
-            color: #1a56db;
-        }
-
-        .profil-info-row a {
-            color: #1a56db;
-            text-decoration: none;
-        }
-
-    .profil-cijena-card {
-        text-align: center;
-    }
-
-    .profil-cijena-label {
-        color: #6b7280;
-        font-size: .85rem;
-        margin: 0;
-    }
-
-    .profil-cijena-iznos {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1a56db;
-        margin: .25rem 0 0;
-    }
+    .profil-wrapper { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    .profil-header-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow: hidden; margin-bottom: 1.5rem; }
+    .profil-banner { height: 120px; background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%); }
+    .profil-header-body { display: flex; align-items: flex-end; gap: 1.5rem; padding: 0 2rem 1.5rem; flex-wrap: wrap; }
+    .profil-avatar-wrap { margin-top: -48px; flex-shrink: 0; }
+    .profil-avatar { width: 96px; height: 96px; border-radius: 50%; border: 4px solid #fff; object-fit: cover; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #9ca3af; }
+    .profil-avatar--placeholder { display: flex; align-items: center; justify-content: center; }
+    .profil-header-info { flex: 1; padding-top: .5rem; }
+    .profil-name-row { display: flex; align-items: center; gap: .5rem; }
+    .profil-name { font-size: 1.4rem; font-weight: 700; margin: 0; }
+    .profil-verified-badge { color: #1a56db; font-size: 1.1rem; }
+    .profil-tip { color: #6b7280; font-size: .9rem; margin: .1rem 0 0; }
+    .profil-lokacija { color: #6b7280; font-size: .85rem; margin: .25rem 0 0; }
+    .profil-header-stats { display: flex; gap: 2rem; margin-left: auto; }
+    .profil-stat { display: flex; flex-direction: column; align-items: center; }
+    .profil-stat-value { font-size: 1.2rem; font-weight: 700; color: #111; }
+    .profil-stat-label { font-size: .75rem; color: #6b7280; }
+    .profil-akcije { display: flex; gap: .75rem; align-self: center; }
+    .profil-kontakt-btn { background: #1a56db; color: #fff; border-radius: 8px; padding: .6rem 1.4rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .profil-kontakt-btn:hover { background: #1447b8; color: #fff; }
+    .profil-uredi-btn { background: #fff; color: #1a56db; border: 1.5px solid #1a56db; border-radius: 8px; padding: .6rem 1.4rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .profil-uredi-btn:hover { background: #eff6ff; color: #1a56db; }
+    .profil-content-grid { display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start; }
+    .profil-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .profil-card-title { font-size: 1rem; font-weight: 700; margin: 0 0 1rem; color: #111; }
+    .profil-card-text { color: #4b5563; font-size: .9rem; line-height: 1.6; margin: 0; }
+    .profil-card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .profil-card-header-row .profil-card-title { margin-bottom: 0; }
+    .profil-vidi-sve { font-size: .85rem; color: #1a56db; text-decoration: none; }
+    .profil-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .profil-tag { background: #eff6ff; color: #1a56db; border-radius: 20px; padding: .3rem .8rem; font-size: .8rem; font-weight: 500; }
+    .profil-oglasi-lista { display: flex; flex-direction: column; gap: .75rem; }
+    .profil-oglas-item { display: flex; gap: 1rem; align-items: flex-start; padding: .75rem; border-radius: 8px; border: 1px solid #e5e7eb; text-decoration: none; color: inherit; transition: border-color .15s; }
+    .profil-oglas-item:hover { border-color: #1a56db; }
+    .profil-oglas-ikona { width: 40px; height: 40px; background: #eff6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #1a56db; flex-shrink: 0; }
+    .profil-oglas-info { display: flex; flex-direction: column; gap: .2rem; }
+    .profil-oglas-naslov { font-weight: 600; font-size: .9rem; color: #111; }
+    .profil-oglas-opis { font-size: .8rem; color: #6b7280; }
+    .profil-oglas-cijena { font-size: .8rem; color: #1a56db; font-weight: 500; }
+    .profil-recenzija { border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem; margin-bottom: 1rem; }
+    .profil-recenzija:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .profil-recenzija-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
+    .profil-recenzija-avatar { width: 36px; height: 36px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #9ca3af; overflow: hidden; flex-shrink: 0; }
+    .profil-recenzija-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profil-recenzija-meta { display: flex; flex-direction: column; }
+    .profil-recenzija-ime { font-weight: 600; font-size: .85rem; }
+    .profil-recenzija-datum { font-size: .75rem; color: #9ca3af; }
+    .profil-recenzija-tekst { font-size: .85rem; color: #4b5563; margin: 0; }
+    .profil-zvjezdica { color: #f59e0b; font-size: .85rem; }
+    .profil-portfolio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .profil-portfolio-item img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
+    .profil-portfolio-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; padding: 2rem; color: #9ca3af; font-size: .85rem; background: #f9fafb; border-radius: 8px; }
+    .profil-portfolio-placeholder i { font-size: 2rem; }
+    .profil-info-row { display: flex; align-items: center; gap: .75rem; font-size: .9rem; color: #4b5563; margin-bottom: .5rem; }
+    .profil-info-row i { color: #1a56db; }
+    .profil-info-row a { color: #1a56db; text-decoration: none; }
+    .profil-cijena-card { text-align: center; }
+    .profil-cijena-label { color: #6b7280; font-size: .85rem; margin: 0; }
+    .profil-cijena-iznos { font-size: 1.5rem; font-weight: 700; color: #1a56db; margin: .25rem 0 0; }
+    @@media (max-width: 768px) { .profil-content-grid { grid-template-columns: 1fr; } .profil-header-stats { gap: 1rem; } .profil-header-body { gap: 1rem; } }
 </style>
