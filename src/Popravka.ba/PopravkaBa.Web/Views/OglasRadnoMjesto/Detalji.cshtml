@@ -133,6 +133,12 @@
                         </div>
                     }
 
+                    @if (!string.IsNullOrEmpty(Model.Slika))
+                    {
+                        <img src="@Model.Slika" alt="@Model.Naslov"
+                             class="img-fluid rounded mb-3 w-100" style="max-height:360px;object-fit:cover;" />
+                    }
+
                     @if (!string.IsNullOrEmpty(Model.Opis))
                     {
                         <p style="white-space: pre-line;">@Model.Opis</p>
@@ -336,11 +342,13 @@
                         }
                         else
                         {
-                            <p class="text-muted small mb-2">Oglas je trenutno aktivan i još uvijek možete dostaviti vašu ponudu korisniku</p>
-                            <form asp-controller="PrijavaOglas" asp-action="Apliciraj" method="get">
+                            <p class="text-muted small mb-2">Oglas je trenutno aktivan i još uvijek možete dostaviti vašu prijavu poslodavcu.</p>
+                            <form asp-controller="PrijavaOglas" asp-action="Posalji" method="post" class="confirm-form">
+                                @Html.AntiForgeryToken()
                                 <input type="hidden" name="oglasId" value="@Model.OglasId" />
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fa-solid fa-paper-plane me-2"></i>Apliciraj ponudu
+                                <button type="button" class="btn btn-primary w-100 confirm-btn"
+                                        data-msg="Poslati prijavu na ovaj oglas? Prijava se ne može povući.">
+                                    <i class="fa-solid fa-paper-plane me-2"></i>Apliciraj na oglas
                                 </button>
                             </form>
                         }

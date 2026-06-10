@@ -1,17 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using PopravkaBa.Application.DTOs;
 using PopravkaBa.Application.Services.Interface;
+using PopravkaBa.Domain.Enums;
+using PopravkaBa.Domain.Models;
 
 public class PrijavaOglasController : Controller
 {
     private readonly IPrijavaOglasService _prijavaOglasService;
     private readonly IOglasRadnoMjestoService _oglasRadnoMjestoService;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<PrijavaOglasController> _logger;
 
-    public PrijavaOglasController(IPrijavaOglasService prijavaOglasService, IOglasRadnoMjestoService oglasRadnoMjestoService, ILogger<PrijavaOglasController> logger)
+    public PrijavaOglasController(IPrijavaOglasService prijavaOglasService, IOglasRadnoMjestoService oglasRadnoMjestoService, UserManager<ApplicationUser> userManager, ILogger<PrijavaOglasController> logger)
     {
         _prijavaOglasService = prijavaOglasService;
         _oglasRadnoMjestoService = oglasRadnoMjestoService;
+        _userManager = userManager;
         _logger = logger;
     }
 
@@ -23,33 +29,30 @@ public class PrijavaOglasController : Controller
     }
 
 
-    public IActionResult Apliciraj(int oglasId)
-    {
-        var dto = new KreirajPrijavaRadnoMjestoDto
-        {
-            OglasID = oglasId
-        };
-        return View(dto);
-    }
-
+    // Prijava se šalje direktno sa stranice oglasa (pop-up potvrda), bez zasebne stranice.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Apliciraj(KreirajPrijavaRadnoMjestoDto dto)
+    [Authorize(Roles = "Majstor")]
+    public async Task<IActionResult> Posalji(int oglasId)
     {
-        if (!ModelState.IsValid) return View(dto);
-
+        var korisnikId = _userManager.GetUserId(User)!;
         try
         {
+            var dto = new KreirajPrijavaRadnoMjestoDto { OglasID = oglasId, MajstorID = korisnikId };
             await _prijavaOglasService.KreirajPrijavu(dto);
             TempData["Success"] = "Prijava je uspješno poslana.";
-            return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = dto.OglasID });
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Oglas nije aktivan ili je već prijavljen
+            TempData["Error"] = ex.Message;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Greška pri kreiranju prijave.");
-            ModelState.AddModelError("", "Došlo je do greške.");
-            return View(dto);
+            _logger.LogError(ex, "Greška pri slanju prijave.");
+            TempData["Error"] = "Došlo je do greške pri slanju prijave.";
         }
+        return RedirectToAction("Detalji", "OglasRadnoMjesto", new { id = oglasId });
     }
 
     public async Task<IActionResult> ObrisiPrijavu(int prijavaId)
