@@ -46,8 +46,7 @@ namespace PopravkaBa.Web.Controllers
                     ID = elem.Item1.ID,
                     Naziv = elem.Item1.Naziv,
                     AktivniIzvrsilacCount = elem.Item2
-                    // Tehnički, nije implementirana logika da li je profil izvrsioca "aktivan"
-                }
+                    }
                 ),
                 NedavniOglasi = nedavniOglasi?.Select(oglas => new NedavniOglasiViewModel
                 {
@@ -57,7 +56,8 @@ namespace PopravkaBa.Web.Controllers
                     DatumObjave = oglas.DatumObjave,
                     VlasnikOglasaSkracenoIme = oglas.VlasnikOglasa.SkracenoIme.Length > 15 ? oglas.VlasnikOglasa.SkracenoIme.Substring(0, 15) + "..." : oglas.VlasnikOglasa.SkracenoIme,
                     VlasnikOglasaSlika = oglas.VlasnikOglasa.Slika,
-                    BrojPonuda = oglas.BrojPrijava
+                    BrojPonuda = oglas.BrojPrijava,
+                    TipOglasa = oglas is Domain.Models.OglasRadnoMjesto ? "OglasRadnoMjesto" : "OglasUsluge"
                 }) ?? Enumerable.Empty<NedavniOglasiViewModel>()
             };
            
@@ -73,7 +73,7 @@ namespace PopravkaBa.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            Response.StatusCode = 500;
+       
             var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
             return View(new ErrorViewModel
             {     

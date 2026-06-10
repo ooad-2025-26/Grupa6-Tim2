@@ -105,13 +105,18 @@ namespace PopravkaBa.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<OglasUsluge?> DajPoIdAsync(int id) => 
+        public async Task<OglasUsluge?> DajPoIdAsync(int id) =>
             await _context.OglasiUsluga
             .Include(o => o.VlasnikOglasa)
             .Include(o => o.Mjesto)
             .Include(o => o.Kategorije)
+                .ThenInclude(ok => ok.Kategorija)
             .Include(o => o.Notifikacije)
             .Include(o => o.Ponude)
+                .ThenInclude(p => p.Izvrsilac)
+                    .ThenInclude(izv => izv.Kategorije)
+                        .ThenInclude(ik => ik.Kategorija)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(o => o.OglasID == id);
 
         public async Task<IEnumerable<OglasUsluge>> DajSveAsync() => 
@@ -126,11 +131,12 @@ namespace PopravkaBa.Infrastructure.Repositories
         public async Task<StraniceniRezultat<OglasUsluge>> PronadjiAsync(
         ISpecification<OglasUsluge> spec, int stranica, int stavkiPoStranici)
         {
+            // Include Ponude so that BrojPrijava (= Ponude.Count) is correctly populated.
+            // VlasnikOglasa→Mjesta is NOT needed here (PretragaService only reads SkracenoIme/Slika).
             var query = _context.OglasiUsluga
                 .Include(o => o.VlasnikOglasa)
-                    .ThenInclude(v => v.Mjesta)
-                        .ThenInclude(km => km.Mjesto)
                 .Include(o => o.Mjesto)
+                .Include(o => o.Ponude)
                 .Where(spec.ToExpression())
                 .AsNoTracking();
 
@@ -214,15 +220,20 @@ namespace PopravkaBa.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<OglasRadnoMjesto?> DajPoIdAsync(int id) => 
-            await  _context.OglasiRadnogMjesta
+        public async Task<OglasRadnoMjesto?> DajPoIdAsync(int id) =>
+            await _context.OglasiRadnogMjesta
             .Include(orm => orm.VozackeDozvole)
             .Include(orm => orm.Uvjeti)
             .Include(orm => orm.VlasnikOglasa)
             .Include(orm => orm.Prijave)
+                .ThenInclude(p => p.Majstor)
+                    .ThenInclude(m => m.Kategorije)
+                        .ThenInclude(ik => ik.Kategorija)
             .Include(orm => orm.Mjesto)
             .Include(orm => orm.Kategorije)
+                .ThenInclude(ok => ok.Kategorija)
             .Include(orm => orm.Notifikacije)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(orm => orm.OglasID == id);
         public async Task<IEnumerable<OglasRadnoMjesto>?> DajNedavneAsync(int topN)
        => await _context.OglasiRadnogMjesta
@@ -241,10 +252,9 @@ namespace PopravkaBa.Infrastructure.Repositories
         public async Task<StraniceniRezultat<OglasRadnoMjesto>> PronadjiAsync(
             ISpecification<OglasRadnoMjesto> spec, int stranica, int stavkiPoStranici)
         {
+            // PretragaService only reads VlasnikOglasa.DisplayName and .Slika — no need for Mjesta.
             var query = _context.OglasiRadnogMjesta
                 .Include(o => o.VlasnikOglasa)
-                    .ThenInclude(v => v.Mjesta)
-                        .ThenInclude(km => km.Mjesto)
                 .Include(o => o.Mjesto)
                 .Where(spec.ToExpression())
                 .AsNoTracking();
@@ -276,7 +286,7 @@ namespace PopravkaBa.Infrastructure.Repositories
 
         public async Task DodajAsync(OglasRadnoMjesto oglas)
         {
-            oglas.DatumObjave = DateTime.Now;
+            oglas.DatumObjave = DateTime.UtcNow;
             await _context.OglasiRadnogMjesta.AddAsync(oglas);
             await _context.SaveChangesAsync();
         }

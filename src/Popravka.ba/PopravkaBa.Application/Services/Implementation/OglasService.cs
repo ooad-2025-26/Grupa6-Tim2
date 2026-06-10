@@ -1,5 +1,6 @@
 ﻿using PopravkaBa.Application.DTOs;
 using PopravkaBa.Application.Services.Interface;
+using PopravkaBa.Domain.Enums;
 using PopravkaBa.Domain.Interfaces;
 using PopravkaBa.Domain.Models;
 
@@ -60,7 +61,9 @@ namespace PopravkaBa.Application.Services
             if (oglas is null)
                 throw new KeyNotFoundException($"Oglas sa ID {id} nije pronađen.");
 
-            await _repo.ObrisiAsync(id);
+            // "Brisanje" oglasa = postavljanje statusa na Neaktivan (soft delete)
+            oglas.StatusOglasa = Status.Neaktivan;
+            await _repo.UrediAsync(oglas);
         }
 
         // TODO: Implementirati pretragu preko lokacije u OglasRepository zbog pocetne stranice
@@ -107,7 +110,8 @@ namespace PopravkaBa.Application.Services
             if (oglas is null)
                 throw new KeyNotFoundException($"Oglas sa ID {id} nije pronađen.");
 
-            await _repo.ObrisiAsync(id);
+            oglas.StatusOglasa = Status.Neaktivan;
+            await _repo.UrediAsync(oglas);
         }
 
         public async Task<IEnumerable<OglasRadnoMjesto>> PronadjiOglase(string pretraga, int? lokacija)
@@ -151,36 +155,63 @@ namespace PopravkaBa.Application.Services
         {
             _repo = repo;
         }
-        public Task<OglasUsluge?> DajOglasPoId(int id)
+        public async Task<OglasUsluge?> DajOglasPoId(int id) => await _repo.DajPoIdAsync(id);
+
+        public async Task<IEnumerable<OglasUsluge>> DajSveOglase()
+            => await _repo.DajSveAsync();
+
+        public async Task<int> ObjaviOglas(ObjaviOglasUslugeDto dto, string vlasnikId)
         {
-            throw new NotImplementedException();
+            var oglas = new OglasUsluge
+            {
+                Naslov = dto.Naslov,
+                Opis = dto.Opis,
+                MjestoID = dto.MjestoID,
+                MinBudzet = dto.MinBudzet,
+                MaxBudzet = dto.MaxBudzet,
+                DatumObjave = DateTime.UtcNow,
+                VlasnikOglasaID = vlasnikId,
+                StatusOglasa = Status.Aktivan
+            };
+
+            await _repo.DodajAsync(oglas);
+            return oglas.OglasID;
         }
 
-        public Task<IEnumerable<OglasUsluge>> DajSveOglase()
+        public async Task ObrisiOglas(int id)
         {
-            throw new NotImplementedException();
+            var oglas = await _repo.DajPoIdAsync(id);
+
+            if (oglas is null)
+                throw new KeyNotFoundException($"Oglas sa ID {id} nije pronađen.");
+
+            // "Brisanje" oglasa = postavljanje statusa na Neaktivan (soft delete)
+            oglas.StatusOglasa = Status.Neaktivan;
+            await _repo.UrediAsync(oglas);
         }
 
-        public Task<int> ObjaviOglas(ObjaviOglasUslugeDto dto, string vlasnikId)
+        public async Task<IEnumerable<OglasUsluge>> PronadjiOglase(string pretraga, int? lokacija)
         {
-            throw new NotImplementedException();
+            var oglasi = await _repo.IzvrsiPretraguTekstaAsync(pretraga);
+            if (lokacija is not null)
+                oglasi = oglasi.Where(o => o.MjestoID == lokacija).ToList();
+            return oglasi;
         }
 
-
-
-        public Task ObrisiOglas(int id)
+        public async Task UrediOglas(UrediOglasUslugeDto dto)
         {
-            throw new NotImplementedException();
-        }
+            var oglas = await _repo.DajPoIdAsync(dto.OglasID);
 
-        public Task<IEnumerable<OglasUsluge>> PronadjiOglase(string pretraga, int? lokacija)
-        {
-            throw new NotImplementedException();
-        }
+            if (oglas is null)
+                throw new KeyNotFoundException($"Oglas sa ID {dto.OglasID} nije pronađen.");
 
-        public Task UrediOglas(UrediOglasUslugeDto dto)
-        {
-            throw new NotImplementedException();
+            oglas.Naslov = dto.Naslov;
+            oglas.Opis = dto.Opis;
+            oglas.MjestoID = dto.MjestoID;
+            oglas.MinBudzet = dto.MinBudzet;
+            oglas.MaxBudzet = dto.MaxBudzet;
+
+            await _repo.UrediAsync(oglas);
         }
 
         public async Task<int> DajBrojZavrsenihAsync() => await _repo.DajBrojZavrsenih();

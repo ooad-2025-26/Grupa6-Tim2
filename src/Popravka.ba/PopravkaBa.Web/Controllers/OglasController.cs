@@ -4,19 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using PopravkaBa.Application.DTOs;
 using PopravkaBa.Application.Services.Interface;
 using PopravkaBa.Domain.Models;
+using PopravkaBa.Web.Models.ViewModels;
+using PopravkaBa.Domain.Enums;
 
 namespace PopravkaBa.Web.Controllers
 {
-    [Authorize(Roles = "Administrator, Majstor")]
+    [Authorize(Roles = "Administrator, Majstor, Firma")]
     public class OglasMajstoraController : Controller
     {
         private readonly IOglasMajstoraFacade _facadeService;
+        private readonly IMjestoService _mjestoService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<OglasMajstoraController> _logger;
 
-        public OglasMajstoraController(IOglasMajstoraFacade facadeService, UserManager<ApplicationUser> userManager, ILogger<OglasMajstoraController> logger)
+        public OglasMajstoraController(IOglasMajstoraFacade facadeService, IMjestoService mjestoService, UserManager<ApplicationUser> userManager, ILogger<OglasMajstoraController> logger)
         {
             _facadeService = facadeService;
+            _mjestoService = mjestoService;
             _userManager = userManager;
             _logger = logger;
         }
@@ -35,9 +39,32 @@ namespace PopravkaBa.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Detalji(int id)
         {
-            var oglas = await _facadeService.DajOglasPoId(id); 
+            var oglas = await _facadeService.DajOglasPoId(id);
             if (oglas is null) return NotFound();
-            return View(oglas);
+
+            var trenutniKorisnikId = _userManager.GetUserId(User);
+            var vlasnik = await _userManager.FindByIdAsync(oglas.VlasnikOglasaID);
+
+            var vm = new OglasMajstoraDetaljiViewModel
+            {
+                OglasId      = oglas.OglasID,
+                Naslov       = oglas.Naslov,
+                Opis         = oglas.Opis,
+                DatumObjave  = oglas.DatumObjave,
+                StatusOglasa = oglas.StatusOglasa,
+                Lokacija     = oglas.Mjesto?.Naziv,
+                MinCijena    = oglas.MinCijena,
+                TipIsplate   = oglas.TipIsplate,
+                Kategorije   = oglas.Kategorije?.Select(k => k.Kategorija?.Naziv ?? "")
+                                    .Where(n => n != "").ToList() ?? new(),
+                VlasnikId       = oglas.VlasnikOglasaID,
+                VlasnikUsername = vlasnik?.UserName ?? oglas.VlasnikOglasaID,
+                VlasnikDisplayName = oglas.VlasnikOglasa?.DisplayName ?? "—",
+                VlasnikSlika = oglas.VlasnikOglasa?.Slika,
+                JeVlasnik    = trenutniKorisnikId == oglas.VlasnikOglasaID
+                               || User.IsInRole("Administrator"),
+            };
+            return View(vm);
         }
 
         public async Task<IActionResult> ObjaviOglas()
@@ -77,6 +104,12 @@ namespace PopravkaBa.Web.Controllers
             var oglas = await _facadeService.DajOglasPoId(id);
             if (oglas is null) return NotFound();
 
+            if (!SmijeUredjivati(oglas.VlasnikOglasaID, oglas.StatusOglasa, out var greska))
+            {
+                TempData["Error"] = greska;
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             var dto = new UrediOglasMajstoraDto
             {
                 OglasID = oglas.OglasID,
@@ -85,11 +118,30 @@ namespace PopravkaBa.Web.Controllers
                 MjestoID = oglas.MjestoID,
                 MinCijena = oglas.MinCijena,
                 TipIsplate = oglas.TipIsplate,
-                KategorijeID = oglas.Kategorije.Select(k => k.KategorijaID).ToList()
+                KategorijeID = oglas.Kategorije?.Select(k => k.KategorijaID).ToList() ?? new()
             };
 
             ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+            ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
             return View(dto);
+        }
+
+        private bool SmijeUredjivati(string vlasnikId, Status status, out string greska)
+        {
+            greska = "";
+            var korisnikId = _userManager.GetUserId(User);
+            bool jeAdmin = User.IsInRole("Administrator");
+            if (vlasnikId != korisnikId && !jeAdmin)
+            {
+                greska = "Nemate dozvolu za uređivanje ovog oglasa.";
+                return false;
+            }
+            if (status != Status.Aktivan && !jeAdmin)
+            {
+                greska = "Samo aktivni oglasi se mogu uređivati.";
+                return false;
+            }
+            return true;
         }
 
         [HttpPost]
@@ -97,9 +149,19 @@ namespace PopravkaBa.Web.Controllers
         public async Task<IActionResult> UrediOglas(int id, UrediOglasMajstoraDto dto)
         {
             if (id != dto.OglasID) return BadRequest();
+
+            var postojeci = await _facadeService.DajOglasPoId(id);
+            if (postojeci is null) return NotFound();
+            if (!SmijeUredjivati(postojeci.VlasnikOglasaID, postojeci.StatusOglasa, out var greska))
+            {
+                TempData["Error"] = greska;
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+                ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
                 return View(dto);
             }
 
@@ -107,13 +169,14 @@ namespace PopravkaBa.Web.Controllers
             {
                 await _facadeService.UrediOglas(dto);
                 TempData["Success"] = "Oglas je uspješno uređen.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalji), new { id });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Greška pri uređivanju oglasa.");
                 ModelState.AddModelError("", "Došlo je do greške.");
                 ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+                ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
                 return View(dto);
             }
         }
@@ -129,17 +192,27 @@ namespace PopravkaBa.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PotvrdaBrisanjaOglasa(int id)
         {
+            var oglas = await _facadeService.DajOglasPoId(id);
+            if (oglas is null) return NotFound();
+
+            var korisnikId = _userManager.GetUserId(User);
+            if (oglas.VlasnikOglasaID != korisnikId && !User.IsInRole("Administrator"))
+            {
+                TempData["Error"] = "Nemate dozvolu za brisanje ovog oglasa.";
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             try
             {
                 await _facadeService.ObrisiOglas(id);
-                TempData["Success"] = "Oglas je uspješno obrisan.";
+                TempData["Success"] = "Oglas je uspješno deaktiviran.";
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Detalji), new { id });
         }
     }
 
@@ -149,12 +222,22 @@ namespace PopravkaBa.Web.Controllers
         private readonly IOglasRadnoMjestoFacade _facadeService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<OglasRadnoMjestoController> _logger;
+        private readonly IPrijavaOglasService _prijavaService;
 
-        public OglasRadnoMjestoController(IOglasRadnoMjestoFacade facadeService, UserManager<ApplicationUser> userManager, ILogger<OglasRadnoMjestoController> logger)
+        private readonly IMjestoService _mjestoService;
+
+        public OglasRadnoMjestoController(
+            IOglasRadnoMjestoFacade facadeService,
+            IMjestoService mjestoService,
+            UserManager<ApplicationUser> userManager,
+            ILogger<OglasRadnoMjestoController> logger,
+            IPrijavaOglasService prijavaService)
         {
             _facadeService = facadeService;
+            _mjestoService = mjestoService;
             _userManager = userManager;
             _logger = logger;
+            _prijavaService = prijavaService;
         }
 
         [AllowAnonymous]
@@ -173,7 +256,61 @@ namespace PopravkaBa.Web.Controllers
         {
             var oglas = await _facadeService.DajOglasPoId(id);
             if (oglas is null) return NotFound();
-            return View(oglas);
+
+            var trenutniKorisnikId = _userManager.GetUserId(User);
+            var vlasnik = await _userManager.FindByIdAsync(oglas.VlasnikOglasaID);
+
+            var prijaveDto = new List<PrijavaDto>();
+            if (oglas.Prijave != null)
+            {
+                foreach (var p in oglas.Prijave)
+                {
+                    var majstorUser = await _userManager.FindByIdAsync(p.MajstorID);
+                    prijaveDto.Add(new PrijavaDto
+                    {
+                        PrijavaId         = p.ID,
+                        MajstorId         = p.MajstorID,
+                        MajstorUsername   = majstorUser?.UserName ?? p.MajstorID,
+                        MajstorIme        = p.Majstor?.DisplayName ?? "—",
+                        MajstorSlika      = p.Majstor?.Slika,
+                        MajstorKategorija = p.Majstor?.Kategorije?.FirstOrDefault()?.Kategorija?.Naziv,
+                        ProsjecnaOcjena   = (decimal)(p.Majstor?.ProsjecnaOcjena ?? 0),
+                        BrojRecenzija     = p.Majstor?.BrojRecenzija ?? 0,
+                        VrijemePrijave    = p.VrijemePrijave,
+                        StatusPrijave     = p.StatusPrijave
+                    });
+                }
+            }
+
+            var vm = new OglasRadnoMjestoDetaljiViewModel
+            {
+                OglasId          = oglas.OglasID,
+                Naslov           = oglas.Naslov,
+                Opis             = oglas.Opis,
+                DatumObjave      = oglas.DatumObjave,
+                StatusOglasa     = oglas.StatusOglasa,
+                Lokacija         = oglas.Mjesto?.Naziv,
+                MinPrihod        = oglas.MinPrihod,
+                MaxPrihod        = oglas.MaxPrihod,
+                TipIsplate       = oglas.TipIsplate,
+                VrstaZaposlenja  = oglas.VrstaZaposlenja,
+                BrojIzvrsilaca   = oglas.BrojIzvrsilaca,
+                Kategorije       = oglas.Kategorije?.Select(k => k.Kategorija?.Naziv ?? "")
+                                       .Where(n => n != "").ToList() ?? new(),
+                Uvjeti           = oglas.Uvjeti?.Select(u => u.TekstUvjeta).ToList() ?? new(),
+                VlasnikId        = oglas.VlasnikOglasaID,
+                VlasnikUsername  = vlasnik?.UserName ?? oglas.VlasnikOglasaID,
+                VlasnikDisplayName = oglas.VlasnikOglasa?.DisplayName ?? "—",
+                VlasnikSlika     = oglas.VlasnikOglasa?.Slika,
+                Prijave          = prijaveDto,
+                JeVlasnik        = trenutniKorisnikId == oglas.VlasnikOglasaID
+                                   || User.IsInRole("Administrator"),
+                MozeApplicirati  = User.IsInRole("Majstor")
+                                   && trenutniKorisnikId != oglas.VlasnikOglasaID,
+                VecApplicirao    = oglas.Prijave?.Any(p => p.MajstorID == trenutniKorisnikId) ?? false
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> ObjaviOglas()
@@ -213,17 +350,48 @@ namespace PopravkaBa.Web.Controllers
             var oglas = await _facadeService.DajOglasPoId(id);
             if (oglas is null) return NotFound();
 
+            if (!SmijeUredjivati(oglas.VlasnikOglasaID, oglas.StatusOglasa, out var greska))
+            {
+                TempData["Error"] = greska;
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             var dto = new UrediOglasRadnoMjestoDto
             {
                 OglasID = oglas.OglasID,
                 Naslov = oglas.Naslov,
                 Opis = oglas.Opis,
                 MjestoID = oglas.MjestoID,
-                KategorijeID = oglas.Kategorije.Select(k => k.KategorijaID).ToList()
+                BrojIzvrsilaca = oglas.BrojIzvrsilaca,
+                VrstaZaposlenja = oglas.VrstaZaposlenja,
+                MinPrihod = oglas.MinPrihod,
+                MaxPrihod = oglas.MaxPrihod,
+                TipIsplate = oglas.TipIsplate,
+                Uvjeti = oglas.Uvjeti?.Select(u => u.TekstUvjeta).ToList() ?? new(),
+                KategorijeID = oglas.Kategorije?.Select(k => k.KategorijaID).ToList() ?? new()
             };
 
             ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+            ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
             return View(dto);
+        }
+
+        private bool SmijeUredjivati(string vlasnikId, Status status, out string greska)
+        {
+            greska = "";
+            var korisnikId = _userManager.GetUserId(User);
+            bool jeAdmin = User.IsInRole("Administrator");
+            if (vlasnikId != korisnikId && !jeAdmin)
+            {
+                greska = "Nemate dozvolu za uređivanje ovog oglasa.";
+                return false;
+            }
+            if (status != Status.Aktivan && !jeAdmin)
+            {
+                greska = "Samo aktivni oglasi se mogu uređivati.";
+                return false;
+            }
+            return true;
         }
 
         [HttpPost]
@@ -231,9 +399,21 @@ namespace PopravkaBa.Web.Controllers
         public async Task<IActionResult> UrediOglas(int id, UrediOglasRadnoMjestoDto dto)
         {
             if (id != dto.OglasID) return BadRequest();
+
+            var postojeci = await _facadeService.DajOglasPoId(id);
+            if (postojeci is null) return NotFound();
+            if (!SmijeUredjivati(postojeci.VlasnikOglasaID, postojeci.StatusOglasa, out var greska))
+            {
+                TempData["Error"] = greska;
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
+            dto.Uvjeti = dto.Uvjeti?.Where(u => !string.IsNullOrWhiteSpace(u)).ToList() ?? new();
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+                ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
                 return View(dto);
             }
 
@@ -241,13 +421,14 @@ namespace PopravkaBa.Web.Controllers
             {
                 await _facadeService.UrediOglas(dto);
                 TempData["Success"] = "Oglas je uspješno uređen.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalji), new { id });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Greška pri uređivanju oglasa.");
                 ModelState.AddModelError("", "Došlo je do greške pri uređivanju.");
                 ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+                ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
                 return View(dto);
             }
         }
@@ -263,17 +444,27 @@ namespace PopravkaBa.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PotvrdaBrisanjaOglasa(int id)
         {
+            var oglas = await _facadeService.DajOglasPoId(id);
+            if (oglas is null) return NotFound();
+
+            var korisnikId = _userManager.GetUserId(User);
+            if (oglas.VlasnikOglasaID != korisnikId && !User.IsInRole("Administrator"))
+            {
+                TempData["Error"] = "Nemate dozvolu za brisanje ovog oglasa.";
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             try
             {
                 await _facadeService.ObrisiOglas(id);
-                TempData["Success"] = "Oglas je uspješno obrisan.";
+                TempData["Success"] = "Oglas je uspješno deaktiviran.";
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Detalji), new { id });
         }
     }
 
@@ -281,13 +472,17 @@ namespace PopravkaBa.Web.Controllers
     public class OglasUslugeController : Controller
     {
         private readonly IOglasUslugeFacade _facadeService;
+        private readonly IMjestoService _mjestoService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IPonudaUslugeService _ponudaUslugeService;
         private readonly ILogger<OglasUslugeController> _logger;
 
-        public OglasUslugeController(IOglasUslugeFacade facadeService, UserManager<ApplicationUser> userManager, ILogger<OglasUslugeController> logger)
+        public OglasUslugeController(IOglasUslugeFacade facadeService, IMjestoService mjestoService, UserManager<ApplicationUser> userManager, IPonudaUslugeService ponudaUslugeService, ILogger<OglasUslugeController> logger)
         {
             _facadeService = facadeService;
+            _mjestoService = mjestoService;
             _userManager = userManager;
+            _ponudaUslugeService = ponudaUslugeService;
             _logger = logger;
         }
 
@@ -307,7 +502,75 @@ namespace PopravkaBa.Web.Controllers
         {
             var oglas = await _facadeService.DajOglasPoId(id);
             if (oglas is null) return NotFound();
-            return View(oglas);
+
+            var trenutniKorisnikId = _userManager.GetUserId(User);
+            var vlasnik = await _userManager.FindByIdAsync(oglas.VlasnikOglasaID);
+
+            // Mapiranje ponuda u DTO
+            var ponudeDto = new List<PonudaDto>();
+            if (oglas.Ponude != null)
+            {
+                foreach (var p in oglas.Ponude)
+                {
+                    var izvUser = await _userManager.FindByIdAsync(p.IzvrsilacID);
+                    ponudeDto.Add(new PonudaDto
+                    {
+                        PonudaId            = p.ID,
+                        IzvrsilacId         = p.IzvrsilacID,
+                        IzvrsilacUsername   = izvUser?.UserName ?? p.IzvrsilacID,
+                        IzvrsilacIme        = p.Izvrsilac?.DisplayName ?? "—",
+                        IzvrsilacSlika      = p.Izvrsilac?.Slika,
+                        IzvrsilacKategorija = p.Izvrsilac?.Kategorije?.FirstOrDefault()?.Kategorija?.Naziv,
+                        Verificiran         = false,
+                        Cijena              = p.Cijena,
+                        TipIsplate          = p.TipIsplate,
+                        ProsjecnaOcjena     = (decimal)(p.Izvrsilac?.ProsjecnaOcjena ?? 0),
+                        BrojRecenzija       = p.Izvrsilac?.BrojRecenzija ?? 0,
+                        DatumPocetka        = p.DatumPocetkaUsluge,
+                        DatumKraja          = p.DatumOcekivanogZavrsetka,
+                        StatusPonude        = p.StatusPonude,
+                        Poruka              = p.Poruka
+                    });
+                }
+            }
+
+            // Prosječna cijena po kategoriji oglasa (platforma-wide)
+            var kategorijeIds = oglas.Kategorije?.Select(k => k.KategorijaID).ToList() ?? new();
+            decimal? prosjecnaCijenaKategorije = kategorijeIds.Any()
+                ? await _ponudaUslugeService.DajProsjekCijenePoKategorijama(kategorijeIds)
+                : null;
+
+            // Izračunaj razliku od prosjeka za svaku ponudu
+            foreach (var p in ponudeDto.Where(p => p.Cijena.HasValue))
+                p.RazlikaOdProsjeka = prosjecnaCijenaKategorije.HasValue
+                    ? (decimal)p.Cijena!.Value - prosjecnaCijenaKategorije.Value
+                    : null;
+
+            var vm = new OglasUslugeDetaljiViewModel
+            {
+                OglasId       = oglas.OglasID,
+                Naslov        = oglas.Naslov,
+                Opis          = oglas.Opis,
+                DatumObjave   = oglas.DatumObjave,
+                StatusOglasa  = oglas.StatusOglasa,
+                Lokacija      = oglas.Mjesto?.Naziv,
+                MinBudzet     = oglas.MinBudzet,
+                MaxBudzet     = oglas.MaxBudzet,
+                Kategorije    = oglas.Kategorije?.Select(k => k.Kategorija?.Naziv ?? "").Where(n => n != "").ToList() ?? new(),
+                VlasnikId     = oglas.VlasnikOglasaID,
+                VlasnikUsername = vlasnik?.UserName ?? oglas.VlasnikOglasaID,
+                VlasnikDisplayName = oglas.VlasnikOglasa?.DisplayName ?? "—",
+                VlasnikSlika  = oglas.VlasnikOglasa?.Slika,
+                Ponude        = ponudeDto,
+                ProsjecnaCijenaPonude = prosjecnaCijenaKategorije,
+                JeVlasnik     = trenutniKorisnikId == oglas.VlasnikOglasaID
+                                || User.IsInRole("Administrator"),
+                MozeApplicirati = (User.IsInRole("Majstor") || User.IsInRole("Firma"))
+                                  && trenutniKorisnikId != oglas.VlasnikOglasaID,
+                VecApplicirao  = oglas.Ponude?.Any(p => p.IzvrsilacID == trenutniKorisnikId) ?? false
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> ObjaviOglas()
@@ -347,6 +610,12 @@ namespace PopravkaBa.Web.Controllers
             var oglas = await _facadeService.DajOglasPoId(id);
             if (oglas is null) return NotFound();
 
+            if (!SmijeUredjivati(oglas.VlasnikOglasaID, oglas.StatusOglasa, out var greska))
+            {
+                TempData["Error"] = greska;
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             var dto = new UrediOglasUslugeDto
             {
                 OglasID = oglas.OglasID,
@@ -355,11 +624,30 @@ namespace PopravkaBa.Web.Controllers
                 MjestoID = oglas.MjestoID,
                 MinBudzet = oglas.MinBudzet,
                 MaxBudzet = oglas.MaxBudzet,
-                KategorijeID = oglas.Kategorije.Select(k => k.KategorijaID).ToList()
+                KategorijeID = oglas.Kategorije?.Select(k => k.KategorijaID).ToList() ?? new()
             };
 
             ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+            ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
             return View(dto);
+        }
+
+        private bool SmijeUredjivati(string vlasnikId, Status status, out string greska)
+        {
+            greska = "";
+            var korisnikId = _userManager.GetUserId(User);
+            bool jeAdmin = User.IsInRole("Administrator");
+            if (vlasnikId != korisnikId && !jeAdmin)
+            {
+                greska = "Nemate dozvolu za uređivanje ovog oglasa.";
+                return false;
+            }
+            if (status != Status.Aktivan && !jeAdmin)
+            {
+                greska = "Samo aktivni oglasi se mogu uređivati.";
+                return false;
+            }
+            return true;
         }
 
         [HttpPost]
@@ -367,9 +655,19 @@ namespace PopravkaBa.Web.Controllers
         public async Task<IActionResult> UrediOglas(int id, UrediOglasUslugeDto dto)
         {
             if (id != dto.OglasID) return BadRequest();
+
+            var postojeci = await _facadeService.DajOglasPoId(id);
+            if (postojeci is null) return NotFound();
+            if (!SmijeUredjivati(postojeci.VlasnikOglasaID, postojeci.StatusOglasa, out var greska))
+            {
+                TempData["Error"] = greska;
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+                ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
                 return View(dto);
             }
 
@@ -377,13 +675,14 @@ namespace PopravkaBa.Web.Controllers
             {
                 await _facadeService.UrediOglas(dto);
                 TempData["Success"] = "Oglas je uspješno uređen.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalji), new { id });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Greška pri uređivanju oglasa.");
                 ModelState.AddModelError("", "Došlo je do greške pri uređivanju oglasa.");
                 ViewBag.Kategorije = await _facadeService.DajSveKategorije();
+                ViewBag.Mjesta = await _mjestoService.DajSvaMjestaAsync();
                 return View(dto);
             }
         }
@@ -399,17 +698,27 @@ namespace PopravkaBa.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PotvrdaBrisanjaOglasa(int id)
         {
+            var oglas = await _facadeService.DajOglasPoId(id);
+            if (oglas is null) return NotFound();
+
+            var korisnikId = _userManager.GetUserId(User);
+            if (oglas.VlasnikOglasaID != korisnikId && !User.IsInRole("Administrator"))
+            {
+                TempData["Error"] = "Nemate dozvolu za brisanje ovog oglasa.";
+                return RedirectToAction(nameof(Detalji), new { id });
+            }
+
             try
             {
                 await _facadeService.ObrisiOglas(id);
-                TempData["Success"] = "Oglas je uspješno obrisan.";
+                TempData["Success"] = "Oglas je uspješno deaktiviran.";
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Detalji), new { id });
         }
     }
 }

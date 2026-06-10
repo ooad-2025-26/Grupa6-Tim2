@@ -22,10 +22,12 @@
             public DbSet<Kategorija> Kategorije { get; set; }
             public DbSet<Klijent> Klijenti { get; set; }
 
-            public DbSet<KorisnikMjesto> KorisnikMjesto { get; set; }
-            public DbSet<Majstor> Majstori { get; set; }
-            public DbSet<Mjesto> Mjesta { get; set; }
-            public DbSet<OglasKategorija> OglasKategorije { get; set; }
+        public DbSet<KorisnikMjesto> KorisnikMjesto { get; set; }
+        public DbSet<Majstor> Majstori { get; set; }
+        public DbSet<Mjesto> Mjesta { get; set; }
+
+        public DbSet<MjesecnaStatistikaKompozicija> MjesecnaStatistikaKompozicija { get; set; }
+        public DbSet<OglasKategorija> OglasKategorije { get; set; }
 
             public DbSet<OglasMajstora> OglasiMajstora { get; set; }
             public DbSet<OglasRadnoMjesto> OglasiRadnogMjesta { get; set; }
@@ -43,41 +45,41 @@
 
             public DbSet<VerifikacijskiToken> Tokeni { get; set; }
         
-    
-            protected override void OnModelCreating(ModelBuilder builder)
-            {
-                base.OnModelCreating(builder);
-                builder.Entity<EmailNotifikacijaOglas>().ToTable("EmailNotifikacijaOglasa");
-                builder.Entity<EmailVerifikacijaFirme>().ToTable("EmailVerifikacijaFirme");
-                builder.Entity<IzvrsilacKategorija>().ToTable("IzvrsilacKategorija");
-                builder.Entity<Kategorija>().ToTable("Kategorija"); 
-                builder.Entity<KorisnikMjesto>().ToTable("KorisnikMjesto");
-                builder.Entity<Mjesto>().ToTable("Mjesto");
-                builder.Entity<OglasKategorija>().ToTable("OglasKategorija");
-                builder.Entity<OglasMajstora>().ToTable("OglasMajstora");
-                builder.Entity<OglasRadnoMjesto>().ToTable("OglasRadnoMjesto");
-                builder.Entity<OglasUsluge>().ToTable("OglasUsluge");
-                builder.Entity<OglasVozackaDozvola>().ToTable("OglasVozackaDozvola");
-                builder.Entity<PonudaUsluge>().ToTable("PonudaUsluge");
-                builder.Entity<VerifikacijskiToken>().ToTable("VerifikacijskiToken");
-                builder.Entity<PonudaUsluge>()
-                    .HasOne(p => p.OglasUsluge)
-                    .WithMany(o => o.Ponude)
-                    .HasForeignKey(p => p.OglasUslugeID)
-                    .OnDelete(DeleteBehavior.Cascade);
-                // Potrebno je service-side riješiti problem brisanja prijava kada se briše majstor.
-                builder.Entity<PonudaUsluge>()
-                    .HasOne(p => p.Izvrsilac)
-                    .WithMany(i => i.Ponude)
-                    .HasForeignKey(p => p.IzvrsilacID)
-                    .OnDelete(DeleteBehavior.NoAction);
-                builder.Entity<PortfolioSlika>().ToTable("PortfolioSlika");
-                builder.Entity<PrijavaRadnoMjesto>().ToTable("PrijavaRadnoMjesto");
-                builder.Entity<PrijavaRadnoMjesto>()
-                    .HasOne(p => p.OglasRadnoMjesto)
-                    .WithMany(o => o.Prijave)
-                    .HasForeignKey(p => p.OglasID)
-                    .OnDelete(DeleteBehavior.Cascade);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<EmailNotifikacijaOglas>().ToTable("EmailNotifikacijaOglasa");
+            builder.Entity<EmailVerifikacijaFirme>().ToTable("EmailVerifikacijaFirme");
+            builder.Entity<IzvrsilacKategorija>().ToTable("IzvrsilacKategorija");
+            builder.Entity<Kategorija>().ToTable("Kategorija"); 
+            builder.Entity<KorisnikMjesto>().ToTable("KorisnikMjesto");
+            builder.Entity<Mjesto>().ToTable("Mjesto");
+            builder.Entity<MjesecnaStatistikaKompozicija>().ToTable("MjesecnaStatistikaKompozicija");
+            builder.Entity<OglasKategorija>().ToTable("OglasKategorija");
+            builder.Entity<OglasMajstora>().ToTable("OglasMajstora");
+            builder.Entity<OglasRadnoMjesto>().ToTable("OglasRadnoMjesto");
+            builder.Entity<OglasUsluge>().ToTable("OglasUsluge");
+            builder.Entity<OglasVozackaDozvola>().ToTable("OglasVozackaDozvola");
+            builder.Entity<PonudaUsluge>().ToTable("PonudaUsluge");
+            builder.Entity<VerifikacijskiToken>().ToTable("VerifikacijskiToken");
+            builder.Entity<PonudaUsluge>()
+                .HasOne(p => p.OglasUsluge)
+                .WithMany(o => o.Ponude)
+                .HasForeignKey(p => p.OglasUslugeID)
+                .OnDelete(DeleteBehavior.Cascade);
+            // Potrebno je service-side riješiti problem brisanja prijava kada se briše majstor.
+            builder.Entity<PonudaUsluge>()
+                .HasOne(p => p.Izvrsilac)
+                .WithMany(i => i.Ponude)
+                .HasForeignKey(p => p.IzvrsilacID)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<PortfolioSlika>().ToTable("PortfolioSlika");
+            builder.Entity<PrijavaRadnoMjesto>().ToTable("PrijavaRadnoMjesto");
+            builder.Entity<PrijavaRadnoMjesto>()
+                .HasOne(p => p.OglasRadnoMjesto)
+                .WithMany(o => o.Prijave)
+                .HasForeignKey(p => p.OglasID)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 // Potrebno je service-side riješiti problem brisanja prijava kada se briše majstor.
                 builder.Entity<PrijavaRadnoMjesto>()

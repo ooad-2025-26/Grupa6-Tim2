@@ -312,6 +312,67 @@ namespace PopravkaBa.Infrastructure.Migrations
                     b.ToTable("KorisnikMjesto", (string)null);
                 });
 
+            modelBuilder.Entity("PopravkaBa.Domain.Models.MjesecnaStatistikaKompozicija", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("BrojPoslova")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Godina")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("IzvrsilacID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("KategorijaID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("KategorijaNaziv")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Mjesec")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MjestoID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MjestoNaziv")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("ProsjecnaOcjena")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("RangStandardni")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Slika")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TipKorisnika")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("VrijemeAzuriranja")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("MjesecnaStatistikaKompozicija", (string)null);
+                });
+
             modelBuilder.Entity("PopravkaBa.Domain.Models.Mjesto", b =>
                 {
                     b.Property<int>("MjestoID")
@@ -453,6 +514,12 @@ namespace PopravkaBa.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
+                    b.Property<int?>("Cijena")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("DatumIzvrsavanjaUsluge")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime?>("DatumOcekivanogZavrsetka")
                         .HasColumnType("timestamp with time zone");
 
@@ -469,7 +536,13 @@ namespace PopravkaBa.Infrastructure.Migrations
                     b.Property<int>("OglasUslugeID")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Poruka")
+                        .HasColumnType("text");
+
                     b.Property<int>("StatusPonude")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TipIsplate")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
