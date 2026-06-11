@@ -17,13 +17,24 @@ namespace PopravkaBa.Infrastructure.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-        name: "StatusVerifikacije",
-        table: "AspNetUsers",
-        type: "integer",
-        nullable: false,
-        defaultValue: 0
-     );
+            migrationBuilder.AlterColumn<int>(
+               name: "StatusVerifikacije",
+               table: "AspNetUsers",
+               type: "integer",
+               nullable: false,
+               defaultValue: 0,
+               oldClrType: typeof(int),
+               oldType: "integer",
+               oldNullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "AdminVerificirao",
+                table: "AspNetUsers",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false
+                );
+
         }
 
        
@@ -33,12 +44,22 @@ namespace PopravkaBa.Infrastructure.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "MinIskustvo",
-                table: "OglasRadnoMjesto");     
-
+                table: "OglasRadnoMjesto");
+            
             migrationBuilder.DropColumn(
-               name: "StatusVerifikacije",
-               table: "AspNetUsers"
-               );
+                name: "AdminVerificirao",
+                table: "AspNetUsers"
+                );
+            
+            migrationBuilder.AlterColumn<int>(
+                name: "StatusVerifikacije",
+                table: "AspNetUsers",
+                type: "integer",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: false,
+                oldDefaultValue: 0);
         }
     }
 }

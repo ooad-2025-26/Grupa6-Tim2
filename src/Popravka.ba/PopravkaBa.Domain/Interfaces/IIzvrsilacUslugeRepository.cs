@@ -8,13 +8,14 @@ namespace PopravkaBa.Domain.Interfaces
     {
         Task<IEnumerable<IzvrsilacUsluge>> DajSveAsync();
         Task<IzvrsilacUsluge?> DajPoIdAsync(int id);
+        // Profil sa svim navigacijama (kategorije, portfolio, mjesta, recenzije)
+        Task<IzvrsilacUsluge?> DajProfilPoIdAsync(string id);
         Task<StraniceniRezultat<IzvrsilacUsluge>> PronadjiAsync(
             ISpecification<IzvrsilacUsluge> spec, int stranica, int stavkiPoStranici);
         Task DodajAsync(IzvrsilacUsluge oglas);
         Task UrediAsync(IzvrsilacUsluge oglas);
         Task ObrisiAsync(int id);
         Task<IEnumerable<IzvrsilacUsluge>> IzvrsiPretraguTekstaAsync(string pretraga);
-        Task<IzvrsilacUsluge?> DajProfilPoIdAsync(string id);
 
         // Nova metoda: snima promjene na tracked entitetu
         Task SacuvajAsync();
