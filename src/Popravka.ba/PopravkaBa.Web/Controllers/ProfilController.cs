@@ -1,81 +1,65 @@
-
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PopravkaBa.Application.DTOs;
 using PopravkaBa.Application.Services.Interface;
-using System.Security.Claims;
+using PopravkaBa.Domain.Models;
+using PopravkaBa.Web.Models.ViewModels;
 
 namespace PopravkaBa.Web.Controllers
 {
     [Authorize]
     public class ProfilController : Controller
     {
-        private readonly IProfilService _profilService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IOglasMajstoraFacade _oglasMajstoraFacade;
 
-        public ProfilController(IProfilService profilService)
+        public ProfilController(UserManager<ApplicationUser> userManager, IOglasMajstoraFacade oglasMajstoraFacade)
         {
-            _profilService = profilService;
+            _userManager = userManager;
+            _oglasMajstoraFacade = oglasMajstoraFacade;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detalji(string id)
+        [Route("Profil/{username}")]
+        public async Task<IActionResult> Index(string username)
         {
-            if (string.IsNullOrEmpty(id))
-                return NotFound();
+            if (string.IsNullOrWhiteSpace(username)) return NotFound();
 
-            var profil = await _profilService.DajProfilAsync(id);
-            if (profil == null)
-                return NotFound();
+            var korisnik = await _userManager.FindByNameAsync(username);
+            if (korisnik is null) return NotFound();
 
+            var uloge = await _userManager.GetRolesAsync(korisnik);
+            var uloga = uloge.FirstOrDefault() ?? "Korisnik";
 
-            // da li je trenutni user = id profila koji je otvoren
-            ViewBag.TrenutniKorisnikId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var vm = new ProfilViewModel
+            {
+                UserId = korisnik.Id,
+                Username = korisnik.UserName ?? username,
+                DisplayName = korisnik.DisplayName,
+                Slika = korisnik.Slika,
+                DatumRegistracije = korisnik.DatumRegistracije,
+                Uloga = uloga,
+                JeVlasnik = _userManager.GetUserId(User) == korisnik.Id
+            };
 
-            return View(profil);
-        }
-
-        
-        // samo vlasnik profila može pristupiti
-        [HttpGet]
-        public async Task<IActionResult> UrediProfil(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                return NotFound();
-
-            // Provjeri da li prijavljeni korisnik pokušava urediti svoj profil
-            var trenutniKorisnikId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (trenutniKorisnikId != id)
-                return Forbid();
-
-            var dto = await _profilService.DajZaUredjivanjеAsync(id);
-            if (dto == null)
-                return NotFound();
-
-            return View(dto);
-        }
-
-        // samo vlasnik profila može snimiti
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UrediProfil(UrediProfilDto dto)
-        {
-            var trenutniKorisnikId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            // Ovo sprječava da neko pošalje formu sa tuđim ID-em;
-            if (trenutniKorisnikId != dto.Id)
-                return Forbid(); 
-
-            if (!ModelState.IsValid)
-            { 
-                return View(dto);
+            if (uloga == "Majstor" || uloga == "Firma")
+            {
+                var oglasi = await _oglasMajstoraFacade.DajSveOglase();
+                vm.OglasiMajstora = oglasi
+                    .Where(o => o.VlasnikOglasaID == korisnik.Id)
+                    .Select(o => new ProfilOglasMajstoraItem
+                    {
+                        OglasId = o.OglasID,
+                        Naslov = o.Naslov,
+                        Lokacija = o.Mjesto?.Naziv,
+                        MinCijena = o.MinCijena,
+                        TipIsplate = o.TipIsplate,
+                        Kategorije = o.Kategorije?.Select(k => k.Kategorija?.Naziv ?? "")
+                                       .Where(n => n != "").ToList() ?? new()
+                    }).ToList();
             }
 
-            var uspjeh = await _profilService.UrediProfilAsync(dto);
-            if (!uspjeh)
-                return NotFound();
-
-            TempData["UspjehPoruka"] = "Profil je uspješno ažuriran.";
-            return RedirectToAction(nameof(Detalji), new { id = dto.Id });
+            return View(vm);
         }
     }
 }
-
