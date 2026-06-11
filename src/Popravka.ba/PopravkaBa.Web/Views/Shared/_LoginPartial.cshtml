@@ -63,8 +63,8 @@
                             _ => ("Ponude", "Ponude")
                         };
 
-                        <a class="dropdown-item pp-item" asp-controller="Profil" asp-action="Detalji" asp-route-id="@user.Id">
-                                 <i class="bi bi-person"></i><span>Moj profil</span>
+                        <a class="dropdown-item pp-item" href="/Profil/@user.UserName">
+                            <i class="bi bi-person"></i><span>Moj profil</span>
                         </a>
                         <a class="dropdown-item pp-item" asp-controller="Profil" asp-action="@oglasiAction">
                             <i class="bi bi-file-earmark-text"></i><span>@oglasiLabel</span>
