@@ -43,6 +43,9 @@ Kompletna dokumentacija projekta održava se u `docs/` direktoriju, izvorni kod,
 ## Aplikacija je trenutno deployana na:
 https://popravka-ba.onrender.com/
 
+## Arhivirana web aplikacija:
+https://web.archive.org/web/20260627091040/https://popravka-ba.onrender.com/
+
 ## Stack
 
 - **ASP.NET 8.0** — Razor Pages
